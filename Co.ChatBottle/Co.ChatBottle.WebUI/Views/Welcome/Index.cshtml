@@ -1,0 +1,64 @@
+﻿@{
+    ViewBag.Title = "流浪瓶";
+}
+
+<style>
+    /*web background*/
+    .container {
+        display: table;
+        height: 100%;
+    }
+
+    .row {
+        display: table-cell;
+        vertical-align: middle;
+    }
+    /* centered columns styles */
+    .row-centered {
+        text-align: center;
+    }
+
+    .col-centered {
+        display: inline-block;
+        float: none;
+        text-align: left;
+        margin-right: -4px;
+    }
+
+    .unactive {
+        opacity:0.7
+    }
+
+    .active {
+        opacity: 1 !important
+    }
+</style>
+
+
+
+<div class="container">
+    <div class="row row-centered">
+        <div class="col-md-6 col-centered">
+            <h2 class="row-centered">欢迎</h2>
+                <div class="input-group input-group-md">
+                    <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-user" aria-hidden="true"></i></span>
+                    <input type="text" class="form-control" id="nickname" name="nickname" placeholder="请输入昵称" />
+                </div>
+                <p></p>
+                <div class="input-group input-group-md">
+                    <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-user"></i></span>
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary unactive active" style="width:98px">
+                            <input type="radio" class="gender" value="1"> 男
+                        </label>
+                        
+                        <label class="btn btn-danger unactive" style="width:98px">
+                            <input type="radio" class="gender" value="2"> 女
+                        </label>
+                    </div>	
+                </div>
+                <br />
+                <button type="button" class="btn btn-success btn-block" id="btnSubmit">开始</button>
+        </div>
+    </div>
+</div>
