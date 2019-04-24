@@ -141,6 +141,7 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\WelcomeController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -156,6 +157,7 @@
     <Content Include="Content\component\bootstrap-3.3.7\js\bootstrap.js" />
     <Content Include="Content\component\bootstrap-3.3.7\js\bootstrap.min.js" />
     <Content Include="Content\component\bootstrap-3.3.7\js\npm.js" />
+    <Content Include="Content\img\gender.png" />
     <Content Include="Content\js\jquery.min.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
@@ -187,11 +189,11 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Content\css\" />
-    <Folder Include="Content\img\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Content Include="Views\Home\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

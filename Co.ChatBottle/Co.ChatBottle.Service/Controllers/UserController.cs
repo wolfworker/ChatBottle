@@ -18,23 +18,9 @@ namespace Co.ChatBottle.Service.Controllers
     {
         public UserBiz userBiz { get; set; } = new UserBiz();
 
-        [HttpGet]
-        public HttpResponseMessage Register([FromUri] RegisterRequest request)
+        [HttpPost]
+        public HttpResponseMessage Register(RegisterRequest request)
         {
-            //Step 1：校验必传参数
-
-            //Step 2：两次密码 校验
-
-            //Step 3：校验验证码 
-
-            //Step 4：手机号或用户名是否存在
-
-            //Step 5：生成邀请码
-
-            //Step 6：组装注册实体（密码MD5加密）
-
-            //Step 7：发放积分奖励
-
             var response = new BaseResponse<RegisterResponse>();
 
             if (request == null)
@@ -46,8 +32,7 @@ namespace Co.ChatBottle.Service.Controllers
             var userInfo = new ACT_User
             {
                 UserName = request.UserName,
-                Phone = request.Phone,
-                PassChar = SecurityHelper.GenerateMd5Hash(request.PassWord)
+                Gender = request.Gender
             };
 
             var userEntity = userBiz.Add(userInfo);
@@ -69,7 +54,7 @@ namespace Co.ChatBottle.Service.Controllers
                 response.ErrorCode = 0;
                 response.Result = result;
             }
-            return ResponseToJson(response);
+            return ResponseToJson(response, request.callback);
         }
 
         [HttpGet]

@@ -36,5 +36,7 @@ namespace Co.ChatBottle.Model
         public string Host { get; set; }
 
         public string UserAgent { get; set; }
+
+        public string callback { get; set; }
     }
 }

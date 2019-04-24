@@ -36,7 +36,7 @@ namespace Co.ChatBottle.Service.Controllers
             }
         }
 
-        public HttpResponseMessage ResponseToJson(Object obj)
+        public HttpResponseMessage ResponseToJson(Object obj,string jsonp="")
         {
             String str;
             if (obj is String || obj is Char)
@@ -47,14 +47,21 @@ namespace Co.ChatBottle.Service.Controllers
             {
                 str = JsonConvert.SerializeObject(obj);
             }
+            if (!string.IsNullOrEmpty(jsonp))
+            {
+                str = $"{jsonp}({str})";
+            }
             HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(str, Encoding.GetEncoding("UTF-8"), "application/json") };
             return result;
         }
 
         public void ConvertBaseRequest(BaseRequest request)
         {
-            request.Host = Request.Headers.Host;
-            request.UserAgent = Request.Headers.UserAgent.ToString();
+            if (Request != null && Request.Headers != null)
+            {
+                request.Host = Request.Headers.Host;
+                request.UserAgent = Request.Headers.UserAgent.ToString();
+            }
         }
     }
 }

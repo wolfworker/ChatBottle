@@ -13,9 +13,7 @@ namespace Co.ChatBottle.Model
     {
         public string UserName { get; set; }
 
-        public string Phone { get; set; }
-
-        public string PassWord { get; set; }
+        public byte Gender { get; set; }
     }
 
     /// <summary>

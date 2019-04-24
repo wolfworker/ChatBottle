@@ -41,12 +41,14 @@
         <div class="col-md-6 col-centered">
             <h2 class="row-centered">欢迎</h2>
                 <div class="input-group input-group-md">
-                    <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-user" aria-hidden="true"></i></span>
-                    <input type="text" class="form-control" id="nickname" name="nickname" placeholder="请输入昵称" />
+                    <span class="input-group-addon"><i class="glyphicon glyphicon-user" aria-hidden="true" style="width: 17px;"></i></span>
+                    <input type="text" class="form-control"  id="username" name="username" placeholder="请输入昵称" />
                 </div>
                 <p></p>
                 <div class="input-group input-group-md">
-                    <span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-user"></i></span>
+                    <span class="input-group-addon">
+                        <img src="/Content/img/gender.png" style="width: 17px;">
+                    </span>
                     <div class="btn-group" data-toggle="buttons">
                         <label class="btn btn-primary unactive active" style="width:98px">
                             <input type="radio" class="gender" value="1"> 男
@@ -62,3 +64,33 @@
         </div>
     </div>
 </div>
+<script>
+    $(function () {
+        $("#btnSubmit").click(function () {
+            var gender = $(".gender").val();
+            var username = $("#username").val();
+            //$.post("http://localhost:9001/api/user/register", { UserName: username, Gender: gender }, function (result) {
+            //    debugger;
+            //    alert("function");
+            //});
+
+            $.ajax({
+                type: "POST",
+                url: "http://localhost:9001/api/user/register",
+                //contentType: "application/json", //如果提交的是json数据类型，则必须有此参数,表示提交的数据类型 
+                dataType: "json", //表示返回值类型，不必须   
+                //contentType: 'application/json; charset=utf-8',
+                //contentType: "application/x-www-form-urlencoded",
+                data: { UserName: username, Gender: gender },
+                success: function (jsonResult) {
+                    //在原来的页面跳转到下载word模板的页面
+                    debugger;
+                    alert("function");
+                },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    alert("失败！error");
+                }
+            });
+        });
+    });
+</script>
