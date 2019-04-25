@@ -194,6 +194,11 @@
   <ItemGroup>
     <None Include="packages.config" />
     <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Home\ThrowBottle.cshtml" />
+    <Content Include="Views\Home\MyBottle.cshtml" />
+    <Content Include="Views\Home\PickBottle.cshtml" />
+    <Content Include="Views\Home\ProfileSetting.cshtml" />
+    <Content Include="Views\Home\BottleDetail.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

@@ -69,11 +69,10 @@
         $("#btnSubmit").click(function () {
             var gender = $(".gender").val();
             var username = $("#username").val();
-            //$.post("http://localhost:9001/api/user/register", { UserName: username, Gender: gender }, function (result) {
-            //    debugger;
-            //    alert("function");
-            //});
-
+            if (username == undefined || username == "") {
+                alert("昵称不可为空！");
+                return;
+            }
             $.ajax({
                 type: "POST",
                 url: "http://localhost:9001/api/user/register",
@@ -82,10 +81,14 @@
                 //contentType: 'application/json; charset=utf-8',
                 //contentType: "application/x-www-form-urlencoded",
                 data: { UserName: username, Gender: gender },
-                success: function (jsonResult) {
+                success: function (result) {
                     //在原来的页面跳转到下载word模板的页面
                     debugger;
-                    alert("function");
+                    if (result.ErrorCode == 0) {
+                        window.location.href = "/home/index";
+                    } else {
+                        alert("系统异常，请重试！");
+                    }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     alert("失败！error");
