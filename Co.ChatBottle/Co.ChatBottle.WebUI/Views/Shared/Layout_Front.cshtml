@@ -6,21 +6,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
     <title>流浪瓶-ChatBottle</title>
-
     <link href="~/Content/component/bootstrap-3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
+    <link href="~/Content/component/datepicker/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
     <script src="~/Content/js/jquery.min.js"></script>
-
     <script src="~/Content/component/bootstrap-3.3.7/js/bootstrap.min.js"></script>
-    
-    <script src="https://cdn.bootcss.com/moment.js/2.24.0/moment-with-locales.js"></script>
-    
-    <script src="https://cdn.bootcss.com/bootstrap-datetimepicker/4.17.47/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Content/component/datepicker/bootstrap-datetimepicker.min.js"></script>
+    <script src="~/Content/component/datepicker/bootstrap-datetimepicker.zh-CN.js"></script>
 
 </head>
 <body>
     @RenderBody()
-    
+
+    <script>
+        $(function () {
+            $("#profilesetting").click(function () {
+                $("#rootdiv").load("/Home/ProfileSetting");
+            });
+
+            $("#throwbottle").click(function () {
+                $("#rootdiv").load("/Home/ThrowBottle");
+            });
+
+            $("#pickbottle").click(function () {
+                $("#rootdiv").load("/Home/PickBottle");
+            });
+
+            $("#mybottle").click(function () {
+                $("#rootdiv").load("/Home/MyBottle");
+            });
+        });
+
+    </script>
 </body>
 </html>

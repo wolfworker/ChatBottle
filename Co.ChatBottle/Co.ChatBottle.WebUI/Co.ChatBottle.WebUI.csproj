@@ -157,6 +157,9 @@
     <Content Include="Content\component\bootstrap-3.3.7\js\bootstrap.js" />
     <Content Include="Content\component\bootstrap-3.3.7\js\bootstrap.min.js" />
     <Content Include="Content\component\bootstrap-3.3.7\js\npm.js" />
+    <Content Include="Content\component\datepicker\bootstrap-datetimepicker.min.css" />
+    <Content Include="Content\component\datepicker\bootstrap-datetimepicker.min.js" />
+    <Content Include="Content\component\datepicker\bootstrap-datetimepicker.zh-CN.js" />
     <Content Include="Content\img\gender.png" />
     <Content Include="Content\js\jquery.min.js" />
     <Content Include="favicon.ico" />
