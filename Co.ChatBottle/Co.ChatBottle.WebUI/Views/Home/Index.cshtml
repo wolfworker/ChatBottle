@@ -1,11 +1,76 @@
 ﻿@{
+    Layout = "~/Views/Shared/Layout_Front.cshtml";
     ViewBag.Title = "流浪瓶";
 }
 <br />
-<div id="rootdiv"></div>
-<br />
-<br />
-<a id="profilesetting">设置</a>
-<a id="throwbottle"> 扔瓶子</a>
-<a id="pickbottle"> 捡瓶子</a>
-<a id="mybottle"> 我的瓶子</a>
+@*<div id="rootdiv" style="height:80%"></div>
+    <input type="hidden" id="id" value="24" />
+
+    <nav class="navbar navbar-inverse navbar-fixed-bottom" style="width: 100%;bottom: 24%; padding-top: 13px;min-height: 40px;text-align:center">
+        <div class="row">
+            <div class="col-xs-3">
+                <a id="profilesetting">设置</a>
+            </div>
+            <div class="col-xs-3">
+                <a id="throwbottle"> 扔瓶子</a>
+            </div>
+            <div class="col-xs-3">
+                <a id="pickbottle"> 捡瓶子</a>
+            </div>
+            <div class="col-xs-3">
+                <a id="mybottle"> 我的瓶子</a>
+            </div>
+
+
+        </div>
+    </nav>*@
+
+
+<style>
+        .mainDiv {
+            margin: 0;
+            padding: 0;
+            font-size: 20px;
+            text-align: center;
+            /*color: #fff;*/
+        }
+
+        .foot {
+            width: 100%;
+            height: 10%;
+            position: absolute;
+            background-color: khaki;
+            bottom: 0;
+        }
+
+        .nav {
+            background-color: black;
+            top: 0px;
+            width: 100%;
+            position: absolute;
+            height: 90%;
+        }
+    </style>
+
+<div class="mainDiv">
+    <input type="hidden" id="id" value="24" />
+    <div  id="rootdiv">
+        
+    </div>
+    <div class="foot">
+        <div class="row" style="padding-top:2%">
+            <div class="col-xs-3">
+                <a id="profilesetting">设置</a>
+            </div>
+            <div class="col-xs-3">
+                <a id="throwbottle"> 扔瓶子</a>
+            </div>
+            <div class="col-xs-3">
+                <a id="pickbottle"> 捡瓶子</a>
+            </div>
+            <div class="col-xs-3">
+                <a id="mybottle"> 我的</a>
+            </div>
+        </div>
+    </div>
+</div>

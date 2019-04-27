@@ -1,9 +1,9 @@
 ﻿@{
+    Layout = "~/Views/Shared/Layout_Front.cshtml";
     ViewBag.Title = "流浪瓶";
 }
 
 <style>
-    /*web background*/
     .container {
         display: table;
         height: 100%;
@@ -13,7 +13,6 @@
         display: table-cell;
         vertical-align: middle;
     }
-    /* centered columns styles */
     .row-centered {
         text-align: center;
     }
@@ -23,14 +22,6 @@
         float: none;
         text-align: left;
         margin-right: -4px;
-    }
-
-    .unactive {
-        opacity:0.7
-    }
-
-    .active {
-        opacity: 1 !important
     }
 </style>
 
@@ -75,15 +66,10 @@
             }
             $.ajax({
                 type: "POST",
-                url: "http://localhost:9014/api/user/register",
-                //contentType: "application/json", //如果提交的是json数据类型，则必须有此参数,表示提交的数据类型 
+                url: "http://www.buyshoes.club:9001/api/user/register",
                 dataType: "json", //表示返回值类型，不必须   
-                //contentType: 'application/json; charset=utf-8',
-                //contentType: "application/x-www-form-urlencoded",
                 data: { UserName: username, Gender: gender },
                 success: function (result) {
-                    //在原来的页面跳转到下载word模板的页面
-                    debugger;
                     if (result.ErrorCode == 0) {
                         window.location.href = "/home/index";
                     } else {

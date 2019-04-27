@@ -9,60 +9,122 @@
         </div>
         <div class="row form-group">
             <label class="control-label col-lg-1">昵称</label>&nbsp;
-            <input class="form-control " style="display:inline; width: 50%;" type="text">
+            <input class="form-control" id="username" style="display:inline; width: 50%;" type="text">
         </div>
         <div class="row form-group">
             <label class="control-label col-lg-1">手机</label>&nbsp;
-            <input class="form-control" style="display:inline;width: 50%;" name="name" id="name" type="text">
+            <input class="form-control " id="phone" style="display:inline;width: 50%;" type="text">
         </div>
         <div class="row form-group">
             <label class="control-label col-lg-1">QQ </label>&nbsp;&nbsp;&nbsp;
-            <input class="form-control" style="display:inline;width: 50%;" name="name" id="name" type="text">
+            <input class="form-control" id="qqnum" style="display:inline;width: 50%;" type="text">
         </div>
         <div class="row form-group">
             <label class="control-label col-lg-1">邮箱</label>&nbsp;
-            <input class="form-control" style="display:inline;width: 50%;" name="name" id="name" type="text">
+            <input class="form-control" id="mail" style="display:inline;width: 50%;" type="text">
         </div>
-
         <div class="row form-group">
             <label class="control-label col-lg-1">性别</label>
             <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-primary unactive active" style="width:98px">
+                <label class="btn btn-primary unactive" style="width:98px">
                     <input type="radio" class="gender" value="1"> 男
                 </label>
                 <label class="btn btn-danger unactive" style="width:98px">
-                    <input type="radio" class="gender" value="2"> 女
+                    <input type="radio" class="gender" value="2" > 女
                 </label>
             </div>
         </div>
         <div class="row form-group">
             <label class="control-label col-lg-1">生日</label>
             &nbsp;
-            <div id="startdiv" class="input-group date form_date col-md-3" data-date-format="yyyy-mm-dd">
-                <input input="start" class="form-control" size="16" type="text" placeholder="请选择生日" value="" readonly>
+            <div style="width: 65%; padding-left: 15%; margin-top: -7%;" class="input-group date form_date col-md-3" data-date-format="yyyy-mm-dd">
+                <input input="start" id="birthday" class="form-control" size="16" type="text" placeholder="请选择生日" value="">
                 <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
-                @*<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>*@
             </div>
-
         </div>
         <div class="row form-group">
             <label class="control-label col-lg-1">个人说明</label>
             <div class="col-lg-5 col-md-6">
-                <textarea class="form-control" rows="2"></textarea>
+                <textarea class="form-control" id="remark" rows="2"></textarea>
+            </div>
+        </div>
+        <div class="row form-group">
+            <div class="col-lg-5">
+                <input type="button" class="btn btn-primary btn-sm btn-block" id="btnsubmit" value="提交">
             </div>
         </div>
     </div>
 </form>
 
 <script type="text/javascript">
-   $('.form_date').datetimepicker({
-       language:  'zh-CN',
+    $('.form_date').datetimepicker({
+        language: 'zh-CN',
         weekStart: 1,
-        todayBtn:  1,   //今日日期按钮
-		autoclose: 1,   //自动关闭
-		todayHighlight: 1,   //高亮今日日期
-		startView: 2,       //从日期视图开始
-		minView: 2,
-		forceParse: 0
+        todayBtn: 1,   //今日日期按钮
+        autoclose: 1,   //自动关闭
+        todayHighlight: 1,   //高亮今日日期
+        startView: 2,       //从日期视图开始
+        minView: 2,
+        forceParse: 0
     });
+
+
+    $(function () {
+        debugger;
+        $.ajax({
+            url: "http://www.buyshoes.club:9001/api/user/QueryById",
+            type: "get",
+            data: {id: $("#id").val()},
+            success: function (data) {
+                //var data = result.result;
+                $("#username").val(data.UserName);
+                $("#phone").val(data.Phone);
+                $("#qqnum").val(data.QQ);
+                $("#mail").val(data.Mail);
+                $("#birthday").val(data.Birthday.substring(0,10));
+                $("#remark").val(data.Remark);
+                $(".gender").each(function () {
+                    if (this.value == data.Gender) {
+                        $(this.parentNode).addClass("active focus");
+                        return;
+                    }
+                });
+            },
+            error: function (result) {
+                debugger;
+                alert("更新失败！")
+            }
+        });
+    });
+
+
+    $("#btnsubmit").click(function () {
+        var postData = {};
+        postData.id = $("#id").val();
+        postData.username = $("#username").val();
+        postData.phone = $("#phone").val();
+        postData.qq = $("#qqnum").val();
+        postData.mail = $("#mail").val();
+        postData.gender = $(".gender").val();
+        $(".gender").each(function () {
+            if (this.checked) {
+                postData.gender = this.value;
+                return;
+            }
+        });
+        postData.birthday = $("#birthday").val();
+        postData.remark = $("#remark").val();
+        $.ajax({
+            url: "http://www.buyshoes.club:9001/api/user/update",
+            type: "post",
+            data: postData,
+            success: function (result) {
+                $("#rootdiv").load("");
+            },
+            error: function (result) {
+                alert("更新失败！")
+            }
+        });
+    });
+
 </script>

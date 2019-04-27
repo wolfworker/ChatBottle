@@ -19,9 +19,9 @@ namespace Co.ChatBottle.Service.Controllers
         public UserBiz userBiz { get; set; } = new UserBiz();
 
         [HttpPost]
-        public HttpResponseMessage Register(RegisterRequest request)
+        public HttpResponseMessage Register(UserRequest request)
         {
-            var response = new BaseResponse<RegisterResponse>();
+            var response = new BaseResponse<UserResponse>();
 
             if (request == null)
             {
@@ -36,7 +36,7 @@ namespace Co.ChatBottle.Service.Controllers
             };
 
             var userEntity = userBiz.Add(userInfo);
-            var result = new RegisterResponse
+            var result = new UserResponse
             {
                 ID = userEntity.ID,
                 UserName = userEntity.UserName,
@@ -56,6 +56,41 @@ namespace Co.ChatBottle.Service.Controllers
             }
             return ResponseToJson(response, request.callback);
         }
+
+        [HttpPost]
+        public HttpResponseMessage Update(UserRequest request)
+        {
+            var response = new BaseResponse<UserResponse>();
+
+            if (request == null)
+            {
+                return null;
+            }
+            ConvertBaseRequest(request);
+
+            var userEntity = userBiz.Query<ACT_User>(request.ID);
+
+            userEntity.UserName = request.UserName;
+            userEntity.Phone = request.Phone;
+            userEntity.QQ = request.QQ;
+            userEntity.Mail = request.Mail;
+            userEntity.Gender = request.Gender;
+            if (request.Birthday != null && request.Birthday != DateTime.MinValue)
+            {
+                userEntity.Birthday = request.Birthday;
+            }
+            userEntity.Remark = request.Remark;
+            userEntity.UpdateUser = "1";
+            userEntity.UpdateTime = DateTime.Now;
+
+            if (userBiz.Update(userEntity))
+            {
+                response.ErrorCode = 0;
+                response.Result = null;
+            }
+            return ResponseToJson(response, request.callback);
+        }
+
 
         [HttpGet]
         public HttpResponseMessage QueryAll()
