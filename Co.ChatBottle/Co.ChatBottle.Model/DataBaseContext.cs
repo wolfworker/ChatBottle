@@ -33,6 +33,11 @@ namespace Co.ChatBottle.Model
         /// </summary>
         public DbSet<SYS_RequestLog> RequestLogs { get; set; }
 
+        /// <summary>
+        /// 业务日志表
+        /// </summary>
+        public DbSet<ACT_User_Position> Positions { get; set; }
+
         #endregion
     }
 }

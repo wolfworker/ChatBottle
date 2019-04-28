@@ -66,18 +66,18 @@
             }
             $.ajax({
                 type: "POST",
-                url: "http://www.buyshoes.club:9001/api/user/register",
+                url: serviceurl +"/api/user/register",
                 dataType: "json", //表示返回值类型，不必须   
                 data: { UserName: username, Gender: gender },
                 success: function (result) {
                     if (result.ErrorCode == 0) {
-                        window.location.href = "/home/index";
+                        window.location.href = "/home/index?sourceFlag=4";
                     } else {
                         alert("系统异常，请重试！");
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("失败！error");
+                    alert("站点异常，请重试！");
                 }
             });
         });

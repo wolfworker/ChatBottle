@@ -71,7 +71,7 @@ namespace Co.ChatBottle.Business
             }
         }
 
-        public T Query<T>(int id) where T : class
+        public T Query<T>(long id) where T : class
         {
             try
             {

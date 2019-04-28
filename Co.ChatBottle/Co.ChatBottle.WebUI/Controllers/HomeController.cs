@@ -8,8 +8,9 @@ namespace Co.ChatBottle.WebUI.Controllers
 {
     public class HomeController : Controller
     {
-        public ActionResult Index()
+        public ActionResult Index(int sourceFlag = -1)
         {
+            ViewBag.resource = sourceFlag;
             return View();
         }
 

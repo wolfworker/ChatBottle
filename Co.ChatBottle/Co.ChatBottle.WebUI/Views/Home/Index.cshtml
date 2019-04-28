@@ -27,35 +27,34 @@
 
 
 <style>
-        .mainDiv {
-            margin: 0;
-            padding: 0;
-            font-size: 20px;
-            text-align: center;
-            /*color: #fff;*/
-        }
+    .mainDiv {
+        margin: 0;
+        padding: 0;
+        font-size: 20px;
+        text-align: center;
+        /*color: #fff;*/
+    }
 
-        .foot {
-            width: 100%;
-            height: 10%;
-            position: absolute;
-            background-color: khaki;
-            bottom: 0;
-        }
+    .foot {
+        width: 100%;
+        height: 10%;
+        position: absolute;
+        background-color: khaki;
+        bottom: 0;
+    }
 
-        .nav {
-            background-color: black;
-            top: 0px;
-            width: 100%;
-            position: absolute;
-            height: 90%;
-        }
-    </style>
+    .nav {
+        background-color: black;
+        top: 0px;
+        width: 100%;
+        position: absolute;
+        height: 90%;
+    }
+</style>
 
 <div class="mainDiv">
-    <input type="hidden" id="id" value="24" />
-    <div  id="rootdiv">
-        
+    <div id="rootdiv">
+
     </div>
     <div class="foot">
         <div class="row" style="padding-top:2%">
@@ -74,3 +73,94 @@
         </div>
     </div>
 </div>
+<script>
+    $(function () {
+        debugger;
+        id = 1;
+        getLocation();
+        if (@ViewBag.resource!= -1) {
+            loadPageByIndex(@ViewBag.resource);//防止跳到主页 死循环
+        }
+    });
+
+    $("#profilesetting").click(function () {
+        loadPage(pageName.ProfileSetting);
+    });
+
+    $("#throwbottle").click(function () {
+        loadPage(pageName.ThrowBottle);
+    });
+
+    $("#pickbottle").click(function () {
+        loadPage(pageName.PickBottle);
+    });
+
+    $("#mybottle").click(function () {
+        loadPage(pageName.MyBottle);
+    });
+
+    function loadPage(pageName) {
+        $("#rootdiv").load(pageName);
+    }
+
+    function loadPageByIndex(pageIndex) {
+        switch (pageIndex) {
+            case 1:
+                loadPage(pageName.ProfileSetting);
+                break;
+            case 2:
+                loadPage(pageName.ThrowBottle);
+                break;
+            case 3:
+                loadPage(pageName.PickBottle);
+                break;
+            case 4:
+                loadPage(pageName.MyBottle);
+                break;
+            case 0:
+            default:
+                loadPage(pageName.Index);
+                break;
+        }
+    }
+
+    function getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition);
+        }
+        else {
+            //x.innerHTML = "Geolocation is not supported by this browser.";
+            //不支持定位
+        }
+    }
+    function showPosition(position) {
+        latitude = position.coords.latitude;
+        longitude = position.coords.latitude;
+
+        //每次更新地址都同步到数据库
+        var data = {
+            userid: id,
+            longitude: longitude,
+            latitude: latitude,
+        };
+        $.post(serviceurl + "/api/position/add", data);
+    }
+
+
+    Date.prototype.Format = function (fmt) { //author: meizz
+        var o = {
+            "M+": this.getMonth() + 1, //月份
+            "d+": this.getDate(), //日
+            "h+": this.getHours(), //小时
+            "m+": this.getMinutes(), //分
+            "s+": this.getSeconds(), //秒
+            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+            "S": this.getMilliseconds() //毫秒
+        };
+        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+        for (var k in o)
+            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        return fmt;
+    }
+
+</script>

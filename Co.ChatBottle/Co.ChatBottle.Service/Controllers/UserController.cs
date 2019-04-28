@@ -21,8 +21,6 @@ namespace Co.ChatBottle.Service.Controllers
         [HttpPost]
         public HttpResponseMessage Register(UserRequest request)
         {
-            var response = new BaseResponse<UserResponse>();
-
             if (request == null)
             {
                 return null;
@@ -36,31 +34,13 @@ namespace Co.ChatBottle.Service.Controllers
             };
 
             var userEntity = userBiz.Add(userInfo);
-            var result = new UserResponse
-            {
-                ID = userEntity.ID,
-                UserName = userEntity.UserName,
-                Phone = userEntity.Phone,
-                Mail = userEntity.Mail,
-                QQ = userEntity.QQ,
-                Birthday = userEntity.Birthday,
-                Gender = userEntity.Gender,
-                Status = userEntity.Status,
-                Remark = userEntity.Remark
-            };
-
-            if (userEntity != null)
-            {
-                response.ErrorCode = 0;
-                response.Result = result;
-            }
-            return ResponseToJson(response, request.callback);
+            return EntityToJson(userEntity);
         }
 
         [HttpPost]
         public HttpResponseMessage Update(UserRequest request)
         {
-            var response = new BaseResponse<UserResponse>();
+            var response = new BaseResponse<ACT_User>();
 
             if (request == null)
             {
@@ -86,25 +66,24 @@ namespace Co.ChatBottle.Service.Controllers
             if (userBiz.Update(userEntity))
             {
                 response.ErrorCode = 0;
-                response.Result = null;
+                response.Result = userEntity;
             }
-            return ResponseToJson(response, request.callback);
+            return ResponseToJson(response);
         }
-
 
         [HttpGet]
         public HttpResponseMessage QueryAll()
         {
             var result = userBiz.QueryAll<ACT_User>();
-            return ResponseToJson(result);
+            return EntityToJson(result);
         }
 
         [HttpGet]
         // GET: api/UserApi/5
-        public HttpResponseMessage QueryById(int id)
+        public HttpResponseMessage QueryById(long id)
         {
             var result = userBiz.Query<ACT_User>(id);
-            return ResponseToJson(result);
+            return EntityToJson(result);
         }
     }
 }

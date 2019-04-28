@@ -36,7 +36,7 @@ namespace Co.ChatBottle.Service.Controllers
             }
         }
 
-        public HttpResponseMessage ResponseToJson(Object obj,string jsonp="")
+        public HttpResponseMessage ResponseToJson(Object obj)
         {
             String str;
             if (obj is String || obj is Char)
@@ -47,16 +47,39 @@ namespace Co.ChatBottle.Service.Controllers
             {
                 str = JsonConvert.SerializeObject(obj);
             }
-            if (!string.IsNullOrEmpty(jsonp))
+            HttpResponseMessage result = new HttpResponseMessage
             {
-                str = $"{jsonp}({str})";
-            }
-            HttpResponseMessage result = new HttpResponseMessage { Content = new StringContent(str, Encoding.GetEncoding("UTF-8"), "application/json") };
+                Content = new StringContent(str,
+                Encoding.GetEncoding("UTF-8"),
+                "application/json")
+            };
             return result;
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public HttpResponseMessage EntityToJson<T>(T obj) where T : class
+        {
+            var response = new BaseResponse<T>();
+
+            if (obj != null)
+            {
+                response.ErrorCode = 0;
+                response.Result = obj;
+            }
+            return ResponseToJson(response);
         }
 
         public void ConvertBaseRequest(BaseRequest request)
         {
+            if (request == null)
+            {
+                return;
+            }
             if (Request != null && Request.Headers != null)
             {
                 request.Host = Request.Headers.Host;

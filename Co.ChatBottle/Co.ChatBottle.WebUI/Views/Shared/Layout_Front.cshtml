@@ -27,40 +27,22 @@
 
     @RenderBody()
 
+    @*服务地址*@
     <script>
-        $(function () {
-            $("#profilesetting").click(function () {
-                $("#rootdiv").load("/Home/ProfileSetting");
-            });
+        //var serviceurl = "http://www.buyshoes.club:9001/";
+        //var serviceurl = "http://www.buyshoes.club:9001/";
+        var serviceurl = "http://10.1.8.4:9014/";
+        var id = 0;
 
-            $("#throwbottle").click(function () {
-                $("#rootdiv").load("/Home/ThrowBottle");
-            });
-
-            $("#pickbottle").click(function () {
-                $("#rootdiv").load("/Home/PickBottle");
-            });
-
-            $("#mybottle").click(function () {
-                $("#rootdiv").load("/Home/MyBottle");
-            });
-        });
-
-        Date.prototype.Format = function (fmt) { //author: meizz
-            var o = {
-                "M+": this.getMonth() + 1, //月份
-                "d+": this.getDate(), //日
-                "h+": this.getHours(), //小时
-                "m+": this.getMinutes(), //分
-                "s+": this.getSeconds(), //秒
-                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-                "S": this.getMilliseconds() //毫秒
-            };
-            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-            for (var k in o)
-                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-            return fmt;
-        }
+        var latitude = "";
+        var longitude = "";
+        var pageName = {
+            ProfileSetting: "/Home/ProfileSetting",
+            ThrowBottle: "/Home/ThrowBottle",
+            PickBottle: "/Home/PickBottle",
+            MyBottle: "/Home/MyBottle",
+            Index: "",
+        };
     </script>
 </body>
 </html>

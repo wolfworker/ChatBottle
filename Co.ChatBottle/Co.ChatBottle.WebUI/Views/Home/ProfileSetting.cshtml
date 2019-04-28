@@ -72,16 +72,19 @@
     $(function () {
         debugger;
         $.ajax({
-            url: "http://www.buyshoes.club:9001/api/user/QueryById",
+            url: serviceurl+"/api/user/QueryById",
             type: "get",
-            data: {id: $("#id").val()},
-            success: function (data) {
-                //var data = result.result;
+            data: {id: id},
+            success: function (result) {
+                var data = result.Result;
                 $("#username").val(data.UserName);
                 $("#phone").val(data.Phone);
                 $("#qqnum").val(data.QQ);
                 $("#mail").val(data.Mail);
-                $("#birthday").val(data.Birthday.substring(0,10));
+                if (data.Birthday != undefined && data.Birthday != "") {
+                    debugger;
+                    $("#birthday").val(data.Birthday.substring(0, 10));
+                }
                 $("#remark").val(data.Remark);
                 $(".gender").each(function () {
                     if (this.value == data.Gender) {
@@ -92,7 +95,8 @@
             },
             error: function (result) {
                 debugger;
-                alert("更新失败！")
+                alert(serviceurl)
+                alert("加载失败！")
             }
         });
     });
@@ -100,7 +104,7 @@
 
     $("#btnsubmit").click(function () {
         var postData = {};
-        postData.id = $("#id").val();
+        postData.id = id;
         postData.username = $("#username").val();
         postData.phone = $("#phone").val();
         postData.qq = $("#qqnum").val();
@@ -115,13 +119,14 @@
         postData.birthday = $("#birthday").val();
         postData.remark = $("#remark").val();
         $.ajax({
-            url: "http://www.buyshoes.club:9001/api/user/update",
+            url: serviceurl +"/api/user/update",
             type: "post",
             data: postData,
             success: function (result) {
                 $("#rootdiv").load("");
             },
             error: function (result) {
+                debugger;
                 alert("更新失败！")
             }
         });

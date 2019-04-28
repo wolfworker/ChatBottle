@@ -62,7 +62,7 @@ namespace Co.ChatBottle.DataAccess
             }
         }
 
-        public T Query<T>(int id) where T : class
+        public T Query<T>(long id) where T : class
         {
             using (var context = new DataBaseContext())
             {

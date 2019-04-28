@@ -11,7 +11,7 @@ namespace Co.ChatBottle.Model
     /// </summary>
     public class UserRequest : BaseRequest
     {
-        public int ID { get; set; }
+        public long ID { get; set; }
         public string UserName { get; set; }
         public string Phone { get; set; }
         public string Mail { get; set; }
@@ -27,7 +27,7 @@ namespace Co.ChatBottle.Model
     /// </summary>
     public class UserResponse
     {
-        public int ID { get; set; }
+        public long ID { get; set; }
         public string UserName { get; set; }
         public string Phone { get; set; }
         public string Mail { get; set; }
