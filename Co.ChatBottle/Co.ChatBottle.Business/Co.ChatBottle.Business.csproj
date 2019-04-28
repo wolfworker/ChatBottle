@@ -53,6 +53,7 @@
     <Compile Include="CommonBiz.cs" />
     <Compile Include="DebugLogBiz.cs" />
     <Compile Include="PositionBiz.cs" />
+    <Compile Include="BottleBiz.cs" />
     <Compile Include="UserBiz.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

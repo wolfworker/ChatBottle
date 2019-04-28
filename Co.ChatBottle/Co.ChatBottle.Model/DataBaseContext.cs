@@ -34,9 +34,14 @@ namespace Co.ChatBottle.Model
         public DbSet<SYS_RequestLog> RequestLogs { get; set; }
 
         /// <summary>
-        /// 业务日志表
+        /// 用户位置表
         /// </summary>
         public DbSet<ACT_User_Position> Positions { get; set; }
+
+        /// <summary>
+        /// 瓶子表
+        /// </summary>
+        public DbSet<ACT_Bottle> Bottles { get; set; }
 
         #endregion
     }

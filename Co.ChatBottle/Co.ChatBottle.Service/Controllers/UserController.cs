@@ -60,7 +60,7 @@ namespace Co.ChatBottle.Service.Controllers
                 userEntity.Birthday = request.Birthday;
             }
             userEntity.Remark = request.Remark;
-            userEntity.UpdateUser = "1";
+            userEntity.UpdateUserID = 1;
             userEntity.UpdateTime = DateTime.Now;
 
             if (userBiz.Update(userEntity))

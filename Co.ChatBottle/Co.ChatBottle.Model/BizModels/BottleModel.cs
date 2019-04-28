@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 namespace Co.ChatBottle.Model
 {
     /// <summary>
-    /// 用户位置请求实体
+    /// 瓶子请求实体
     /// </summary>
-    public class PositionRequest : BaseRequest
+    public class BottleRequest : BaseRequest
     {
         public long ID { get; set; }
-        public long UserID { get; set; }
+        public long ThrowUserID { get; set; }
+        public long ReceiveUserID { get; set; }
+        public string BottleDesc { get; set; }
         public string Longitude { get; set; }
         public string Latitude { get; set; }
     }

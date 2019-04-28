@@ -6,14 +6,15 @@ using System.Threading.Tasks;
 
 namespace Co.ChatBottle.Model
 {
-    /// <summary>
-    /// 用户位置请求实体
-    /// </summary>
-    public class PositionRequest : BaseRequest
+    public class ACT_Bottle : CommonEntity
     {
         public long ID { get; set; }
-        public long UserID { get; set; }
+        public long ThrowUserID { get; set; }
+        public long ReceiveUserID { get; set; }
+        public string BottleDesc { get; set; }
         public string Longitude { get; set; }
         public string Latitude { get; set; }
+        public byte Status { get; set; }
+        public string Remark { get; set; }
     }
 }
