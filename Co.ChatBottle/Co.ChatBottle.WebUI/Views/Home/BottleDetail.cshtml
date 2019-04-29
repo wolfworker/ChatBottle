@@ -8,26 +8,24 @@
 <input type="button" id="btnReply" value="发送" />
 
 <script type="text/javascript">
-    $(function () {
-        $.ajax({
-            url: serviceurl + "/api/Bottle/QueryById",
-            type: "get",
-            data: { id: @ViewBag.bottleId },
-            success: function (result) {
-                if (result.ErrorCode == 0 && result.Result != undefined) {
-                    var bottleData = result.Result;
-                    var html = "<br />";
-                    html += '<textarea style="width:100%;text-align:left" readonly="readonly">' + bottleData.BottleDesc + '</textarea>';
-                    html += "<br />";
-                    $("#bottle").append(html);
-                } else {
-                    $("#bottle").append("这是个空瓶子。。。");
-                }
-            },
-            error: function (result) {
-                $("#bottle").append("系统异常啦");
+    $.ajax({
+        url: serviceurl + "/api/Bottle/QueryById",
+        type: "get",
+        data: { id: @ViewBag.bottleId },
+        success: function (result) {
+            if (result.ErrorCode == 0 && result.Result != undefined) {
+                var bottleData = result.Result;
+                var html = "<br />";
+                html += '<textarea style="width:100%;text-align:left" readonly="readonly">' + bottleData.BottleDesc + '</textarea>';
+                html += "<br />";
+                $("#bottle").append(html);
+            } else {
+                $("#bottle").append("这是个空瓶子。。。");
             }
-        });
+        },
+        error: function (result) {
+            $("#bottle").append("系统异常啦");
+        }
     });
 
 </script>

@@ -57,76 +57,78 @@
 </form>
 
 <script type="text/javascript">
-    $(function () {
-        $.ajax({
-            url: serviceurl + "/api/user/QueryById",
-            type: "get",
-            data: { id: userid },
-            success: function (result) {
-                var data = result.Result;
-                $("#username").val(data.UserName);
-                $("#phone").val(data.Phone);
-                $("#qqnum").val(data.QQ);
-                $("#mail").val(data.Mail);
-                if (data.Birthday != undefined && data.Birthday != "") {
-                    $("#birthday").val(data.Birthday.substring(0, 10));
-                }
-                $("#remark").val(data.Remark);
-                $(".gender").each(function () {
-                    if (this.value == data.Gender) {
-                        $(this.parentNode).addClass("active focus");
-                        return;
-                    }
-                });
-            },
-            error: function (result) {
-                alert("加载失败！")
+    $.ajax({
+        url: serviceurl + "/api/user/QueryById",
+        type: "get",
+        data: { id: userid },
+        success: function (result) {
+            var data = result.Result;
+            $("#username").val(data.UserName);
+            $("#phone").val(data.Phone);
+            $("#qqnum").val(data.QQ);
+            $("#mail").val(data.Mail);
+            if (data.Birthday != undefined && data.Birthday != "") {
+                $("#birthday").val(data.Birthday.substring(0, 10));
             }
-        });
-
-        $("#btnsubmit").click(function () {
-            var postData = {};
-            postData.id = userid;
-            postData.username = $("#username").val();
-            postData.phone = $("#phone").val();
-            postData.qq = $("#qqnum").val();
-            postData.mail = $("#mail").val();
-            postData.gender = $(".gender").val();
+            $("#remark").val(data.Remark);
             $(".gender").each(function () {
-                if (this.checked) {
-                    postData.gender = this.value;
+                if (this.value == data.Gender) {
+                    $(this.parentNode).addClass("active focus");
                     return;
                 }
             });
-            postData.birthday = $("#birthday").val();
-            postData.remark = $("#remark").val();
-            $.ajax({
-                url: serviceurl + "/api/user/update",
-                type: "post",
-                data: postData,
-                success: function (result) {
-                    if (result != undefined && result.ErrorCode == 0) {
-                        $("#rootdiv").load("");
-                    } else {
-                        alert(result.ErrorMsg)
-                    }
-                },
-                error: function (result) {
-                    alert("更新失败！")
-                }
-            });
-        });
+        },
+        error: function (result) {
+            alert("加载失败！")
+        }
+    });
 
-        $('.form_date').datetimepicker({
-            language: 'zh-CN',
-            weekStart: 1,
-            todayBtn: 1,   //今日日期按钮
-            autoclose: 1,   //自动关闭
-            todayHighlight: 1,   //高亮今日日期
-            startView: 2,       //从日期视图开始
-            minView: 2,
-            forceParse: 0
+    $("#btnsubmit").click(function () {
+        var postData = {};
+        postData.id = userid;
+        postData.username = $("#username").val();
+        postData.phone = $("#phone").val();
+        postData.qq = $("#qqnum").val();
+        postData.mail = $("#mail").val();
+        postData.gender = $(".gender").val();
+        $(".gender").each(function () {
+            if (this.checked) {
+                postData.gender = this.value;
+                return;
+            }
         });
+        postData.birthday = $("#birthday").val();
+        postData.remark = $("#remark").val();
+        $.ajax({
+            url: serviceurl + "/api/user/update",
+            type: "post",
+            data: postData,
+            success: function (result) {
+                if (result != undefined && result.ErrorCode == 0) {
+                    alert("更新成功了哦！")
+                    $("#rootdiv").empty();
+                    //$("#rootdiv").append('<img src="../Content/img/background.jpg" style="width:100%;height:100%" />');
+
+                    //$("#rootdiv").load('<img src="~/Content/img/background.jpg" style="width:100%;height:100%" />');
+                } else {
+                    alert(result.ErrorMsg)
+                }
+            },
+            error: function (result) {
+                alert("更新失败！")
+            }
+        });
+    });
+
+    $('.form_date').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,   //今日日期按钮
+        autoclose: 1,   //自动关闭
+        todayHighlight: 1,   //高亮今日日期
+        startView: 2,       //从日期视图开始
+        minView: 2,
+        forceParse: 0
     });
 
 </script>

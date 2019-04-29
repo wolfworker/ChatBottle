@@ -3,9 +3,10 @@
 }
 <br />
 <div id="noBottle" style="display:none">暂时还没有瓶子哦，去<a id="pickBottle">捡一个</a>试试？</div>
-<div id="bottleList" style="display:none"></div>
+<div id="bottleList" style="display:none;font-size:12px"></div>
 
 <script type="text/javascript">
+
     $("#pickBottle").click(function () {
         loadPage(pageName.PickBottle);
     });
@@ -26,12 +27,12 @@
             data: { userId: userid },
             success: function (result) {
                 if (result.Result != undefined && result.Result.length > 0) {
-                    var html = "<ol>";
+                    var html = "<div>";
                     var bottleData = result.Result;
                     $.each(bottleData, function (i, item) {
-                        html += '<li><a class="openBottle" data-bottleid=' + item.ID + ' ><span>' + item.BottleDesc + '</span><span>上海闵行</span>-<span>男</span> &nbsp;&nbsp; 未读</a></li>';
+                        html += '<div style="height: 70px;"><img src="http://localhost:9002/Content/img/background.jpg" style="height:50px;width:50px;margin-left:-123px;"><span style="display: block;margin-top:-50px;height:20px;padding-left:120px">上海闵行</span><span style="display: block;padding-top:10px;height:30px;">' + item.BottleDesc +'</span><span style="display:block;padding-left: 25%;margin-top:-48px;">23:22</span></div>';
                     });
-                    html += "</ol>";
+                    html += "</div>";
                     $("#bottleList").append(html);
                     $("#bottleList").show();
                     bindClick();
@@ -45,7 +46,6 @@
         });
     }
 
-    debugger;
     myBottleInit();
 
 </script>

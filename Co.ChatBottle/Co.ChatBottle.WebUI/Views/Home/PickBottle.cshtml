@@ -7,27 +7,6 @@
 <div id="bottle" style="display:none">捡到了一个瓶子，<a id="openBottle" data-bottleid="">打开</a>看看吧？</div>
 
 <script type="text/javascript">
-    $(function () {
-        $("#bottle").hide();
-        $("#noBottle").hide();
-        $.ajax({
-            url: serviceurl + "/api/Bottle/PickBottles",
-            type: "get",
-            data: { userId: userid },
-            success: function (result) {
-                if (result.ErrorCode == 0 && result.Result != undefined) {
-                    
-                    $("#openBottle")[0].dataset.bottleid = result.Result.ID;
-                    $("#bottle").show();
-                } else {
-                    $("#noBottle").show();
-                }
-            },
-            error: function (result) {
-                $("#noBottle").show();
-            }
-        });
-    });
 
     $("#throwBottle").click(function () {
         loadPage(pageName.ThrowBottle);
@@ -36,5 +15,26 @@
     $("#openBottle").click(function () {
         var param = "?bottleId=" + this.dataset.bottleid;
         loadPage(pageName.BottleDetail, param);
+    });
+
+    $("#bottle").hide();
+    $("#noBottle").hide();
+
+    $.ajax({
+        url: serviceurl + "/api/Bottle/PickBottles",
+        type: "get",
+        data: { userId: userid },
+        success: function (result) {
+            if (result.ErrorCode == 0 && result.Result != undefined) {
+
+                $("#openBottle")[0].dataset.bottleid = result.Result.ID;
+                $("#bottle").show();
+            } else {
+                $("#noBottle").show();
+            }
+        },
+        error: function (result) {
+            $("#noBottle").show();
+        }
     });
 </script>

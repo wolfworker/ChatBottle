@@ -32,8 +32,9 @@
     <script>
         //全局变量
         //var serviceurl = "http://www.buyshoes.club:9001/";
-        //var serviceurl = "http://192.168.8.109:9001/";
-        var serviceurl = "http://10.1.8.4:9014/";
+        var serviceurl = "http://192.168.8.108:9001/";
+        //var serviceurl = "http://10.1.8.4:9014/";
+        debugger;
         var userid = 0;//定义全局用户id
         var expiredHour = 24;
         var latitude = "";
@@ -47,6 +48,7 @@
             Index: "",
         };
 
+        debugger;
         function checkUserValid() {
             userid = localStorage.getItem("userid");
             var expiredtimestr = localStorage.getItem("expiredTime");

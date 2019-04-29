@@ -83,11 +83,11 @@
                         }
                         window.location.href = "/home/index?sourceFlag=4";
                     } else {
-                        alert("系统异常，请重试！");
+                        alert(result.ErrorMsg);
                     }
                 },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("站点异常，请重试！");
+                    alert("系统异常，请重试！");
                 }
             });
         });

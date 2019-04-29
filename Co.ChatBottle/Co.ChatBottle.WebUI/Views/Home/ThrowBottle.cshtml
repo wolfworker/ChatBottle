@@ -8,35 +8,33 @@
 </div>
 
 <script>
-    $(function () {
-        $("#btnThrow").click(function () {
-            var bottleData = {};
-            var bottleDesc = $("#bottleText").val();
-            bottleData.ThrowUserID = userid;
-            bottleData.BottleDesc = bottleDesc;
-            bottleData.Longitude = longitude;
-            bottleData.Latitude = latitude;
-            if (bottleDesc == undefined || bottleDesc == "") {
-                alert("瓶子里是空的哦！");
-                return;
-            }
+    $("#btnThrow").click(function () {
+        var bottleData = {};
+        var bottleDesc = $("#bottleText").val();
+        bottleData.ThrowUserID = userid;
+        bottleData.BottleDesc = bottleDesc;
+        bottleData.Longitude = longitude;
+        bottleData.Latitude = latitude;
+        if (bottleDesc == undefined || bottleDesc == "") {
+            alert("瓶子里是空的哦！");
+            return;
+        }
 
-            $.ajax({
-                url: serviceurl + "/api/bottle/add",
-                type: "post",
-                data: bottleData,
-                success: function (result) {
-                    if (result != undefined && result.ErrorCode == 0) {
-                        $("#bottleText").val('');
-                        alert("瓶子已经漂出去啦");
-                    } else {
-                        alert(result.ErrorMsg)
-                    }
-                },
-                error: function (result) {
-                    alert("系统异常！")
+        $.ajax({
+            url: serviceurl + "/api/bottle/add",
+            type: "post",
+            data: bottleData,
+            success: function (result) {
+                if (result != undefined && result.ErrorCode == 0) {
+                    $("#bottleText").val('');
+                    alert("瓶子已经漂出去啦");
+                } else {
+                    alert(result.ErrorMsg)
                 }
-            });
+            },
+            error: function (result) {
+                alert("系统异常！")
+            }
         });
     });
 </script>
