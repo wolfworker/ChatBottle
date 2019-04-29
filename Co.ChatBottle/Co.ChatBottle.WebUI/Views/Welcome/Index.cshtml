@@ -60,40 +60,38 @@
     </div>
 </div>
 <script>
-    $(function () {
-        $("#btnSubmit").click(function () {
-            var gender = $(".gender").val();
-            var username = $("#username").val();
-            var password = $("#password").val();
-            if (username == undefined || username == "" || password == undefined || password == "") {
-                alert("昵称或密码不可为空！");
-                return;
-            }
-
-            $.ajax({
-                type: "POST",
-                url: serviceurl + "/api/user/login",
-                dataType: "json", //表示返回值类型，不必须
-                data: { UserName: username, PassChar: password, Gender: gender },
-                success: function (result) {
-                    if (result.ErrorCode == 0 && result.Result != undefined) {
-                        if (result.Result.ID > 0) {
-                            localStorage.setItem("userid", result.Result.ID);
-                            localStorage.setItem("expiredTime", new Date());
-                        }
-                        window.location.href = "/home/index?sourceFlag=4";
-                    } else {
-                        alert(result.ErrorMsg);
-                    }
-                },
-                error: function (XMLHttpRequest, textStatus, errorThrown) {
-                    alert("系统异常，请重试！");
-                }
-            });
-        });
-
-        if (checkUserValid()) {
-            window.location.href = "/home/index?sourceFlag=4";
+    $("#btnSubmit").click(function () {
+        var gender = $(".gender").val();
+        var username = $("#username").val();
+        var password = $("#password").val();
+        if (username == undefined || username == "" || password == undefined || password == "") {
+            alert("昵称或密码不可为空！");
+            return;
         }
+
+        $.ajax({
+            type: "POST",
+            url: serviceurl + "/api/user/login",
+            dataType: "json", //表示返回值类型，不必须
+            data: { UserName: username, PassChar: password, Gender: gender },
+            success: function (result) {
+                if (result.ErrorCode == 0 && result.Result != undefined) {
+                    if (result.Result.ID > 0) {
+                        localStorage.setItem("userid", result.Result.ID);
+                        localStorage.setItem("expiredTime", new Date());
+                    }
+                    window.location.href = "/home/index?sourceFlag=4";
+                } else {
+                    alert(result.ErrorMsg);
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert("系统异常，请重试！");
+            }
+        });
     });
+
+    if (checkUserValid()) {
+        window.location.href = "/home/index?sourceFlag=4";
+    }
 </script>
