@@ -2,8 +2,8 @@
     Layout = "~/Views/Shared/Layout_Front.cshtml";
     ViewBag.Title = "流浪瓶";
 }
-
 <style>
+
     .container {
         display: table;
         height: 100%;
@@ -13,6 +13,7 @@
         display: table-cell;
         vertical-align: middle;
     }
+
     .row-centered {
         text-align: center;
     }
@@ -25,33 +26,36 @@
     }
 </style>
 
-
-
 <div class="container">
     <div class="row row-centered">
         <div class="col-md-6 col-centered">
             <h2 class="row-centered">欢迎</h2>
-                <div class="input-group input-group-md">
-                    <span class="input-group-addon"><i class="glyphicon glyphicon-user" aria-hidden="true" style="width: 17px;"></i></span>
-                    <input type="text" class="form-control"  id="username" name="username" placeholder="请输入昵称" />
+            <div class="input-group input-group-md">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-user" aria-hidden="true" style="width: 17px;"></i></span>
+                <input type="text" class="form-control" id="username" placeholder="请输入昵称" />
+            </div>
+            <br />
+            <div class="input-group input-group-md">
+                <span class="input-group-addon"><i class="glyphicon glyphicon-certificate" aria-hidden="true" style="width: 17px;"></i></span>
+                <input type="text" class="form-control" id="password" placeholder="请输入密码" />
+            </div>
+            <br />
+            <div class="input-group input-group-md">
+                <span class="input-group-addon">
+                    <img src="/Content/img/gender.png" style="width: 17px;">
+                </span>
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-primary unactive active" style="width:98px">
+                        <input type="radio" class="gender" value="1"> 男
+                    </label>
+
+                    <label class="btn btn-danger unactive" style="width:98px">
+                        <input type="radio" class="gender" value="2"> 女
+                    </label>
                 </div>
-                <p></p>
-                <div class="input-group input-group-md">
-                    <span class="input-group-addon">
-                        <img src="/Content/img/gender.png" style="width: 17px;">
-                    </span>
-                    <div class="btn-group" data-toggle="buttons">
-                        <label class="btn btn-primary unactive active" style="width:98px">
-                            <input type="radio" class="gender" value="1"> 男
-                        </label>
-                        
-                        <label class="btn btn-danger unactive" style="width:98px">
-                            <input type="radio" class="gender" value="2"> 女
-                        </label>
-                    </div>	
-                </div>
-                <br />
-                <button type="button" class="btn btn-success btn-block" id="btnSubmit">开始</button>
+            </div>
+            <br />
+            <button type="button" class="btn btn-success btn-block" id="btnSubmit">开始流浪</button>
         </div>
     </div>
 </div>
@@ -60,17 +64,23 @@
         $("#btnSubmit").click(function () {
             var gender = $(".gender").val();
             var username = $("#username").val();
-            if (username == undefined || username == "") {
-                alert("昵称不可为空！");
+            var password = $("#password").val();
+            if (username == undefined || username == "" || password == undefined || password == "") {
+                alert("昵称或密码不可为空！");
                 return;
             }
+
             $.ajax({
                 type: "POST",
-                url: serviceurl +"/api/user/register",
-                dataType: "json", //表示返回值类型，不必须   
-                data: { UserName: username, Gender: gender },
+                url: serviceurl + "/api/user/login",
+                dataType: "json", //表示返回值类型，不必须
+                data: { UserName: username, PassChar: password, Gender: gender },
                 success: function (result) {
-                    if (result.ErrorCode == 0) {
+                    if (result.ErrorCode == 0 && result.Result != undefined) {
+                        if (result.Result.ID > 0) {
+                            localStorage.setItem("userid", result.Result.ID);
+                            localStorage.setItem("expiredTime", new Date());
+                        }
                         window.location.href = "/home/index?sourceFlag=4";
                     } else {
                         alert("系统异常，请重试！");
@@ -81,5 +91,9 @@
                 }
             });
         });
+
+        if (checkUserValid()) {
+            window.location.href = "/home/index?sourceFlag=4";
+        }
     });
 </script>

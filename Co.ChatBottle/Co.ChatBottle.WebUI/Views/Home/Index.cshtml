@@ -2,30 +2,6 @@
     Layout = "~/Views/Shared/Layout_Front.cshtml";
     ViewBag.Title = "流浪瓶";
 }
-<br />
-@*<div id="rootdiv" style="height:80%"></div>
-    <input type="hidden" id="id" value="24" />
-
-    <nav class="navbar navbar-inverse navbar-fixed-bottom" style="width: 100%;bottom: 24%; padding-top: 13px;min-height: 40px;text-align:center">
-        <div class="row">
-            <div class="col-xs-3">
-                <a id="profilesetting">设置</a>
-            </div>
-            <div class="col-xs-3">
-                <a id="throwbottle"> 扔瓶子</a>
-            </div>
-            <div class="col-xs-3">
-                <a id="pickbottle"> 捡瓶子</a>
-            </div>
-            <div class="col-xs-3">
-                <a id="mybottle"> 我的瓶子</a>
-            </div>
-
-
-        </div>
-    </nav>*@
-
-
 <style>
     .mainDiv {
         margin: 0;
@@ -76,91 +52,107 @@
 <script>
     $(function () {
         debugger;
-        id = 1;
-        getLocation();
-        if (@ViewBag.resource!= -1) {
-            loadPageByIndex(@ViewBag.resource);//防止跳到主页 死循环
+            init();
+        });
+
+    debugger;
+        var loadPage = function (pageName, param) {
+            var pagePath = pageName;
+            if (param != undefined && param != "") {
+                pagePath += param;
+            }
+            $("#rootdiv").load(pagePath);
         }
-    });
 
-    $("#profilesetting").click(function () {
-        loadPage(pageName.ProfileSetting);
-    });
-
-    $("#throwbottle").click(function () {
-        loadPage(pageName.ThrowBottle);
-    });
-
-    $("#pickbottle").click(function () {
-        loadPage(pageName.PickBottle);
-    });
-
-    $("#mybottle").click(function () {
-        loadPage(pageName.MyBottle);
-    });
-
-    function loadPage(pageName) {
-        $("#rootdiv").load(pageName);
-    }
-
-    function loadPageByIndex(pageIndex) {
-        switch (pageIndex) {
-            case 1:
-                loadPage(pageName.ProfileSetting);
-                break;
-            case 2:
-                loadPage(pageName.ThrowBottle);
-                break;
-            case 3:
-                loadPage(pageName.PickBottle);
-                break;
-            case 4:
-                loadPage(pageName.MyBottle);
-                break;
-            case 0:
-            default:
-                loadPage(pageName.Index);
-                break;
+        var loadPageByIndex = function (pageIndex) {
+            switch (pageIndex) {
+                case 1:
+                    loadPage(pageName.ProfileSetting);
+                    break;
+                case 2:
+                    loadPage(pageName.ThrowBottle);
+                    break;
+                case 3:
+                    loadPage(pageName.PickBottle);
+                    break;
+                case 4:
+                    loadPage(pageName.MyBottle);
+                    break;
+                case 5:
+                    loadPage(pageName.BottleDetail);
+                    break;
+                case 0:
+                default:
+                    loadPage(pageName.Index);
+                    break;
+            }
         }
-    }
 
-    function getLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition);
+        var getLocation = function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(showPosition);
+            }
+            else {
+                //x.innerHTML = "Geolocation is not supported by this browser.";
+                //不支持定位
+            }
         }
-        else {
-            //x.innerHTML = "Geolocation is not supported by this browser.";
-            //不支持定位
+
+        var showPosition = function (position) {
+            latitude = position.coords.latitude;
+            longitude = position.coords.latitude;
+
+            //每次更新地址都同步到数据库
+            var data = {
+                userid: userid,
+                longitude: longitude,
+                latitude: latitude,
+            };
+            $.post(serviceurl + "/api/position/add", data);
         }
-    }
-    function showPosition(position) {
-        latitude = position.coords.latitude;
-        longitude = position.coords.latitude;
 
-        //每次更新地址都同步到数据库
-        var data = {
-            userid: id,
-            longitude: longitude,
-            latitude: latitude,
-        };
-        $.post(serviceurl + "/api/position/add", data);
-    }
+        var init = function () {
+            getLocation();
+            if (@ViewBag.sourceFlag!= -1) {
+                loadPageByIndex(@ViewBag.sourceFlag);//防止跳到主页 死循环
+            }
+            if (!checkUserValid()) {
+                window.location.href = "/welcome/index";
+            }
+        }
+
+        $("#profilesetting").click(function () {
+            loadPage(pageName.ProfileSetting);
+        });
+
+        $("#throwbottle").click(function () {
+            loadPage(pageName.ThrowBottle);
+        });
+
+        $("#pickbottle").click(function () {
+            loadPage(pageName.PickBottle);
+        });
+
+        $("#mybottle").click(function () {
+            loadPage(pageName.MyBottle);
+        });
 
 
-    Date.prototype.Format = function (fmt) { //author: meizz
-        var o = {
-            "M+": this.getMonth() + 1, //月份
-            "d+": this.getDate(), //日
-            "h+": this.getHours(), //小时
-            "m+": this.getMinutes(), //分
-            "s+": this.getSeconds(), //秒
-            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-            "S": this.getMilliseconds() //毫秒
-        };
-        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-        return fmt;
-    }
 
+        Date.prototype.Format = function (fmt) { //author: meizz
+            var o = {
+                "M+": this.getMonth() + 1, //月份
+                "d+": this.getDate(), //日
+                "h+": this.getHours(), //小时
+                "m+": this.getMinutes(), //分
+                "s+": this.getSeconds(), //秒
+                "q+": Math.floor((this.getMonth() + 3) / 3), //季度
+                "S": this.getMilliseconds() //毫秒
+            };
+            if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+            return fmt;
+        }
+    //});
 </script>

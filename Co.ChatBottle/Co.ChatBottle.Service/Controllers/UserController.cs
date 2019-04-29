@@ -19,20 +19,39 @@ namespace Co.ChatBottle.Service.Controllers
         public UserBiz userBiz { get; set; } = new UserBiz();
 
         [HttpPost]
-        public HttpResponseMessage Register(UserRequest request)
+        public HttpResponseMessage Login(UserRequest request)
         {
-            if (request == null)
+            if (request == null || string.IsNullOrEmpty(request.UserName)
+                || string.IsNullOrEmpty(request.UserName.Trim()))
             {
-                return null;
+                return ErrorToJson("昵称需要填的哦，小可爱");
             }
             ConvertBaseRequest(request);
 
+            var userName = request.UserName.Trim();
+
+            //先用账号密码 验证登陆
+            var sql = $"SELECT * FROM dbo.ACT_User WHERE UserName = '{userName}' AND Status = 0 ORDER BY UpdateTime DESC ";
+            var exsitUser = userBiz.QueryCustom<ACT_User>(sql);
+
+            if (exsitUser != null && exsitUser.Any())
+            {
+                if (exsitUser.FirstOrDefault().PassChar == request.PassChar
+                    && !string.IsNullOrEmpty(exsitUser.FirstOrDefault().PassChar))
+                {
+                    //登陆成功
+                    return EntityToJson(exsitUser);
+                }
+                return ErrorToJson("这个昵称已经有人用了，换一个吧！");
+            }
+
             var userInfo = new ACT_User
             {
-                UserName = request.UserName,
-                Gender = request.Gender
+                UserName = userName,
+                Gender = request.Gender,
+                PassChar = request.PassChar,
             };
-
+            
             var userEntity = userBiz.Add(userInfo);
             return EntityToJson(userEntity);
         }
@@ -42,15 +61,25 @@ namespace Co.ChatBottle.Service.Controllers
         {
             var response = new BaseResponse<ACT_User>();
 
+            ConvertBaseRequest(request);
+
             if (request == null)
             {
-                return null;
+                return ErrorToJson("请求为空");
             }
-            ConvertBaseRequest(request);
+
+            //判断是否已存在用户名
+            var userName = request.UserName.Trim();
+            var sql = $"SELECT * FROM dbo.ACT_User WHERE UserName = '{userName}' AND ID != {request.ID} AND Status = 0";
+            var exsitUser = userBiz.QueryCustom<ACT_User>(sql);
+            if (exsitUser != null && exsitUser.Any())
+            {
+                return ErrorToJson("这个昵称已经有人用了，换一个吧！");
+            }
 
             var userEntity = userBiz.Query<ACT_User>(request.ID);
 
-            userEntity.UserName = request.UserName;
+            userEntity.UserName = userName;
             userEntity.Phone = request.Phone;
             userEntity.QQ = request.QQ;
             userEntity.Mail = request.Mail;
@@ -67,8 +96,13 @@ namespace Co.ChatBottle.Service.Controllers
             {
                 response.ErrorCode = 0;
                 response.Result = userEntity;
+                return ResponseToJson(response);
             }
-            return ResponseToJson(response);
+            else
+            {
+                return ErrorToJson("更新失败");
+            }
+            
         }
 
         [HttpGet]

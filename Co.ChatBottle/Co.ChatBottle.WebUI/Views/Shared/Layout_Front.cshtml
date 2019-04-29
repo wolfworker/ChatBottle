@@ -20,6 +20,7 @@
         .unactive {
             opacity: 0.6
         }
+
         .active {
             opacity: 1 !important
         }
@@ -29,11 +30,12 @@
 
     @*服务地址*@
     <script>
+        //全局变量
         //var serviceurl = "http://www.buyshoes.club:9001/";
-        var serviceurl = "http://192.168.8.109:9001/";
-        //var serviceurl = "http://10.1.8.4:9014/";
-        var id = 0;
-
+        //var serviceurl = "http://192.168.8.109:9001/";
+        var serviceurl = "http://10.1.8.4:9014/";
+        var userid = 0;//定义全局用户id
+        var expiredHour = 24;
         var latitude = "";
         var longitude = "";
         var pageName = {
@@ -41,8 +43,33 @@
             ThrowBottle: "/Home/ThrowBottle",
             PickBottle: "/Home/PickBottle",
             MyBottle: "/Home/MyBottle",
+            BottleDetail: "/Home/BottleDetail",
             Index: "",
         };
+
+        function checkUserValid() {
+            userid = localStorage.getItem("userid");
+            var expiredtimestr = localStorage.getItem("expiredTime");
+            var nowTime = new Date();
+
+            if (userid == undefined || isNaN(userid) || expiredtimestr == undefined) {
+                //如果没有用户缓存，则跳转到欢迎页
+                return false;
+            }
+            var expiredTime = new Date(expiredtimestr)
+
+            var totalTimeMs = nowTime.getTime() - expiredTime.getTime();  //时间差的毫秒数
+            if (isNaN(totalTimeMs) || totalTimeMs > expiredHour * 60 * 60 * 1000) {
+                //如果数据过期，则跳转到欢迎页
+                localStorage.removeItem("userid");
+                localStorage.removeItem("expiredTime");
+                return false;
+            }
+            //重新设置有效期
+            localStorage.setItem("userid", userid);
+            localStorage.setItem("expiredTime", nowTime);
+            return true;
+        }
     </script>
 </body>
 </html>

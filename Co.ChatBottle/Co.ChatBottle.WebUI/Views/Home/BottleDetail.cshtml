@@ -1,12 +1,33 @@
 ﻿@{
     ViewBag.Title = "流浪瓶";
 }
-<br />
-<textarea id="bottle" style="width:100%;text-align:left" readonly="readonly">hello,world!,can we chat?</textarea>
-<br />
-<textarea id="bottle2" style="width:100%;text-align:right" readonly="readonly">of course,what's your name?</textarea>
-<br />
-<textarea id="bottle3" style="width:100%;text-align:left" readonly="readonly">i'm jack,nice to see you!</textarea>
-<br />
+
+<div id="bottle"></div>
+
 <input type="text" id="reply" />
-<input type="button" id="btnReply" value="发送"/>
+<input type="button" id="btnReply" value="发送" />
+
+<script type="text/javascript">
+    $(function () {
+        $.ajax({
+            url: serviceurl + "/api/Bottle/QueryById",
+            type: "get",
+            data: { id: @ViewBag.bottleId },
+            success: function (result) {
+                if (result.ErrorCode == 0 && result.Result != undefined) {
+                    var bottleData = result.Result;
+                    var html = "<br />";
+                    html += '<textarea style="width:100%;text-align:left" readonly="readonly">' + bottleData.BottleDesc + '</textarea>';
+                    html += "<br />";
+                    $("#bottle").append(html);
+                } else {
+                    $("#bottle").append("这是个空瓶子。。。");
+                }
+            },
+            error: function (result) {
+                $("#bottle").append("系统异常啦");
+            }
+        });
+    });
+
+</script>

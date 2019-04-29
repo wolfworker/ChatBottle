@@ -2,6 +2,39 @@
     ViewBag.Title = "流浪瓶";
 }
 <br />
-暂时还没有瓶子，去<a href="/Home/ThrowBottle">扔一个</a>吧！
-<br />
-捡到了一个瓶子，<a href="/Home/BottleDetail">打开</a>看看吧？
+
+<div id="noBottle" style="display:none">没有捡到瓶子哦，何不去<a id="throwBottle">扔一个</a>？</div>
+<div id="bottle" style="display:none">捡到了一个瓶子，<a id="openBottle" data-bottleid="">打开</a>看看吧？</div>
+
+<script type="text/javascript">
+    $(function () {
+        $("#bottle").hide();
+        $("#noBottle").hide();
+        $.ajax({
+            url: serviceurl + "/api/Bottle/PickBottles",
+            type: "get",
+            data: { userId: userid },
+            success: function (result) {
+                if (result.ErrorCode == 0 && result.Result != undefined) {
+                    
+                    $("#openBottle")[0].dataset.bottleid = result.Result.ID;
+                    $("#bottle").show();
+                } else {
+                    $("#noBottle").show();
+                }
+            },
+            error: function (result) {
+                $("#noBottle").show();
+            }
+        });
+    });
+
+    $("#throwBottle").click(function () {
+        loadPage(pageName.ThrowBottle);
+    });
+
+    $("#openBottle").click(function () {
+        var param = "?bottleId=" + this.dataset.bottleid;
+        loadPage(pageName.BottleDetail, param);
+    });
+</script>

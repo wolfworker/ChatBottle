@@ -30,7 +30,7 @@
                     <input type="radio" class="gender" value="1"> 男
                 </label>
                 <label class="btn btn-danger unactive" style="width:98px">
-                    <input type="radio" class="gender" value="2" > 女
+                    <input type="radio" class="gender" value="2"> 女
                 </label>
             </div>
         </div>
@@ -57,24 +57,11 @@
 </form>
 
 <script type="text/javascript">
-    $('.form_date').datetimepicker({
-        language: 'zh-CN',
-        weekStart: 1,
-        todayBtn: 1,   //今日日期按钮
-        autoclose: 1,   //自动关闭
-        todayHighlight: 1,   //高亮今日日期
-        startView: 2,       //从日期视图开始
-        minView: 2,
-        forceParse: 0
-    });
-
-
     $(function () {
-        debugger;
         $.ajax({
-            url: serviceurl+"/api/user/QueryById",
+            url: serviceurl + "/api/user/QueryById",
             type: "get",
-            data: {id: id},
+            data: { id: userid },
             success: function (result) {
                 var data = result.Result;
                 $("#username").val(data.UserName);
@@ -82,7 +69,6 @@
                 $("#qqnum").val(data.QQ);
                 $("#mail").val(data.Mail);
                 if (data.Birthday != undefined && data.Birthday != "") {
-                    debugger;
                     $("#birthday").val(data.Birthday.substring(0, 10));
                 }
                 $("#remark").val(data.Remark);
@@ -94,41 +80,52 @@
                 });
             },
             error: function (result) {
-                debugger;
-                alert(serviceurl)
                 alert("加载失败！")
             }
         });
-    });
 
-
-    $("#btnsubmit").click(function () {
-        var postData = {};
-        postData.id = id;
-        postData.username = $("#username").val();
-        postData.phone = $("#phone").val();
-        postData.qq = $("#qqnum").val();
-        postData.mail = $("#mail").val();
-        postData.gender = $(".gender").val();
-        $(".gender").each(function () {
-            if (this.checked) {
-                postData.gender = this.value;
-                return;
-            }
+        $("#btnsubmit").click(function () {
+            var postData = {};
+            postData.id = userid;
+            postData.username = $("#username").val();
+            postData.phone = $("#phone").val();
+            postData.qq = $("#qqnum").val();
+            postData.mail = $("#mail").val();
+            postData.gender = $(".gender").val();
+            $(".gender").each(function () {
+                if (this.checked) {
+                    postData.gender = this.value;
+                    return;
+                }
+            });
+            postData.birthday = $("#birthday").val();
+            postData.remark = $("#remark").val();
+            $.ajax({
+                url: serviceurl + "/api/user/update",
+                type: "post",
+                data: postData,
+                success: function (result) {
+                    if (result != undefined && result.ErrorCode == 0) {
+                        $("#rootdiv").load("");
+                    } else {
+                        alert(result.ErrorMsg)
+                    }
+                },
+                error: function (result) {
+                    alert("更新失败！")
+                }
+            });
         });
-        postData.birthday = $("#birthday").val();
-        postData.remark = $("#remark").val();
-        $.ajax({
-            url: serviceurl +"/api/user/update",
-            type: "post",
-            data: postData,
-            success: function (result) {
-                $("#rootdiv").load("");
-            },
-            error: function (result) {
-                debugger;
-                alert("更新失败！")
-            }
+
+        $('.form_date').datetimepicker({
+            language: 'zh-CN',
+            weekStart: 1,
+            todayBtn: 1,   //今日日期按钮
+            autoclose: 1,   //自动关闭
+            todayHighlight: 1,   //高亮今日日期
+            startView: 2,       //从日期视图开始
+            minView: 2,
+            forceParse: 0
         });
     });
 

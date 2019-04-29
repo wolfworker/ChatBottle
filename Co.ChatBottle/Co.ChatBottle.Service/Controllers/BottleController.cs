@@ -27,10 +27,10 @@ namespace Co.ChatBottle.Service.Controllers
             }
             ConvertBaseRequest(request);
 
-            var userInfo = new ACT_Bottle
+            var bottleInfo = new ACT_Bottle
             {
                 ThrowUserID = request.ThrowUserID,
-                ReceiveUserID = request.ReceiveUserID,
+                //ReceiveUserID = request.ReceiveUserID,
                 BottleDesc = request.BottleDesc,
                 Longitude = request.Longitude,
                 Latitude = request.Latitude,
@@ -38,7 +38,11 @@ namespace Co.ChatBottle.Service.Controllers
                 UpdateUserID = request.ThrowUserID
             };
 
-            var bottleEntity = bottleBiz.Add(userInfo);
+            var bottleEntity = bottleBiz.Add(bottleInfo);
+            if (bottleEntity == null)
+            {
+                return ErrorToJson("瓶子没扔出去，重新试下吧！");
+            }
             return EntityToJson(bottleEntity);
         }
         
@@ -57,13 +61,43 @@ namespace Co.ChatBottle.Service.Controllers
             return EntityToJson(result);
         }
 
+        /// <summary>
+        /// 获取我的瓶子（包含捡的和扔的）
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         [HttpGet]
         // GET: api/UserApi/5
         public HttpResponseMessage QueryByUserId(long userId)
         {
-            var sql = $"SELECT TOP 1 * FROM ACT_Bottle WHERE ThrowUserID = {userId} OR ReceiveUserID = {userId} ORDER BY UpdateTime DESC ";
+            var sql = $"SELECT * FROM ACT_Bottle WHERE ThrowUserID = {userId} OR ReceiveUserID = {userId} ORDER BY UpdateTime DESC ";
             var result = bottleBiz.QueryCustom<ACT_Bottle>(sql);
             return EntityToJson(result);
+        }
+
+
+        /// <summary>
+        /// 捡瓶子
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
+        [HttpGet]
+        // GET: api/UserApi/5
+        public HttpResponseMessage PickBottles(long userId)
+        {
+            var sql = $"SELECT TOP 1 * FROM ACT_Bottle WHERE ThrowUserID != {userId} AND ReceiveUserID = 0 ORDER BY UpdateTime DESC ";
+            var result = bottleBiz.QueryCustom<ACT_Bottle>(sql);
+            if (result != null && result.Any())
+            {
+                var bottleInfo = result.FirstOrDefault();
+                bottleInfo.ReceiveUserID = userId;
+                bottleInfo.UpdateTime = DateTime.Now;
+                if (bottleBiz.Update(bottleInfo))
+                {
+                    return EntityToJson(bottleInfo);
+                }
+            }
+            return ErrorToJson("瓶子太重，捞不上来啦，重新试试吧！");
         }
     }
 }

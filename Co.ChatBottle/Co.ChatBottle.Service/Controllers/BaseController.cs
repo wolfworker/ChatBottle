@@ -62,7 +62,7 @@ namespace Co.ChatBottle.Service.Controllers
         /// <typeparam name="T"></typeparam>
         /// <param name="obj"></param>
         /// <returns></returns>
-        public HttpResponseMessage EntityToJson<T>(T obj) where T : class
+        public HttpResponseMessage EntityToJson<T>(T obj, string errMsg = "") where T : class
         {
             var response = new BaseResponse<T>();
 
@@ -71,6 +71,23 @@ namespace Co.ChatBottle.Service.Controllers
                 response.ErrorCode = 0;
                 response.Result = obj;
             }
+            else if (!string.IsNullOrEmpty(errMsg))
+            {
+                response.ErrorMsg = errMsg;
+            }
+            return ResponseToJson(response);
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public HttpResponseMessage ErrorToJson(string errMsg)
+        {
+            var response = new BaseResponse<string>();
+            response.ErrorMsg = errMsg;
             return ResponseToJson(response);
         }
 

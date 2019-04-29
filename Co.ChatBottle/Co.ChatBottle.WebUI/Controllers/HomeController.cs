@@ -10,7 +10,7 @@ namespace Co.ChatBottle.WebUI.Controllers
     {
         public ActionResult Index(int sourceFlag = -1)
         {
-            ViewBag.resource = sourceFlag;
+            ViewBag.sourceFlag = sourceFlag;
             return View();
         }
 
@@ -34,8 +34,9 @@ namespace Co.ChatBottle.WebUI.Controllers
             return View();
         }
 
-        public ActionResult BottleDetail()
+        public ActionResult BottleDetail(long bottleId)
         {
+            ViewBag.bottleId = bottleId;
             return View();
         }
     }
