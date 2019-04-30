@@ -12,8 +12,6 @@ namespace Co.ChatBottle.Model
         public long ThrowUserID { get; set; } = 0;
         public long ReceiveUserID { get; set; } = 0;
         public string BottleDesc { get; set; }
-        public string Longitude { get; set; }
-        public string Latitude { get; set; }
         public byte Status { get; set; }
         public string Remark { get; set; }
     }

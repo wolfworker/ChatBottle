@@ -10,6 +10,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web.Http;
 
 namespace Co.ChatBottle.Service.Controllers
@@ -19,7 +20,7 @@ namespace Co.ChatBottle.Service.Controllers
         public BottleBiz bottleBiz { get; set; } = new BottleBiz();
 
         [HttpPost]
-        public HttpResponseMessage Add(BottleRequest request)
+        public HttpResponseMessage ThrowBottle(BottleRequest request)
         {
             if (request == null)
             {
@@ -30,15 +31,35 @@ namespace Co.ChatBottle.Service.Controllers
             var bottleInfo = new ACT_Bottle
             {
                 ThrowUserID = request.ThrowUserID,
-                //ReceiveUserID = request.ReceiveUserID,
                 BottleDesc = request.BottleDesc,
-                Longitude = request.Longitude,
-                Latitude = request.Latitude,
                 CreatedUserID = request.ThrowUserID,
-                UpdateUserID = request.ThrowUserID
+                UpdateUserID = request.ThrowUserID,
             };
 
             var bottleEntity = bottleBiz.Add(bottleInfo);
+
+            //异步记录瓶子位置
+            Task.Run(() =>
+            {
+                var positionInfo = new ACT_User_Position
+                {
+                    UserID = request.ThrowUserID,
+                    BottleID = bottleEntity.ID,
+                    Longitude = request.Longitude,
+                    Latitude = request.Latitude,
+                    CreatedUserID = request.ThrowUserID,
+                    UpdateUserID = request.ThrowUserID,
+                    Province = request.Province,
+                    City = request.City,
+                    District = request.District,
+                    Street = request.Street,
+                    StreetNumber = request.StreetNumber,
+                    AddressDetail = request.AddressDetail,
+                };
+
+                var positionEntity = new PositionBiz().Add(positionInfo);
+            });
+
             if (bottleEntity == null)
             {
                 return ErrorToJson("瓶子没扔出去，重新试下吧！");
@@ -70,8 +91,10 @@ namespace Co.ChatBottle.Service.Controllers
         // GET: api/UserApi/5
         public HttpResponseMessage QueryByUserId(long userId)
         {
-            var sql = $"SELECT * FROM ACT_Bottle WHERE ThrowUserID = {userId} OR ReceiveUserID = {userId} ORDER BY UpdateTime DESC ";
-            var result = bottleBiz.QueryCustom<ACT_Bottle>(sql);
+            var sql = $@"SELECT bottle.*,users.UserName AS ThrowUserName
+                         FROM    ACT_Bottle bottle INNER JOIN dbo.ACT_User users ON users.ID = bottle.ThrowUserID
+                         WHERE   bottle.ThrowUserID = {userId} OR bottle.ReceiveUserID = {userId} ORDER BY bottle.UpdateTime DESC; ";
+            var result = bottleBiz.QueryCustom<BottleResonse>(sql);
             return EntityToJson(result);
         }
 
@@ -91,7 +114,7 @@ namespace Co.ChatBottle.Service.Controllers
             {
                 var bottleInfo = result.FirstOrDefault();
                 bottleInfo.ReceiveUserID = userId;
-                bottleInfo.UpdateTime = DateTime.Now;
+                //bottleInfo.UpdateTime = DateTime.Now;//不更新时间，否则会导致 页面排序出问题，只有真实操作瓶子才更新时间
                 if (bottleBiz.Update(bottleInfo))
                 {
                     return EntityToJson(bottleInfo);

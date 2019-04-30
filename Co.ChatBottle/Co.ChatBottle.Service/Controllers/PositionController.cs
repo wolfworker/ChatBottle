@@ -31,7 +31,16 @@ namespace Co.ChatBottle.Service.Controllers
             {
                 UserID = request.UserID,
                 Longitude = request.Longitude,
-                Latitude = request.Latitude
+                Latitude = request.Latitude,
+                
+                CreatedUserID = request.UserID,
+                UpdateUserID = request.UserID,
+                Province = request.Province,
+                City = request.City,
+                District = request.District,
+                Street = request.Street,
+                StreetNumber = request.StreetNumber,
+                AddressDetail = request.AddressDetail,
             };
 
             var positionEntity = positionBiz.Add(positionInfo);

@@ -17,5 +17,29 @@ namespace Co.ChatBottle.Model
         public string BottleDesc { get; set; }
         public string Longitude { get; set; }
         public string Latitude { get; set; }
+
+        public string Province { get; set; }
+        public string City { get; set; }
+        public string District { get; set; }
+        public string Street { get; set; }
+        public string StreetNumber { get; set; }
+        public string AddressDetail { get; set; }
+    }
+
+
+    /// <summary>
+    /// 我的瓶子返回实体
+    /// </summary>
+    public class BottleResonse
+    {
+        public long BootleID { get; set; }
+        public long ThrowUserID { get; set; } = 0;
+        public long ReceiveUserID { get; set; } = 0;
+        public string BottleDesc { get; set; }
+        public string Longitude { get; set; }
+        public string Latitude { get; set; }
+        public string ThrowUserName { get; set; }
+        public DateTime UpdateTime { get; set; }
+        public string AreaName { get; set; }
     }
 }

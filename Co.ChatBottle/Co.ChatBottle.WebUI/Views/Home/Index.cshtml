@@ -10,6 +10,23 @@
         text-align: center;
     }
 
+    .head {
+        background-color: khaki;
+        position: absolute;
+        width: 100%;
+        height: 5%;
+    }
+
+    #rootdiv {
+        top: 5%;
+        width: 100%;
+        position: absolute;
+        height: 85%;
+        background-image: url(../../Content/img/background.jpg);
+        background-repeat: no-repeat;
+        background-size: cover;
+    }
+
     .foot {
         width: 100%;
         height: 10%;
@@ -18,18 +35,13 @@
         bottom: 0;
     }
 
-    #rootdiv {
-        top: 0px;
-        width: 100%;
-        position: absolute;
-        height: 90%;
-        background-image: url(../../Content/img/background.jpg);
-        background-repeat: no-repeat;
-        background-size: cover;
-    }
 </style>
 
 <div class="mainDiv">
+    
+    <div class="head">
+        <span id="topbtn">流浪瓶V1.0</span>
+    </div>
     <div id="rootdiv">
     </div>
     <div class="foot">
@@ -101,13 +113,26 @@
         latitude = position.coords.latitude;
         longitude = position.coords.longitude;
 
-        //每次更新地址都同步到数据库
-        var data = {
-            userid: userid,
-            longitude: longitude,
-            latitude: latitude,
-        };
-        $.post(serviceurl + "/api/position/add", data);
+        // 百度地图API功能
+        var point = new BMap.Point(longitude, latitude);
+        var geoc = new BMap.Geocoder();
+        geoc.getLocation(point, function (rs) {
+            debugger;
+            var data = {};
+            data.userid = userid;
+            data.longitude = longitude;
+            data.latitude = latitude;
+
+            var addComp = rs.addressComponents;
+            data.province = province = addComp.province;
+            data.city = city = addComp.city;
+            data.district = district = addComp.district;
+            data.street = street = addComp.street;
+            data.streetNumber = streetNumber = addComp.streetNumber;
+            data.addressdetail = addressdetail = rs.business;
+
+            $.post(serviceurl + "/api/position/add", data);
+        });
     }
 
     $("#profilesetting").click(function () {
@@ -126,30 +151,19 @@
         loadPage(pageName.MyBottle);
     });
 
+    $("#topbtn").click(function () {
+        //顶部按钮事件
+
+    });
+
     var init = function () {
         getLocation();
         if (@ViewBag.sourceFlag!= -1) {
             loadPageByIndex(@ViewBag.sourceFlag);//防止跳到主页 死循环
         }
-        debugger;
         if (!checkUserValid()) {
             window.location.href = "/welcome/index";
         }
     }
 
-    Date.prototype.Format = function (fmt) { //author: meizz
-        var o = {
-            "M+": this.getMonth() + 1, //月份
-            "d+": this.getDate(), //日
-            "h+": this.getHours(), //小时
-            "m+": this.getMinutes(), //分
-            "s+": this.getSeconds(), //秒
-            "q+": Math.floor((this.getMonth() + 3) / 3), //季度
-            "S": this.getMilliseconds() //毫秒
-        };
-        if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
-        for (var k in o)
-            if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
-        return fmt;
-    }
 </script>

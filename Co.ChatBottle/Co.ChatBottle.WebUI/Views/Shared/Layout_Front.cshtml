@@ -13,6 +13,8 @@
     <script src="~/Content/component/bootstrap-3.3.7/js/bootstrap.min.js"></script>
     <script src="~/Content/component/datepicker/bootstrap-datetimepicker.min.js"></script>
     <script src="~/Content/component/datepicker/bootstrap-datetimepicker.zh-CN.js"></script>
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=7aQjxiU2MrATqBNEdW9SDeG9"></script>
+    <script src="~/Content/js/common.js"></script>
 
 </head>
 <body>
@@ -24,6 +26,7 @@
         .active {
             opacity: 1 !important
         }
+
     </style>
 
     @RenderBody()
@@ -32,13 +35,20 @@
     <script>
         //全局变量
         //var serviceurl = "http://www.buyshoes.club:9001/";
-        var serviceurl = "http://192.168.8.108:9001/";
-        //var serviceurl = "http://10.1.8.4:9014/";
-        debugger;
+        //var serviceurl = "http://192.168.8.108:9001/";
+        var serviceurl = "http://10.1.8.4:9014/";
         var userid = 0;//定义全局用户id
         var expiredHour = 24;
         var latitude = "";
         var longitude = "";
+
+        var province = "";
+        var city = "";
+        var district = "";
+        var street = "";
+        var streetNumber = "";
+        var addressdetail = "";
+
         var pageName = {
             ProfileSetting: "/Home/ProfileSetting",
             ThrowBottle: "/Home/ThrowBottle",
@@ -48,7 +58,6 @@
             Index: "",
         };
 
-        debugger;
         function checkUserValid() {
             userid = localStorage.getItem("userid");
             var expiredtimestr = localStorage.getItem("expiredTime");

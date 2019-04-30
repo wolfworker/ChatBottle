@@ -9,19 +9,27 @@
 
 <script>
     $("#btnThrow").click(function () {
-        var bottleData = {};
         var bottleDesc = $("#bottleText").val();
-        bottleData.ThrowUserID = userid;
-        bottleData.BottleDesc = bottleDesc;
-        bottleData.Longitude = longitude;
-        bottleData.Latitude = latitude;
         if (bottleDesc == undefined || bottleDesc == "") {
             alert("瓶子里是空的哦！");
             return;
         }
 
+        var bottleData = {};
+        bottleData.ThrowUserID = userid;
+        bottleData.BottleDesc = bottleDesc;
+        bottleData.Longitude = longitude;
+        bottleData.Latitude = latitude;
+
+        bottleData.province = province;
+        bottleData.city = city;
+        bottleData.district = district;
+        bottleData.street = street;
+        bottleData.streetNumber = streetNumber;
+        bottleData.addressdetail = addressdetail;
+
         $.ajax({
-            url: serviceurl + "/api/bottle/add",
+            url: serviceurl + "/api/bottle/ThrowBottle",
             type: "post",
             data: bottleData,
             success: function (result) {

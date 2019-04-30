@@ -84,25 +84,25 @@
     });
 
     $("#btnsubmit").click(function () {
-        var postData = {};
-        postData.id = userid;
-        postData.username = $("#username").val();
-        postData.phone = $("#phone").val();
-        postData.qq = $("#qqnum").val();
-        postData.mail = $("#mail").val();
-        postData.gender = $(".gender").val();
+        var userData = {};
+        userData.id = userid;
+        userData.username = $("#username").val();
+        userData.phone = $("#phone").val();
+        userData.qq = $("#qqnum").val();
+        userData.mail = $("#mail").val();
+        userData.gender = $(".gender").val();
         $(".gender").each(function () {
             if (this.checked) {
-                postData.gender = this.value;
+                userData.gender = this.value;
                 return;
             }
         });
-        postData.birthday = $("#birthday").val();
-        postData.remark = $("#remark").val();
+        userData.birthday = $("#birthday").val();
+        userData.remark = $("#remark").val();
         $.ajax({
             url: serviceurl + "/api/user/update",
             type: "post",
-            data: postData,
+            data: userData,
             success: function (result) {
                 if (result != undefined && result.ErrorCode == 0) {
                     alert("更新成功了哦！")
