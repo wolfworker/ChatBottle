@@ -117,7 +117,6 @@
         var point = new BMap.Point(longitude, latitude);
         var geoc = new BMap.Geocoder();
         geoc.getLocation(point, function (rs) {
-            debugger;
             var data = {};
             data.userid = userid;
             data.longitude = longitude;
@@ -149,6 +148,7 @@
 
     $("#mybottle").click(function () {
         loadPage(pageName.MyBottle);
+        getLocation();
     });
 
     $("#topbtn").click(function () {

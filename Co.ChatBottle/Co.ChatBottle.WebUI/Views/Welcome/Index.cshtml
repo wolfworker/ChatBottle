@@ -3,7 +3,6 @@
     ViewBag.Title = "流浪瓶";
 }
 <style>
-
     .container {
         display: table;
         height: 100%;
@@ -60,6 +59,11 @@
     </div>
 </div>
 <script>
+    $(function () {
+        if (checkUserValid()) {
+            window.location.href = "/home/index?sourceFlag=4";
+        }
+    })
     $("#btnSubmit").click(function () {
         var gender = $(".gender").val();
         var username = $("#username").val();
@@ -90,8 +94,4 @@
             }
         });
     });
-
-    if (checkUserValid()) {
-        window.location.href = "/home/index?sourceFlag=4";
-    }
 </script>

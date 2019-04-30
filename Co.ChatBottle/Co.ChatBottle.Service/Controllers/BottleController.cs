@@ -91,8 +91,10 @@ namespace Co.ChatBottle.Service.Controllers
         // GET: api/UserApi/5
         public HttpResponseMessage QueryByUserId(long userId)
         {
-            var sql = $@"SELECT bottle.*,users.UserName AS ThrowUserName
+            var sql = $@"SELECT bottle.ID as BottleID,bottle.BottleDesc,bottle.UpdateTime,users.UserName AS ThrowUserName,
+                                position.City,position.District,position.Longitude,position.Latitude,bottle.ThrowUserID,bottle.ReceiveUserID
                          FROM    ACT_Bottle bottle INNER JOIN dbo.ACT_User users ON users.ID = bottle.ThrowUserID
+                                                    INNER JOIN ACT_User_Position position on position.BottleID = bottle.ID
                          WHERE   bottle.ThrowUserID = {userId} OR bottle.ReceiveUserID = {userId} ORDER BY bottle.UpdateTime DESC; ";
             var result = bottleBiz.QueryCustom<BottleResonse>(sql);
             return EntityToJson(result);

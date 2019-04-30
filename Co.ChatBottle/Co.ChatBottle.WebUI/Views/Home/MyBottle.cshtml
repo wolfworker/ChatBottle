@@ -18,6 +18,7 @@
     .textdesc {
         padding-top: 15px;
         display: block;
+        color: dimgray;
     }
 
     .detailright {
@@ -31,6 +32,11 @@
         border-bottom: 1px solid #ccc;
         padding-top: 5px;
         margin-bottom: 5px;
+    }
+
+    .userInfo {
+        font-weight: bolder;
+        font-size: initial;
     }
 </style>
 <div id="noBottle" style="display:none">暂时还没有瓶子哦，去<a id="pickBottle">捡一个</a>试试？</div>
@@ -48,7 +54,6 @@
             loadPage(pageName.BottleDetail, param);
         });
     }
-
     var myBottleInit = function () {
         $("#bottleList").hide();
         $("#noBottle").hide();
@@ -61,10 +66,14 @@
                     var html = "";
                     var bottleData = result.Result;
                     $.each(bottleData, function (i, item) {
+                        var areaName = (item.City == undefined ? "" : item.City) + (item.District == undefined ? "" : item.District)
+                        if (areaName != undefined && areaName != "") {
+                            areaName = "(" + areaName.replace(/市/g, "").replace(/区/g, "").replace(/县/g, "") + ")";
+                        }
                         html += '<div style="height: 50px;">';
                         html += '<div style="float: left;"><img src="../Content/img/background.jpg" class="userimg"></div>';
-                        html += '<div class="openBottle" data-bottleid="' + item.ID + '" ><span >' + item.ThrowUserName + "(" + item.AreaName + ')</span><span class="textdesc" >' + item.BottleDesc + '</span></div>';
-
+                        html += '<div class="openBottle" data-bottleid="' + item.BottleID + '" ><span class="userInfo">' + item.ThrowUserName + areaName + '</span><span class="textdesc" >' + item.BottleDesc + '</span></div>';
+                        
                         html += '<div class="detailright" ><span>' + item.UpdateTime.FormatToDate("hh:mm") + '</span></div>';
                         html += '</div>';
                         html += '<div class="bottleline"></div>';

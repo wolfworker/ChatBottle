@@ -32,7 +32,7 @@ namespace Co.ChatBottle.Model
     /// </summary>
     public class BottleResonse
     {
-        public long BootleID { get; set; }
+        public long BottleID { get; set; }
         public long ThrowUserID { get; set; } = 0;
         public long ReceiveUserID { get; set; } = 0;
         public string BottleDesc { get; set; }
@@ -40,6 +40,7 @@ namespace Co.ChatBottle.Model
         public string Latitude { get; set; }
         public string ThrowUserName { get; set; }
         public DateTime UpdateTime { get; set; }
-        public string AreaName { get; set; }
+        public string City { get; set; }
+        public string District { get; set; }
     }
 }
