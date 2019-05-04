@@ -1,13 +1,21 @@
 ﻿@{
     ViewBag.Title = "流浪瓶";
 }
-<br />
 
-<div id="noBottle" style="display:none">没有捡到瓶子哦，何不去<a id="throwBottle">扔一个</a>？</div>
-<div id="bottle" style="display:none">捡到了一个瓶子，<a id="openBottle" data-bottleid="">打开</a>看看吧？</div>
+<style>
+    .fulldiv {
+        width: 100%;
+        height: 100%;
+    }
+</style>
+@*没捡到瓶子*@
+<div id="noBottle" class="fulldiv" style="display:none;"><img src="~/Content/img/emptybottle.jpg" class="fulldiv" id="throwBottle"/></div>
+@*捡到一个瓶子*@
+<div id="bottle"class="fulldiv" style="display:none"><img src="~/Content/img/findbottle.jpg" class="fulldiv" id="openBottle" data-bottleid=""/></div>
+@*捡瓶子时的动画*@
+<div id="pickbottlegif" class="fulldiv" style="display:none"><img src="~/Content/img/pickbottle.gif" class="fulldiv" /></div>
 
 <script type="text/javascript">
-
     $("#throwBottle").click(function () {
         loadPage(pageName.ThrowBottle);
     });
@@ -19,21 +27,24 @@
 
     $("#bottle").hide();
     $("#noBottle").hide();
-
+    $("#pickbottlegif").show();
     $.ajax({
         url: serviceurl + "/api/Bottle/PickBottles",
         type: "get",
         data: { userId: userid },
         success: function (result) {
-            if (result.ErrorCode == 0 && result.Result != undefined) {
-
-                $("#openBottle")[0].dataset.bottleid = result.Result.ID;
-                $("#bottle").show();
-            } else {
-                $("#noBottle").show();
-            }
+            setTimeout(function () {
+                $("#pickbottlegif").hide();
+                if (result.ErrorCode == 0 && result.Result != undefined) {
+                    $("#openBottle")[0].dataset.bottleid = result.Result.ID;
+                    $("#bottle").show();
+                } else {
+                    $("#noBottle").show();
+                }
+            }, 1000);
         },
         error: function (result) {
+            $("#pickbottlegif").hide();
             $("#noBottle").show();
         }
     });

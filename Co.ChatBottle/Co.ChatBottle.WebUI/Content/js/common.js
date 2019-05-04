@@ -26,18 +26,30 @@ String.prototype.FormatToDate = function (fmt) {
         if (dateStr.indexOf("T") != -1) {
             dateStr = dateStr.replace(/T/g, " ");
         }
+        if (dateStr.indexOf("-") != -1) {
+            dateStr = dateStr.replace(/-/g, "/");
+        }
 
         if (dateStr.indexOf("/") != -1) {
+            var timeArr = dateStr.split(" ");
+            if (timeArr != undefined && timeArr.length > 0) {
+                var dateArr = timeArr[0].split("/");
+                if (dateArr != undefined && dateArr.length > 2) {
+                    dateStr = dateArr[1] + "/" + dateArr[2] + "/" + dateArr[0];
+                }
+
+                if (timeArr.length > 1) {
+                    if (timeArr[1] != undefined && timeArr[1] != "") {
+                        var timestr = timeArr[1].split(".");
+                        dateStr = dateStr + " " + timestr[0];
+                    }
+                }
+            }
             dateTemp = new Date(dateStr);
-        }
-        else if (dateStr.indexOf("-") != -1) {
-            dateTemp = new Date(dateStr.replace(/-/g, "/"));
         }
         else {
             return "";
         }
         return dateTemp.Format(fmt);
-    } catch(e){
-        return "";
-    }
+    } catch (e) { return ""; }
 }

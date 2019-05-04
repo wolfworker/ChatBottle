@@ -6,10 +6,13 @@ using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
+using System.Web;
 using System.Web.Http;
 
 namespace Co.ChatBottle.Service.Controllers
@@ -51,8 +54,15 @@ namespace Co.ChatBottle.Service.Controllers
                 Gender = request.Gender,
                 PassChar = request.PassChar,
             };
-            
-            var userEntity = userBiz.Add(userInfo);
+
+            ACT_User userEntity = null;
+            try
+            {
+                userEntity = userBiz.Add(userInfo);
+            }catch(Exception ex)
+            {
+                return ErrorToJson(ex.Message);
+            }
             return EntityToJson(userEntity);
         }
 
@@ -91,6 +101,27 @@ namespace Co.ChatBottle.Service.Controllers
             userEntity.Remark = request.Remark;
             userEntity.UpdateUserID = 1;
             userEntity.UpdateTime = DateTime.Now;
+            //保存头像
+            if (!string.IsNullOrEmpty(request.FileBase64))
+            {
+                try
+                {
+                    var imgBase64 = request.FileBase64.Replace("data:image/png;base64,", "").Replace("data:image/jpeg;base64,", "").Replace("data:image/bmp;base64,", "").Replace("data:image/gif;base64,", "");
+                    var imgBtyes = Convert.FromBase64String(imgBase64);
+                    var stream = new MemoryStream(imgBtyes);
+                    var image = Bitmap.FromStream(stream, true);
+                    var filePath = System.Configuration.ConfigurationManager.AppSettings.Get("PhysicsHeaderPath");
+                    var webImageUrl = System.Configuration.ConfigurationManager.AppSettings.Get("WebHeaderUrl");
+                    var fileFullPath = filePath + "\\" + request.ID+".bmp";
+
+                    image.Save(fileFullPath, System.Drawing.Imaging.ImageFormat.Bmp);
+                    userEntity.HeaderImgUrl = webImageUrl + request.ID + ".bmp";
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
 
             if (userBiz.Update(userEntity))
             {

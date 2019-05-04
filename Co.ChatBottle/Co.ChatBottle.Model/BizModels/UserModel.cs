@@ -21,6 +21,7 @@ namespace Co.ChatBottle.Model
         public byte Status { get; set; }
         public DateTime Birthday { get; set; }
         public string Remark { get; set; }
+        public string FileBase64 { get; set; }
     }
 
     /// <summary>

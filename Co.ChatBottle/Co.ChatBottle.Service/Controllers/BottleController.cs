@@ -91,12 +91,40 @@ namespace Co.ChatBottle.Service.Controllers
         // GET: api/UserApi/5
         public HttpResponseMessage QueryByUserId(long userId)
         {
-            var sql = $@"SELECT bottle.ID as BottleID,bottle.BottleDesc,bottle.UpdateTime,users.UserName AS ThrowUserName,
-                                position.City,position.District,position.Longitude,position.Latitude,bottle.ThrowUserID,bottle.ReceiveUserID
+            var sql = $@"SELECT bottle.ID as BottleID,bottle.BottleDesc,bottle.UpdateTime,users.UserName AS ThrowUserName,users.HeaderImgUrl,users.Gender,
+                                position.City,position.District,position.Longitude,position.Latitude,bottle.ThrowUserID,bottle.ReceiveUserID,'' AS UpdateTimeDesc
                          FROM    ACT_Bottle bottle INNER JOIN dbo.ACT_User users ON users.ID = bottle.ThrowUserID
                                                     INNER JOIN ACT_User_Position position on position.BottleID = bottle.ID
                          WHERE   bottle.ThrowUserID = {userId} OR bottle.ReceiveUserID = {userId} ORDER BY bottle.UpdateTime DESC; ";
             var result = bottleBiz.QueryCustom<BottleResonse>(sql);
+            
+            //头像默认值
+            if(result!=null&& result.Any())
+            {
+                result.ForEach(p =>
+                {
+                    if (string.IsNullOrEmpty(p.HeaderImgUrl))
+                    {
+                        p.HeaderImgUrl = System.Configuration.ConfigurationManager.AppSettings.Get("DefaultHeaderUrl");
+                    }
+                    if (p.UpdateTime > DateTime.Today)
+                    {
+                        p.UpdateTimeDesc = p.UpdateTime.ToString("hh:mm");
+                    }
+                    else if (p.UpdateTime > DateTime.Today.AddDays(-1))
+                    {
+                        p.UpdateTimeDesc = "昨天";
+                    }
+                    else if (p.UpdateTime < DateTime.Today.AddYears(-1))
+                    {
+                        p.UpdateTimeDesc = p.UpdateTime.ToString("yy-MM-dd");
+                    }
+                    else
+                    {
+                        p.UpdateTimeDesc = p.UpdateTime.ToString("MM-dd");
+                    }
+                });
+            }
             return EntityToJson(result);
         }
 
@@ -123,6 +151,19 @@ namespace Co.ChatBottle.Service.Controllers
                 }
             }
             return ErrorToJson("瓶子太重，捞不上来啦，重新试试吧！");
+        }
+
+        [HttpPost]
+        public HttpResponseMessage DeleteBottle(BottleRequest request)
+        {
+            if (bottleBiz.Delete<ACT_Bottle>(request.BottleID))
+            {
+                return EntityToJson(string.Empty);
+            }
+            else
+            {
+                return ErrorToJson("更新失败");
+            }
         }
     }
 }

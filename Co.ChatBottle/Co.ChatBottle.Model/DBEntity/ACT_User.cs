@@ -15,6 +15,7 @@ namespace Co.ChatBottle.Model
         public string QQ { get; set; }
         public string PassChar { get; set; }
         public byte Gender { get; set; }
+        public string HeaderImgUrl { get; set; }
         public DateTime Birthday { get; set; } = new DateTime(1990, 01, 01);
         public byte Status { get; set; }
         public string Remark { get; set; }

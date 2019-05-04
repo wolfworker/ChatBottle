@@ -161,7 +161,16 @@
     <Content Include="Content\component\datepicker\bootstrap-datetimepicker.min.js" />
     <Content Include="Content\component\datepicker\bootstrap-datetimepicker.zh-CN.js" />
     <Content Include="Content\img\background.jpg" />
+    <Content Include="Content\img\emptybottle.jpg" />
+    <Content Include="Content\img\female.png" />
+    <Content Include="Content\img\findbottle.jpg" />
     <Content Include="Content\img\gender.png" />
+    <Content Include="Content\img\icon_mybottles.png" />
+    <Content Include="Content\img\icon_pickbottle.png" />
+    <Content Include="Content\img\icon_setting.png" />
+    <Content Include="Content\img\icon_throwbottle.png" />
+    <Content Include="Content\img\male.png" />
+    <Content Include="Content\img\pickbottle.gif" />
     <Content Include="Content\js\common.js" />
     <Content Include="Content\js\jquery.min.js" />
     <Content Include="favicon.ico" />

@@ -11,7 +11,7 @@ namespace Co.ChatBottle.Model
     /// </summary>
     public class BottleRequest : BaseRequest
     {
-        public long ID { get; set; }
+        public long BottleID { get; set; }
         public long ThrowUserID { get; set; } = 0;
         public long ReceiveUserID { get; set; } = 0;
         public string BottleDesc { get; set; }
@@ -42,5 +42,8 @@ namespace Co.ChatBottle.Model
         public DateTime UpdateTime { get; set; }
         public string City { get; set; }
         public string District { get; set; }
+        public string HeaderImgUrl { get; set; }
+        public byte Gender { get; set; }
+        public string UpdateTimeDesc { get; set; }
     }
 }

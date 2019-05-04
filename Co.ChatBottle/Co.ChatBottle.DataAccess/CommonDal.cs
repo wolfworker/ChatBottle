@@ -33,7 +33,7 @@ namespace Co.ChatBottle.DataAccess
             return result;
         }
 
-        public bool Delete<T>(int id) where T : class
+        public bool Delete<T>(long id) where T : class
         {
             var result = false;
             using (var context = new DataBaseContext())

@@ -14,11 +14,11 @@
         background-color: khaki;
         position: absolute;
         width: 100%;
-        height: 5%;
+        height: 6%;
     }
 
     #rootdiv {
-        top: 5%;
+        top: 6%;
         width: 100%;
         position: absolute;
         height: 85%;
@@ -29,34 +29,35 @@
 
     .foot {
         width: 100%;
-        height: 10%;
+        height: 9%;
         position: absolute;
         background-color: khaki;
         bottom: 0;
     }
 
+    .icon {
+        width: 32px;
+    }
 </style>
 
 <div class="mainDiv">
-    
+
     <div class="head">
-        <span id="topbtn">流浪瓶V1.0</span>
+        <span>流浪瓶 V1.0</span>
+        <img class="icon" style="float:right" id="profilesetting" src="~/Content/img/icon_setting.png" />
     </div>
     <div id="rootdiv">
     </div>
     <div class="foot">
-        <div class="row" style="padding-top:2%">
-            <div class="col-xs-3">
-                <a id="profilesetting">设置</a>
+        <div style="padding-top:2%">
+            <div class="col-xs-4">
+                <img class="icon" id="throwbottle" src="~/Content/img/icon_throwbottle.png" />
             </div>
-            <div class="col-xs-3">
-                <a id="throwbottle"> 扔瓶子</a>
+            <div class="col-xs-4">
+                <img class="icon" id="pickbottle" src="~/Content/img/icon_pickbottle.png" />
             </div>
-            <div class="col-xs-3">
-                <a id="pickbottle"> 捡瓶子</a>
-            </div>
-            <div class="col-xs-3">
-                <a id="mybottle"> 我的</a>
+            <div class="col-xs-4">
+                <img class="icon" id="mybottle" src="~/Content/img/icon_mybottles.png" />
             </div>
         </div>
     </div>

@@ -16,16 +16,16 @@ namespace Co.ChatBottle.Business
 
         public T Add<T>(T t) where T : class
         {
-            try
+            //try
             {
                 return commonDal.Add(t);
             }
-            catch (Exception ex)
-            {
-                var message = $"Biz Add 出错 -> 错误信息：{ex.Message}, 堆栈信息：{ex.StackTrace}, 请求参数：{JsonConvert.SerializeObject(t)}";
-                WriteLog(message);
-                return null;
-            }
+            //catch (Exception ex)
+            //{
+            //    var message = $"Biz Add 出错 -> 错误信息：{ex.Message}, 堆栈信息：{ex.StackTrace}, 请求参数：{JsonConvert.SerializeObject(t)}";
+            //    WriteLog(message);
+            //    return null;
+            //}
         }
 
         public bool Update<T>(T t) where T : class
@@ -42,7 +42,7 @@ namespace Co.ChatBottle.Business
             }
         }
 
-        public bool Delete<T>(int id) where T : class
+        public bool Delete<T>(long id) where T : class
         {
             try
             {
