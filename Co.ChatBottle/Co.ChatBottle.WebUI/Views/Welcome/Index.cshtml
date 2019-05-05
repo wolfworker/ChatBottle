@@ -63,10 +63,6 @@
         if (checkUserValid()) {
             window.location.href = "/home/index?sourceFlag=4";
         }
-        else {
-            //欢迎页 退出websocket
-            quit();
-        }
     });
 
     $("#btnSubmit").click(function () {
@@ -84,7 +80,7 @@
             data: { UserName: username, PassChar: password, Gender: gender },
             success: function (result) {
                 if (result.ErrorCode == 0 && result.Result != undefined) {
-                    var data = result.Result;
+                    var data = result.Result[0];
                     if (data != undefined && data.ID > 0) {
                         localStorage.setItem("userid", data.ID);
                         localStorage.setItem("expiredTime", new Date());

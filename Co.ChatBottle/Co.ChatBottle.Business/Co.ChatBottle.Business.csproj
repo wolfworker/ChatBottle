@@ -50,6 +50,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ChatRecordBiz.cs" />
     <Compile Include="CommonBiz.cs" />
     <Compile Include="DebugLogBiz.cs" />
     <Compile Include="PositionBiz.cs" />

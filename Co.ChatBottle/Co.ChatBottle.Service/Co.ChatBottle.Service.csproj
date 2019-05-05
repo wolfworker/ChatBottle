@@ -102,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Websocket.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\PositionController.cs" />
     <Compile Include="Controllers\BottleController.cs" />

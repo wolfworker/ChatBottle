@@ -43,6 +43,11 @@ namespace Co.ChatBottle.Model
         /// </summary>
         public DbSet<ACT_Bottle> Bottles { get; set; }
 
+        /// <summary>
+        /// 聊天记录表
+        /// </summary>
+        public DbSet<ACT_ChatRecord> ChatRecords { get; set; }
+
         #endregion
     }
 }

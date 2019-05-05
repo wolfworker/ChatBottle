@@ -53,6 +53,7 @@
     <Compile Include="CommonDal.cs" />
     <Compile Include="PositionDal.cs" />
     <Compile Include="BottleDal.cs" />
+    <Compile Include="ChatRecordDal.cs" />
     <Compile Include="UserDal.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

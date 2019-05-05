@@ -199,6 +199,7 @@
     <Content Include="Views\Shared\Layout.cshtml" />
     <Content Include="Views\Welcome\Index.cshtml" />
     <Content Include="Views\Shared\Layout_Front.cshtml" />
+    <Content Include="websocket.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\css\" />

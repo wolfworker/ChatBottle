@@ -50,6 +50,7 @@
     <Compile Include="BizModels\BottleModel.cs" />
     <Compile Include="BizModels\PositionModel.cs" />
     <Compile Include="BizModels\UserModel.cs" />
+    <Compile Include="DBEntity\ACT_ChatRecord.cs" />
     <Compile Include="DBEntity\ACT_Bottle.cs" />
     <Compile Include="DBEntity\ACT_User_Position.cs" />
     <Compile Include="DBEntity\SYS_RequestLog.cs" />

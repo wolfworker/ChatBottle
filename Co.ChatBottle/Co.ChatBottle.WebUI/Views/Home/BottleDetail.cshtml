@@ -3,11 +3,16 @@
 }
 
 <div id="bottle" data-receiveid=""></div>
+<input type="hidden" id="bottleId" value="0" />
+<input type="hidden" id="senderid" value="0" />
+<input type="hidden" id="receiverid" value="0"  />
 
 <input type="text" id="replyContent" />
 <input type="button" id="btnReply" value="发送" />
 
 <script type="text/javascript">
+    $("#bottleId").val(@ViewBag.bottleId);
+  
     $.ajax({
         url: serviceurl + "/api/Bottle/QueryById",
         type: "get",
@@ -15,8 +20,10 @@
         success: function (result) {
             if (result.ErrorCode == 0 && result.Result != undefined) {
                 var bottleData = result.Result;
-                $("#bottle")[0].dataset.receiveid = bottleData.ReceiveUserID;
-
+                debugger;
+                $("#senderid").val(bottleData.ThrowUserID);
+                $("#receiverid").val(bottleData.ReceiveUserID);
+                
                 var html = "<br />";
                 html += '<textarea style="width:100%;text-align:left" readonly="readonly">' + bottleData.BottleDesc + '</textarea>';
                 html += "<br />";
@@ -31,12 +38,10 @@
     });
 
     $("#btnReply").click(function(){
-        debugger;
         //发送消息
         var content = $("#replyContent").val();
         if (content != undefined && content != "") {
-            var receiceid = $("#bottle")[0].dataset.receiveid;
-            content = "#$%345" + userid + "#$%345" + receiceid + "#$%345" +content;
+            content = "#$%345" + $("#bottleId").val() + "#$%345" + $("#senderid").val() + "#$%345" + $("#receiverid").val() + "#$%345" +content;
         }
         send(content);
         $("#replyContent").val('');

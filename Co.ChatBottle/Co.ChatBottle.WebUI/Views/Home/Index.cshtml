@@ -137,8 +137,6 @@
 
     //连接websocket
     var connectWebsocket = function () {
-        //var address = document.getElementById('address').value;
-        debugger;
         ws = new WebSocket(websocketaddress);
         ws.onopen = function (e) {
             alert("连接上了websocket服务器");
@@ -150,7 +148,6 @@
         };
         ws.onmessage = function (e) {
             //服务器回发消息，客户端即时处理
-            debugger;
             var html = "<br />";
             html += '<textarea style="width:100%;text-align:left" readonly="readonly">' + e.data + '</textarea>';
             html += "<br />";
@@ -163,7 +160,6 @@
         };
         ws.onerror = function (e) {
             //服务器出错，客户端即时处理
-            debugger;
 
             //var msg = document.createElement('div');
             //msg.style.color = '#0f0';
@@ -172,7 +168,6 @@
         };
         ws.onclose = function (e) {
             //服务器关闭连接，客户端即时处理
-            debugger;
             //var msg = document.createElement('div');
             //msg.style.color = '#0f0';
             //msg.innerHTML = "Server > connection closed by server.";
@@ -195,7 +190,6 @@
     }
 
     var send = function (content) {
-        debugger;
         //客户端发送消息
         if (content == undefined || content == "") {
             return;
@@ -231,7 +225,6 @@
     });
 
     var init = function () {
-        debugger;
         getLocation();
         connectWebsocket();
         if (@ViewBag.sourceFlag!= -1) {
