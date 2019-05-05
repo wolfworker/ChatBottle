@@ -16,10 +16,12 @@ namespace Co.ChatBottle.ConsoleTest
     {
         private static Socket listener;
         private static Hashtable ht;
+        private static Hashtable userht;
         static void Main(string[] args)
         {
-            int port = 1818;//监听端口为1818端口
+            int port = 9017;//监听端口为9015端口
             ht = new Hashtable();//用于存放客户端的连接socket
+            userht = new Hashtable();//用于存放客户id和客户端的对应关系
             byte[] buffer = new byte[1024];
 
             var localEP = new IPEndPoint(IPAddress.Any, port);
@@ -53,12 +55,7 @@ namespace Co.ChatBottle.ConsoleTest
             clientSocket.Blocking = true;
             IPEndPoint clientipe = (IPEndPoint)clientSocket.RemoteEndPoint;
             //    Console.WriteLine("[" + clientipe.Address.ToString() + "] Connected");
-            var key = string.Format("{0}-X-Q-X-{1}", clientipe.Address.ToString(), clientipe.Port);
-            if (!ht.ContainsKey(key))
-            {
-                //将ip地址设置为hashTable的key值 若hashTable中存在该ip地址则不再ht中添加socket以免发送重复数据
-                ht.Add(key, clientSocket);
-            }
+            
             Console.WriteLine("接收到了客户端：ip" + clientSocket.RemoteEndPoint.ToString() + "的连接");
             byte[] buffer = new byte[1024];
             int length = clientSocket.Receive(buffer);
@@ -67,7 +64,15 @@ namespace Co.ChatBottle.ConsoleTest
 
             //接收用户姓名信息
             length = clientSocket.Receive(buffer);
-            string xm = AnalyticData(buffer, length);
+            string connecteuserid = AnalyticData(buffer, length);
+            var key = string.Format("{0}-X-Q-X-{1}", clientipe.Address.ToString(), clientipe.Port);
+            if (!ht.ContainsKey(key))
+            {
+                //将ip地址设置为hashTable的key值 若hashTable中存在该ip地址则不再ht中添加socket以免发送重复数据
+                ht.Add(key, clientSocket);
+
+                userht.Add(connecteuserid, key);
+            }
 
             clientSocket.Send(PackData("连接时间：" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")));
 
@@ -108,16 +113,24 @@ namespace Co.ChatBottle.ConsoleTest
                     string clientMsg = AnalyticData(buffer, length);
                     Console.WriteLine("接受到客户端数据：" + clientMsg);
 
+                    var clientMsgArr = clientMsg.Split("#$%345".ToCharArray());
+                    var senderid = clientMsgArr[0];
+                    var receiveid = clientMsgArr[1];
+                    clientMsg = clientMsgArr[2];
                     //发送数据
                     string sendMsg = "" + clientMsg;
                     Console.WriteLine("发送数据：“" + sendMsg + "” 至客户端....");
-                    //遍历hashTable中的数据获取Socket发送数据
+                    
+                    //给 聊天双方 推送消息
                     foreach (DictionaryEntry de in ht)
                     {
                         try
                         {
-                            var sc = (Socket)de.Value;
-                            sc.Send(PackData(clientSocket.RemoteEndPoint.ToString() + xm + "说：" + sendMsg));
+                            if(de.Key == userht[senderid] || de.Key == userht[receiveid])
+                            {
+                                var sc = (Socket)de.Value;
+                                sc.Send(PackData(clientSocket.RemoteEndPoint.ToString() + connecteuserid + "说：" + sendMsg));
+                            }
                         }
                         catch (Exception e)
                         {
@@ -125,6 +138,22 @@ namespace Co.ChatBottle.ConsoleTest
                             errLs.Add(de.Key);
                         }
                     }
+
+
+                    //给全部用户推送消息
+                    //foreach (DictionaryEntry de in ht)
+                    //{
+                    //    try
+                    //    {
+                    //        var sc = (Socket)de.Value;
+                    //        sc.Send(PackData(clientSocket.RemoteEndPoint.ToString() + xm + "说：" + sendMsg));
+                    //    }
+                    //    catch (Exception e)
+                    //    {
+                    //        Console.WriteLine("Num:{0} err:{1}", ht.Count, e);
+                    //        errLs.Add(de.Key);
+                    //    }
+                    //}
 
                     if (errLs != null && errLs.Any())
                     {

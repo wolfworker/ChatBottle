@@ -135,6 +135,79 @@
         });
     }
 
+    //连接websocket
+    var connectWebsocket = function () {
+        //var address = document.getElementById('address').value;
+        debugger;
+        ws = new WebSocket(websocketaddress);
+        ws.onopen = function (e) {
+            alert("连接上了websocket服务器");
+            //var msg = document.createElement('div');
+            //msg.style.color = '#0f0';
+            //msg.innerHTML = "Server > connection open.";
+            //msgContainer.appendChild(msg);
+            ws.send(userid);
+        };
+        ws.onmessage = function (e) {
+            //服务器回发消息，客户端即时处理
+            debugger;
+            var html = "<br />";
+            html += '<textarea style="width:100%;text-align:left" readonly="readonly">' + e.data + '</textarea>';
+            html += "<br />";
+            $("#bottle").append(html);
+
+            //var msg = document.createElement('div');
+            //msg.style.color = '#fff';
+            //msg.innerHTML = e.data;
+            //msgContainer.appendChild(msg);
+        };
+        ws.onerror = function (e) {
+            //服务器出错，客户端即时处理
+            debugger;
+
+            //var msg = document.createElement('div');
+            //msg.style.color = '#0f0';
+            //msg.innerHTML = 'Server > ' + e.data;
+            //msgContainer.appendChild(msg);
+        };
+        ws.onclose = function (e) {
+            //服务器关闭连接，客户端即时处理
+            debugger;
+            //var msg = document.createElement('div');
+            //msg.style.color = '#0f0';
+            //msg.innerHTML = "Server > connection closed by server.";
+            //msgContainer.appendChild(msg);
+        };
+        //text.focus();
+    }
+
+    //退出
+    var quit = function () {
+        //客户端 退出
+        if (ws) {
+            ws.close();
+            //var msg = document.createElement('div');
+            //msg.style.color = '#0f0';
+            //msg.innerHTML = 'Server > connection closed.';
+            //msgContainer.appendChild(msg);
+            ws = null;
+        }
+    }
+
+    var send = function (content) {
+        debugger;
+        //客户端发送消息
+        if (content == undefined || content == "") {
+            return;
+        }
+        ws.send(content);
+        //setTimeout(function () {
+        //    msgContainer.scrollTop = msgContainer.getBoundingClientRect().height;
+        //}, 100);
+        //text.value = '';
+        //text.focus();
+    }
+
     $("#profilesetting").click(function () {
         loadPage(pageName.ProfileSetting);
     });
@@ -158,10 +231,13 @@
     });
 
     var init = function () {
+        debugger;
         getLocation();
+        connectWebsocket();
         if (@ViewBag.sourceFlag!= -1) {
             loadPageByIndex(@ViewBag.sourceFlag);//防止跳到主页 死循环
         }
+
         if (!checkUserValid()) {
             window.location.href = "/welcome/index";
         }

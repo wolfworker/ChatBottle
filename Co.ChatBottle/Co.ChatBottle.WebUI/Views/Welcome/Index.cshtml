@@ -63,7 +63,12 @@
         if (checkUserValid()) {
             window.location.href = "/home/index?sourceFlag=4";
         }
-    })
+        else {
+            //欢迎页 退出websocket
+            quit();
+        }
+    });
+
     $("#btnSubmit").click(function () {
         var gender = $(".gender").val();
         var username = $("#username").val();

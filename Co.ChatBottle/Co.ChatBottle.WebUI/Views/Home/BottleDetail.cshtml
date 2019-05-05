@@ -2,9 +2,9 @@
     ViewBag.Title = "流浪瓶";
 }
 
-<div id="bottle"></div>
+<div id="bottle" data-receiveid=""></div>
 
-<input type="text" id="reply" />
+<input type="text" id="replyContent" />
 <input type="button" id="btnReply" value="发送" />
 
 <script type="text/javascript">
@@ -15,6 +15,8 @@
         success: function (result) {
             if (result.ErrorCode == 0 && result.Result != undefined) {
                 var bottleData = result.Result;
+                $("#bottle")[0].dataset.receiveid = bottleData.ReceiveUserID;
+
                 var html = "<br />";
                 html += '<textarea style="width:100%;text-align:left" readonly="readonly">' + bottleData.BottleDesc + '</textarea>';
                 html += "<br />";
@@ -26,6 +28,18 @@
         error: function (result) {
             $("#bottle").append("系统异常啦");
         }
+    });
+
+    $("#btnReply").click(function(){
+        debugger;
+        //发送消息
+        var content = $("#replyContent").val();
+        if (content != undefined && content != "") {
+            var receiceid = $("#bottle")[0].dataset.receiveid;
+            content = "#$%345" + userid + "#$%345" + receiceid + "#$%345" +content;
+        }
+        send(content);
+        $("#replyContent").val('');
     });
 
 </script>
