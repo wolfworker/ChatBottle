@@ -18,6 +18,7 @@
 
 </head>
 <body>
+    @using Co.ChatBottle.Utility;
     <style>
         .unactive {
             opacity: 0.6
@@ -34,8 +35,8 @@
     <script>
         //全局变量
         //var serviceurl = "http://www.buyshoes.club:9001/";
-        var serviceurl = "http://localhost:9001/";
-        //var serviceurl = "http://10.1.8.4:9014/";
+        //var serviceurl = "http://localhost:9001/";
+        var serviceurl = "http://10.1.8.4:9014/";
         var userid = 0;//定义全局用户id
         var expiredHour = 24;
         var latitude = "";
@@ -47,8 +48,8 @@
         var street = "";
         var streetNumber = "";
         var addressdetail = "";
-
-        var websocketaddress = "ws://127.0.0.1:9017";//websocket地址
+        var encypt = '@ChatConst.EncryptStr';
+        var websocketaddress = "ws://127.0.0.1:9018";//websocket地址
 
         var pageName = {
             ProfileSetting: "/Home/ProfileSetting",
@@ -58,13 +59,13 @@
             BottleDetail: "/Home/BottleDetail",
             Index: "",
         };
-        
+
         function checkUserValid() {
             userid = localStorage.getItem("userid");
             var expiredtimestr = localStorage.getItem("expiredTime");
             var nowTime = new Date();
 
-            if (userid == undefined || isNaN(userid) || expiredtimestr == undefined) {
+            if (userid == undefined || userid == "" || isNaN(userid) || expiredtimestr == undefined) {
                 //如果没有用户缓存，则跳转到欢迎页
                 return false;
             }
@@ -95,7 +96,6 @@
 
                 }
             });
-            
             return valid;
         }
     </script>

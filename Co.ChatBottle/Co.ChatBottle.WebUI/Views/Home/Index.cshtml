@@ -147,17 +147,33 @@
             ws.send(userid);
         };
         ws.onmessage = function (e) {
-            //服务器回发消息，客户端即时处理
             debugger;
-            var html = "<br />";
-            html += '<textarea style="width:100%;text-align:left" readonly="readonly">' + e.data + '</textarea>';
-            html += "<br />";
-            $("#bottle").append(html);
-
-            //var msg = document.createElement('div');
-            //msg.style.color = '#fff';
-            //msg.innerHTML = e.data;
-            //msgContainer.appendChild(msg);
+            //服务器回发消息，客户端即时处理
+            var currentbottleid = $("#bottleId").val();
+            var backbottleid = 0;
+            var backsenderid = 0;
+            var backmsg = e.data;
+            var msgArr = backmsg.split(encypt);
+            if (msgArr.length > 2) {
+                backbottleid = msgArr[0];
+                backsenderid = msgArr[1];
+                backmsg = msgArr[2];
+            }
+            //相同瓶子，且是对方发送的消息
+            if (backbottleid == currentbottleid) {
+                //
+                var html = "<br />";
+                html += '<textarea style="width:100%;text-align:left" readonly="readonly">' + backmsg + '</textarea>';
+                html += "<br />";
+                $("#bottle").append(html);
+                if (backsenderid == userid) {
+                    //自己发的消息
+                    debugger;
+                } else {
+                    //对方发的消息，更新为已读状态
+                    debugger;
+                }
+            }
         };
         ws.onerror = function (e) {
             //服务器出错，客户端即时处理

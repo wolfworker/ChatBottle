@@ -1,6 +1,5 @@
 ﻿using Co.ChatBottle.Business;
 using Co.ChatBottle.Model;
-using Co.ChatBottle.Utility;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;

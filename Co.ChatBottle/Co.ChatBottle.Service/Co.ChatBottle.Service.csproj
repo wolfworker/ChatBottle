@@ -103,7 +103,6 @@
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\RequestLogController.cs" />
-    <Compile Include="Websocket.cs" />
     <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\PositionController.cs" />
     <Compile Include="Controllers\BottleController.cs" />
@@ -123,9 +122,7 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\Co.ChatBottle.Business\Co.ChatBottle.Business.csproj">
       <Project>{126dc10f-a70b-49a5-85ce-9ba9bab04a5e}</Project>
@@ -134,10 +131,6 @@
     <ProjectReference Include="..\Co.ChatBottle.Model\Co.ChatBottle.Model.csproj">
       <Project>{C39FF08B-F058-443B-B48C-2CDC758D2DAC}</Project>
       <Name>Co.ChatBottle.Model</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Co.ChatBottle.Utility\Co.ChatBottle.Utility.csproj">
-      <Project>{08e687b0-6a28-48af-bbd7-f8c7cc884f4d}</Project>
-      <Name>Co.ChatBottle.Utility</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

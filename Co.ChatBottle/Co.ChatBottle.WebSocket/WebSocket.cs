@@ -12,18 +12,20 @@ using System.Threading;
 using System.Threading.Tasks;
 using Co.ChatBottle.Business;
 using Co.ChatBottle.Model;
+using Co.ChatBottle.Utility;
+using System.Data.Entity.SqlServer;
 
-namespace Co.ChatBottle.Service
+namespace Co.ChatBottle.WebSocket
 {
-    public class Websocket
+    public class WebSocket
     {
         private static Socket listener;
         private static Hashtable ht;
         private static Hashtable userht;
 
-        public static void Main()
+        public static void StartSocket()
         {
-            int port = 9017;//监听端口为9015端口
+            int port = 9018;//监听端口为9018端口
             ht = new Hashtable();//用于存放客户端的连接socket
             userht = new Hashtable();//用于存放客户id和客户端的对应关系
             byte[] buffer = new byte[1024];
@@ -125,7 +127,7 @@ namespace Co.ChatBottle.Service
                     string clientMsg = AnalyticData(buffer, length);
                     Console.WriteLine("接受到客户端数据：" + clientMsg);
 
-                    var clientMsgArr = clientMsg.Split(new string[] { "#$%345" }, StringSplitOptions.RemoveEmptyEntries);
+                    var clientMsgArr = clientMsg.Split(new string[] { ChatConst.EncryptStr }, StringSplitOptions.RemoveEmptyEntries);
                     if (clientMsgArr.Length < 3)
                     {
                         return;
@@ -154,14 +156,14 @@ namespace Co.ChatBottle.Service
                             UpdateUserID = long.Parse(connecteuserid),
                         });
                     });
-                    
 
+                    var sendbackMsg = $"{bottleid}{ChatConst.EncryptStr}{connecteuserid}{ChatConst.EncryptStr}{connecteuserid}说：{sendMsg}";
                     //给 聊天双方 推送消息
                     try
                     {
                         //给自己推送消息
                         var sendersocket = (Socket)ht[connecteuserid];
-                        sendersocket.Send(PackData(connecteuserid + " 说：" + sendMsg));
+                        sendersocket.Send(PackData(sendbackMsg));
                     }
                     catch (Exception ex)
                     {
@@ -172,7 +174,7 @@ namespace Co.ChatBottle.Service
                     {
                         //给对方推送消息
                         var receivesocket = (Socket)ht[receiveid.ToString()];
-                        receivesocket.Send(PackData(connecteuserid + " 说：" + sendMsg));
+                        receivesocket.Send(PackData(sendbackMsg));
                     }
                     catch (Exception ex)
                     {
