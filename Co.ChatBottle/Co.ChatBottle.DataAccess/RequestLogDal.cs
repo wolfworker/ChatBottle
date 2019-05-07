@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Co.ChatBottle.DataAccess
 {
-    public class PositionDal : CommonDal
+    public class RequestLogDal : CommonDal
     {
    
     }

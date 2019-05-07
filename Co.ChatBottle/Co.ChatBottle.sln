@@ -17,8 +17,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Co.ChatBottle.Utility", "Co
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Co.ChatBottle.WebUI", "Co.ChatBottle.WebUI\Co.ChatBottle.WebUI.csproj", "{15FE5E62-FA34-4CBC-AEF3-842E2D9DF397}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Co.ChatBottle.Console", "Co.ChatBottle.Console\Co.ChatBottle.Console.csproj", "{2FCD5D70-C3C1-4E27-BB70-84D645E0797D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,10 +51,6 @@ Global
 		{15FE5E62-FA34-4CBC-AEF3-842E2D9DF397}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15FE5E62-FA34-4CBC-AEF3-842E2D9DF397}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15FE5E62-FA34-4CBC-AEF3-842E2D9DF397}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2FCD5D70-C3C1-4E27-BB70-84D645E0797D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2FCD5D70-C3C1-4E27-BB70-84D645E0797D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2FCD5D70-C3C1-4E27-BB70-84D645E0797D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2FCD5D70-C3C1-4E27-BB70-84D645E0797D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -4,7 +4,6 @@
 
 <div id="bottle" data-receiveid=""></div>
 <input type="hidden" id="bottleId" value="0" />
-<input type="hidden" id="senderid" value="0" />
 <input type="hidden" id="receiverid" value="0"  />
 
 <input type="text" id="replyContent" />
@@ -12,7 +11,7 @@
 
 <script type="text/javascript">
     $("#bottleId").val(@ViewBag.bottleId);
-  
+
     $.ajax({
         url: serviceurl + "/api/Bottle/QueryById",
         type: "get",
@@ -20,10 +19,12 @@
         success: function (result) {
             if (result.ErrorCode == 0 && result.Result != undefined) {
                 var bottleData = result.Result;
-                debugger;
-                $("#senderid").val(bottleData.ThrowUserID);
-                $("#receiverid").val(bottleData.ReceiveUserID);
-                
+                var receiverid = bottleData.ReceiveUserID;
+                if (userid != bottleData.ThrowUserID) {
+                    receiverid = bottleData.ThrowUserID;
+                }
+                $("#receiverid").val(receiverid);
+
                 var html = "<br />";
                 html += '<textarea style="width:100%;text-align:left" readonly="readonly">' + bottleData.BottleDesc + '</textarea>';
                 html += "<br />";
@@ -37,11 +38,42 @@
         }
     });
 
+    var requestData = {};
+    requestData.UserID = userid;
+    requestData.BussiessValue = @ViewBag.bottleId;
+
+    $.post(serviceurl + "/api/RequestLog/Add", requestData);
+    //$.ajax({
+    //    url: serviceurl + "/api/RequestLog/Add",
+    //    type: "post",
+    //    data: requestData,
+    //    success: function (result) {
+    //        if (result.ErrorCode == 0 && result.Result != undefined) {
+    //            var requestLog = result.Result;
+    //            var receiverid = bottleData.ReceiveUserID;
+    //            if (userid != bottleData.ThrowUserID) {
+    //                receiverid = bottleData.ThrowUserID;
+    //            }
+    //            $("#receiverid").val(receiverid);
+
+    //            var html = "<br />";
+    //            html += '<textarea style="width:100%;text-align:left" readonly="readonly">' + bottleData.BottleDesc + '</textarea>';
+    //            html += "<br />";
+    //            $("#bottle").append(html);
+    //        } else {
+    //            $("#bottle").append("这是个空瓶子。。。");
+    //        }
+    //    },
+    //    error: function (result) {
+    //        $("#bottle").append("系统异常啦");
+    //    }
+    //});
+
     $("#btnReply").click(function(){
         //发送消息
         var content = $("#replyContent").val();
         if (content != undefined && content != "") {
-            content = "#$%345" + $("#bottleId").val() + "#$%345" + $("#senderid").val() + "#$%345" + $("#receiverid").val() + "#$%345" +content;
+            content = "#$%345" + $("#bottleId").val() + "#$%345" + $("#receiverid").val() + "#$%345" + content;
         }
         send(content);
         $("#replyContent").val('');

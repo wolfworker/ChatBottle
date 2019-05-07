@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommonDal.cs" />
+    <Compile Include="RequestLogDal.cs" />
+    <Compile Include="DebugLogDal.cs" />
     <Compile Include="PositionDal.cs" />
     <Compile Include="BottleDal.cs" />
     <Compile Include="ChatRecordDal.cs" />

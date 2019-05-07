@@ -52,6 +52,7 @@
   <ItemGroup>
     <Compile Include="ChatRecordBiz.cs" />
     <Compile Include="CommonBiz.cs" />
+    <Compile Include="RequestLogBiz.cs" />
     <Compile Include="DebugLogBiz.cs" />
     <Compile Include="PositionBiz.cs" />
     <Compile Include="BottleBiz.cs" />

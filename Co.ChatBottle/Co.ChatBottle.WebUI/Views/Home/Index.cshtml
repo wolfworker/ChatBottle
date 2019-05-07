@@ -148,6 +148,7 @@
         };
         ws.onmessage = function (e) {
             //服务器回发消息，客户端即时处理
+            debugger;
             var html = "<br />";
             html += '<textarea style="width:100%;text-align:left" readonly="readonly">' + e.data + '</textarea>';
             html += "<br />";

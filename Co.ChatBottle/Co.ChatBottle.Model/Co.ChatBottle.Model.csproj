@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BizModels\BottleModel.cs" />
+    <Compile Include="BizModels\RequestLogModel.cs" />
     <Compile Include="BizModels\PositionModel.cs" />
     <Compile Include="BizModels\UserModel.cs" />
     <Compile Include="DBEntity\ACT_ChatRecord.cs" />

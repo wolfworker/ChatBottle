@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Co.ChatBottle.Business
 {
-    public class DebugLogBiz : CommonBiz
+    public class RequestLogBiz : CommonBiz
     {
 
     }
