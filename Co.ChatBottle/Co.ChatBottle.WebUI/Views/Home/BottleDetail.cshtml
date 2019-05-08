@@ -2,47 +2,65 @@
     ViewBag.Title = "流浪瓶";
 }
 
-<div id="bottle" data-receiveid=""></div>
+<div id="bottle" data-receiveid="" style="overflow:auto;height: 90%;"></div>
 <input type="hidden" id="bottleId" value="0" />
 <input type="hidden" id="receiverid" value="0" />
 
 <input type="text" id="replyContent" />
-<input type="button" id="btnReply" value="发送" />
+<input type="button" class="btn-primary" id="btnReply" value="发送" />
 
 <script type="text/javascript">
     $("#bottleId").val(@ViewBag.bottleId);
-
+    $("#btnReply").attr("disabled", false);
+    $("#replyContent").attr("disabled", false);
     $.ajax({
-        url: serviceurl + "/api/Bottle/QueryById",
+        url: serviceurl + "/api/ChatRecord/QueryChatByBottleId",
         type: "get",
-        data: { id: @ViewBag.bottleId },
+        data: { bottleid: @ViewBag.bottleId },
         success: function (result) {
-            if (result.ErrorCode == 0 && result.Result != undefined) {
-                var bottleData = result.Result;
-                var receiverid = bottleData.ReceiveUserID;
-                if (userid != bottleData.ThrowUserID) {
-                    receiverid = bottleData.ThrowUserID;
+            if (result.ErrorCode == 0 && result.Result != undefined && result.Result.length > 0) {
+                var chatRecord = result.Result;
+                //接收人id赋值
+                $("#receiverid").val(chatRecord[0].ReceiverID);
+                if (userid != chatRecord[0].SenderID) {
+                    //别人扔的瓶子
+                    $("#receiverid").val(chatRecord[0].SenderID);
                 }
-                $("#receiverid").val(receiverid);
 
-                var html = "<br />";
-                html += '<textarea style="width:100%;text-align:left" readonly="readonly">' + bottleData.BottleDesc + '</textarea>';
-                html += "<br />";
+                var html = "";
+                $.each(chatRecord,function (index, item) {
+                    html += "<br />";
+                    html += '<textarea style="width:100%;text-align:' + (item.SenderID != userid ? "left" : "right") + ';height: 35px" readonly="readonly">' + item.ChatText + '</textarea>';
+                });
                 $("#bottle").append(html);
+                $("#bottle")[0].scrollTop = $("#bottle")[0].scrollHeight;
+
+                //打开瓶子界面时 更新聊天记录状态为已读
+                var data = {};
+                data.BottleID = @ViewBag.bottleId;
+                data.ReceiverID = userid;
+                $.post(serviceurl + "/api/ChatRecord/UpdateChatStatus", data);
+
+                var receiverid = $("#receiverid").val();
+                if (receiverid == undefined || receiverid == "" || receiverid == 0) {
+                    $("#btnReply").attr("disabled", true);
+                    $("#replyContent").attr("disabled", true);
+                    alert("瓶子还没被捡起哦")
+                }
+
             } else {
                 $("#bottle").append("这是个空瓶子。。。");
+                $("#btnReply").attr("disabled", true);
+                $("#replyContent").attr("disabled", true);
             }
         },
         error: function (result) {
             $("#bottle").append("系统异常啦");
+            $("#btnReply").attr("disabled", true);
+            $("#replyContent").attr("disabled", true);
+
         }
     });
-
-    var requestData = {};
-    requestData.UserID = userid;
-    requestData.BussiessValue = @ViewBag.bottleId;
-
-    $.post(serviceurl + "/api/RequestLog/Add", requestData);
 
     $("#btnReply").click(function(){
         //发送消息
@@ -50,7 +68,6 @@
         if (content != undefined && content != "") {
             content = encypt + $("#bottleId").val() + encypt + $("#receiverid").val() + encypt + content;
         }
-        debugger;
         send(content);
         $("#replyContent").val('');
     });

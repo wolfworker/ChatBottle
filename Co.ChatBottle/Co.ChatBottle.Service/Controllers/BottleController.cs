@@ -37,6 +37,21 @@ namespace Co.ChatBottle.Service.Controllers
 
             var bottleEntity = bottleBiz.Add(bottleInfo);
 
+            //插入第一条聊天记录
+            var chatInfo = new ACT_ChatRecord
+            {
+                BottleID = bottleEntity.ID,
+                ChatText = request.BottleDesc,
+                SenderID = request.ThrowUserID,
+                Remark = "扔瓶子时同步聊天记录",
+                CreatedTime = DateTime.Now,
+                UpdateTime = DateTime.Now,
+                CreatedUserID = request.ThrowUserID,
+                UpdateUserID = request.ThrowUserID,
+            };
+
+            new ChatRecordBiz().Add(chatInfo);
+
             //异步记录瓶子位置
             Task.Run(() =>
             {
@@ -56,7 +71,7 @@ namespace Co.ChatBottle.Service.Controllers
                     AddressDetail = request.AddressDetail,
                 };
 
-                var positionEntity = new PositionBiz().Add(positionInfo);
+                new PositionBiz().Add(positionInfo);
             });
 
             if (bottleEntity == null)
@@ -146,6 +161,10 @@ namespace Co.ChatBottle.Service.Controllers
                 //bottleInfo.UpdateTime = DateTime.Now;//不更新时间，否则会导致 页面排序出问题，只有真实操作瓶子才更新时间
                 if (bottleBiz.Update(bottleInfo))
                 {
+                    //更新聊天记录的receiveid
+                    var updateSql = $@"  UPDATE ACT_ChatRecord SET receiverid = {userId} WHERE bottleid = {bottleInfo.ID} ;";
+                    bottleBiz.ExcuteSql(updateSql);
+
                     return EntityToJson(bottleInfo);
                 }
             }

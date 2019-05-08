@@ -89,7 +89,7 @@ namespace Co.ChatBottle.WebSocket
                 }
             }
 
-            clientSocket.Send(PackData("连接时间：" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")));
+            //clientSocket.Send(PackData("连接时间：" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")));
 
             var chatBll = new ChatRecordBiz();
             try
@@ -135,7 +135,12 @@ namespace Co.ChatBottle.WebSocket
                     var bottleid = Convert.ToInt64(clientMsgArr[0]);
                     //var senderid = Convert.ToInt64(clientMsgArr[1]);
                     var receiveid = Convert.ToInt64(clientMsgArr[1]);
+                    
                     clientMsg = clientMsgArr[2];
+                    if (bottleid == 0 || receiveid == 0 || string.IsNullOrEmpty(clientMsg))
+                    {
+                        return;
+                    }
                     //发送数据
                     string sendMsg = "" + clientMsg;
                     Console.WriteLine("发送数据：“" + sendMsg + "” 至客户端....");

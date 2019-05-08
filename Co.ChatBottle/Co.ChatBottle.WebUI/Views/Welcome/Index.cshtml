@@ -79,7 +79,6 @@
             dataType: "json", //表示返回值类型，不必须
             data: { UserName: username, PassChar: password, Gender: gender },
             success: function (result) {
-                debugger;
                 if (result.ErrorCode == 0 && result.Result != undefined) {
                     var data = result.Result[0];
                     if (data == undefined) {
