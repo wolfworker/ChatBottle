@@ -30,7 +30,8 @@
                 var html = "";
                 $.each(chatRecord,function (index, item) {
                     html += "<br />";
-                    html += '<textarea style="width:100%;text-align:' + (item.SenderID != userid ? "left" : "right") + ';height: 35px" readonly="readonly">' + item.ChatText + '</textarea>';
+                    html += '<textarea style="width:100%;text-align:' + (item.SenderID != userid ? "left;float:left;" : "right;float:right;background-color: lightgreen;") + ';height: 35px" readonly="readonly">' + item.ChatText + '</textarea>';
+                    //html += '<textarea style="width:100%;text-align:' + (item.SenderID != userid ? "left" : "right") + ';height: 35px" readonly="readonly">' + item.ChatText + '</textarea>';
                 });
                 $("#bottle").append(html);
                 $("#bottle")[0].scrollTop = $("#bottle")[0].scrollHeight;

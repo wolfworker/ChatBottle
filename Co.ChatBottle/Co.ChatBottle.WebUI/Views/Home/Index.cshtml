@@ -139,8 +139,7 @@
     var connectWebsocket = function () {
         ws = new WebSocket(websocketaddress);
         ws.onopen = function (e) {
-            debugger;
-            //alert("连接上了websocket服务器");
+            alert("连接上了websocket服务器");
             //var msg = document.createElement('div');
             //msg.style.color = '#0f0';
             //msg.innerHTML = "Server > connection open.";
@@ -159,23 +158,23 @@
                 backbottleid = msgArr[0];
                 backsenderid = msgArr[1];
                 backmsg = msgArr[2];
-            }
-            //相同瓶子
-            if (backbottleid == currentbottleid) {
-                var html = "<br />";
-                html += '<textarea style="width:100%;text-align:' + (backsenderid != userid ? "left" : "right" )+ ';height: 35px" readonly="readonly">' + backmsg + '</textarea>';
-                $("#bottle").append(html);
-                $("#bottle")[0].scrollTop = $("#bottle")[0].scrollHeight;
-                if (backsenderid != userid) {
-                    //对方发的消息，更新为已读状态
-                    var data = {};
-                    data.BottleID = backbottleid;
-                    data.ReceiverID = userid;
-                    $.post(serviceurl + "/api/ChatRecord/UpdateChatStatus", data);
+                //相同瓶子
+                if (backbottleid == currentbottleid) {
+                    var html = "<br />";
+                    html += '<textarea style="width:100%;text-align:' + (backsenderid != userid ? "left;background-color: lightgreen;float:left;" : "right;float:right;") + ';height: 35px" readonly="readonly">' + backmsg + '</textarea>';
+                    $("#bottle").append(html);
+                    $("#bottle")[0].scrollTop = $("#bottle")[0].scrollHeight;
+                    if (backsenderid != userid) {
+                        //对方发的消息，更新为已读状态
+                        var data = {};
+                        data.BottleID = backbottleid;
+                        data.ReceiverID = userid;
+                        $.post(serviceurl + "/api/ChatRecord/UpdateChatStatus", data);
 
-                    //有别人发消息过来，按钮和输入框都应该可以使用
-                    $("#btnReply").attr("disabled", false);
-                    $("#replyContent").attr("disabled", false);
+                        //有别人发消息过来，按钮和输入框都应该可以使用
+                        $("#btnReply").attr("disabled", false);
+                        $("#replyContent").attr("disabled", false);
+                    }
                 }
             }
         };
@@ -219,20 +218,6 @@
         }
         debugger;
         ws.send(content);
-        //setTimeout(function () {
-        //    msgContainer.scrollTop = msgContainer.getBoundingClientRect().height;
-        //}, 100);
-        //text.value = '';
-        //text.focus();
-    }
-
-    var sendHeartbeat = function () {
-        debugger;
-        setInterval(
-            function () {
-                debugger;
-                send("心跳")
-            }, 20000);
     }
 
     $("#profilesetting").click(function () {
@@ -268,7 +253,9 @@
             loadPageByIndex(@ViewBag.sourceFlag);//防止跳到主页 死循环
         }
 
-        sendHeartbeat();
+        setInterval(function () {
+            send("心跳");
+        }, 10000);
     }
 
 </script>

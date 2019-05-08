@@ -25,7 +25,7 @@ namespace Co.ChatBottle.WebSocket
 
         public static void StartSocket()
         {
-            int port = 9018;//监听端口为9018端口
+            int port = 9019;//监听端口为9018端口
             ht = new Hashtable();//用于存放客户端的连接socket
             userht = new Hashtable();//用于存放客户id和客户端的对应关系
             byte[] buffer = new byte[1024];
@@ -122,93 +122,102 @@ namespace Co.ChatBottle.WebSocket
                         {
                             Console.WriteLine(ex.Message);
                         }
-
                     }
+
+                    var continueFlag = true;
+                    var sendersocket = (Socket)ht[connecteuserid];
+
                     string clientMsg = AnalyticData(buffer, length);
                     Console.WriteLine("接受到客户端数据：" + clientMsg);
-
                     var clientMsgArr = clientMsg.Split(new string[] { ChatConst.EncryptStr }, StringSplitOptions.RemoveEmptyEntries);
+                    var bottleid = 0L;
+                    var receiveid = 0L;
+
                     if (clientMsgArr.Length < 3)
                     {
-                        return;
+                        //回发到客户端，用于心跳包检测
+                        sendersocket.Send(PackData(clientMsg));
+                        continueFlag = false;
                     }
-                    var bottleid = Convert.ToInt64(clientMsgArr[0]);
-                    //var senderid = Convert.ToInt64(clientMsgArr[1]);
-                    var receiveid = Convert.ToInt64(clientMsgArr[1]);
-                    
-                    clientMsg = clientMsgArr[2];
-                    if (bottleid == 0 || receiveid == 0 || string.IsNullOrEmpty(clientMsg))
+                    else
                     {
-                        return;
-                    }
-                    //发送数据
-                    string sendMsg = "" + clientMsg;
-                    Console.WriteLine("发送数据：“" + sendMsg + "” 至客户端....");
-
-                    //保存聊天记录到数据库
-                    Task.Run(() =>
-                    {
-                        chatBll.Add(new ACT_ChatRecord
+                        bottleid = Convert.ToInt64(clientMsgArr[0]);
+                        receiveid = Convert.ToInt64(clientMsgArr[1]);
+                        clientMsg = clientMsgArr[2];
+                        if (bottleid == 0 || receiveid == 0 || string.IsNullOrEmpty(clientMsg))
                         {
-                            ID = Guid.NewGuid().ToString(),
-                            BottleID = bottleid,
-                            SenderID = long.Parse(connecteuserid),
-                            ReceiverID = receiveid,
-                            ChatText = clientMsg,
-                            CreatedTime = DateTime.Now,
-                            UpdateTime = DateTime.Now,
-                            CreatedUserID = long.Parse(connecteuserid),
-                            UpdateUserID = long.Parse(connecteuserid),
-                        });
-                    });
-
-                    var sendbackMsg = $"{bottleid}{ChatConst.EncryptStr}{connecteuserid}{ChatConst.EncryptStr}{connecteuserid}说：{sendMsg}";
-                    //给 聊天双方 推送消息
-                    try
-                    {
-                        //给自己推送消息
-                        var sendersocket = (Socket)ht[connecteuserid];
-                        sendersocket.Send(PackData(sendbackMsg));
-                    }
-                    catch (Exception ex)
-                    {
-                        errLs.Add(connecteuserid);
-                    }
-
-                    try
-                    {
-                        //给对方推送消息
-                        var receivesocket = (Socket)ht[receiveid.ToString()];
-                        receivesocket.Send(PackData(sendbackMsg));
-                    }
-                    catch (Exception ex)
-                    {
-                        errLs.Add(receiveid.ToString());
-                    }
-
-                    //给全部用户推送消息
-                    //foreach (DictionaryEntry de in ht)
-                    //{
-                    //    try
-                    //    {
-                    //        var sc = (Socket)de.Value;
-                    //        sc.Send(PackData(clientSocket.RemoteEndPoint.ToString() + xm + "说：" + sendMsg));
-                    //    }
-                    //    catch (Exception e)
-                    //    {
-                    //        Console.WriteLine("Num:{0} err:{1}", ht.Count, e);
-                    //        errLs.Add(de.Key);
-                    //    }
-                    //}
-
-                    if (errLs != null && errLs.Any())
-                    {
-                        foreach (var item in errLs)
-                        {
-                            ht.Remove(item);
+                            continueFlag = false;
                         }
                     }
+                    if (continueFlag)
+                    {
+                        //发送数据
+                        string sendMsg = "" + clientMsg;
+                        Console.WriteLine("发送数据：“" + sendMsg + "” 至客户端....");
 
+                        //保存聊天记录到数据库
+                        Task.Run(() =>
+                        {
+                            chatBll.Add(new ACT_ChatRecord
+                            {
+                                ID = Guid.NewGuid().ToString(),
+                                BottleID = bottleid,
+                                SenderID = long.Parse(connecteuserid),
+                                ReceiverID = receiveid,
+                                ChatText = clientMsg,
+                                CreatedTime = DateTime.Now,
+                                UpdateTime = DateTime.Now,
+                                CreatedUserID = long.Parse(connecteuserid),
+                                UpdateUserID = long.Parse(connecteuserid),
+                            });
+                        });
+
+                        var sendbackMsg = $"{bottleid}{ChatConst.EncryptStr}{connecteuserid}{ChatConst.EncryptStr}{connecteuserid}说：{sendMsg}";
+                        //给 聊天双方 推送消息
+                        try
+                        {
+                            //给自己推送消息
+                            sendersocket.Send(PackData(sendbackMsg));
+                        }
+                        catch (Exception ex)
+                        {
+                            errLs.Add(connecteuserid);
+                        }
+
+                        try
+                        {
+                            //给对方推送消息
+                            var receivesocket = (Socket)ht[receiveid.ToString()];
+                            receivesocket.Send(PackData(sendbackMsg));
+                        }
+                        catch (Exception ex)
+                        {
+                            errLs.Add(receiveid.ToString());
+                        }
+
+                        //给全部用户推送消息
+                        //foreach (DictionaryEntry de in ht)
+                        //{
+                        //    try
+                        //    {
+                        //        var sc = (Socket)de.Value;
+                        //        sc.Send(PackData(clientSocket.RemoteEndPoint.ToString() + xm + "说：" + sendMsg));
+                        //    }
+                        //    catch (Exception e)
+                        //    {
+                        //        Console.WriteLine("Num:{0} err:{1}", ht.Count, e);
+                        //        errLs.Add(de.Key);
+                        //    }
+                        //}
+
+                        if (errLs != null && errLs.Any())
+                        {
+                            foreach (var item in errLs)
+                            {
+                                ht.Remove(item);
+                            }
+                        }
+                    }
                     Thread.Sleep(1000);
                 }
             }

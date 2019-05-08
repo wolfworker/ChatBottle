@@ -16,7 +16,7 @@ namespace Co.ChatBottle.Business
             try
             {
                 var entity = commonDal.Add(request);
-                if (entity != null && string.IsNullOrEmpty(entity.ID))
+                if (entity != null && !string.IsNullOrEmpty(entity.ID))
                 {
                     //聊天记录新增一条，对应瓶子的聊天预览文案也要更新
                     var bittleBiz = new BottleBiz();

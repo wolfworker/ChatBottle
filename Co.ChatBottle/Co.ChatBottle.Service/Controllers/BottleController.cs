@@ -40,6 +40,7 @@ namespace Co.ChatBottle.Service.Controllers
             //插入第一条聊天记录
             var chatInfo = new ACT_ChatRecord
             {
+                ID = Guid.NewGuid().ToString(),
                 BottleID = bottleEntity.ID,
                 ChatText = request.BottleDesc,
                 SenderID = request.ThrowUserID,
