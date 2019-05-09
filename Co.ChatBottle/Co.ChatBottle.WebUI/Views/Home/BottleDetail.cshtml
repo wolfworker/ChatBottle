@@ -2,17 +2,18 @@
     ViewBag.Title = "流浪瓶";
 }
 
-<div id="bottle" data-receiveid="" style="overflow:auto;height: 90%;"></div>
-<input type="hidden" id="bottleId" value="0" />
+<div id="detail_bottle" data-receiveid="" style="overflow:auto;height: 90%;"></div>
+<input type="hidden" id="detail_bottleId" value="0" />
 <input type="hidden" id="receiverid" value="0" />
-
+<p></p>
 <input type="text" id="replyContent" />
 <input type="button" class="btn-primary" id="btnReply" value="发送" />
 
 <script type="text/javascript">
-    $("#bottleId").val(@ViewBag.bottleId);
+    $("#detail_bottleId").val(@ViewBag.bottleId);
     $("#btnReply").attr("disabled", false);
     $("#replyContent").attr("disabled", false);
+
     $.ajax({
         url: serviceurl + "/api/ChatRecord/QueryChatByBottleId",
         type: "get",
@@ -33,8 +34,8 @@
                     html += '<textarea style="width:100%;text-align:' + (item.SenderID != userid ? "left;float:left;" : "right;float:right;background-color: lightgreen;") + ';height: 35px" readonly="readonly">' + item.ChatText + '</textarea>';
                     //html += '<textarea style="width:100%;text-align:' + (item.SenderID != userid ? "left" : "right") + ';height: 35px" readonly="readonly">' + item.ChatText + '</textarea>';
                 });
-                $("#bottle").append(html);
-                $("#bottle")[0].scrollTop = $("#bottle")[0].scrollHeight;
+                $("#detail_bottle").append(html);
+                $("#detail_bottle")[0].scrollTop = $("#detail_bottle")[0].scrollHeight;
 
                 //打开瓶子界面时 更新聊天记录状态为已读
                 var data = {};
@@ -50,27 +51,40 @@
                 }
 
             } else {
-                $("#bottle").append("这是个空瓶子。。。");
+                $("#detail_bottle").append("这是个空瓶子。。。");
                 $("#btnReply").attr("disabled", true);
                 $("#replyContent").attr("disabled", true);
             }
         },
         error: function (result) {
-            $("#bottle").append("系统异常啦");
+            $("#detail_bottle").append("系统异常啦");
             $("#btnReply").attr("disabled", true);
             $("#replyContent").attr("disabled", true);
 
         }
     });
 
-    $("#btnReply").click(function(){
+    var sendmessage = function () {
         //发送消息
         var content = $("#replyContent").val();
         if (content != undefined && content != "") {
-            content = encypt + $("#bottleId").val() + encypt + $("#receiverid").val() + encypt + content;
+            content = encypt + $("#detail_bottleId").val() + encypt + $("#receiverid").val() + encypt + content;
+            send(content);
+            $("#replyContent").val('');
+        } else {
+            alert("发送内容为空！")
         }
-        send(content);
-        $("#replyContent").val('');
+    }
+
+    $("#btnReply").click(function(){
+        sendmessage();
     });
+
+    document.onkeydown = function (e) {
+        if (e.keyCode == 13) {
+            console.log("回车事件");
+            sendmessage();
+        }
+    }
 
 </script>

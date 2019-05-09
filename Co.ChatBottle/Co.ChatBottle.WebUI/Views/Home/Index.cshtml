@@ -139,7 +139,7 @@
     var connectWebsocket = function () {
         ws = new WebSocket(websocketaddress);
         ws.onopen = function (e) {
-            alert("连接上了websocket服务器");
+            //alert("连接上了websocket服务器");
             //var msg = document.createElement('div');
             //msg.style.color = '#0f0';
             //msg.innerHTML = "Server > connection open.";
@@ -147,9 +147,8 @@
             ws.send(userid);
         };
         ws.onmessage = function (e) {
-            debugger;
             //服务器回发消息，客户端即时处理
-            var currentbottleid = $("#bottleId").val();
+            var currentbottleid = $("#detail_bottleId").val();
             var backbottleid = 0;
             var backsenderid = 0;
             var backmsg = e.data;
@@ -161,9 +160,9 @@
                 //相同瓶子
                 if (backbottleid == currentbottleid) {
                     var html = "<br />";
-                    html += '<textarea style="width:100%;text-align:' + (backsenderid != userid ? "left;background-color: lightgreen;float:left;" : "right;float:right;") + ';height: 35px" readonly="readonly">' + backmsg + '</textarea>';
-                    $("#bottle").append(html);
-                    $("#bottle")[0].scrollTop = $("#bottle")[0].scrollHeight;
+                    html += '<textarea style="width:100%;text-align:' + (backsenderid != userid ? "left;float:left;" : "right;float:right;background-color: lightgreen;") + ';height: 35px" readonly="readonly">' + backmsg + '</textarea>';
+                    $("#detail_bottle").append(html);
+                    $("#detail_bottle")[0].scrollTop = $("#detail_bottle")[0].scrollHeight;
                     if (backsenderid != userid) {
                         //对方发的消息，更新为已读状态
                         var data = {};
@@ -179,7 +178,6 @@
             }
         };
         ws.onerror = function (e) {
-            debugger;
             //服务器出错，客户端即时处理
 
             //var msg = document.createElement('div');
@@ -188,7 +186,6 @@
             //msgContainer.appendChild(msg);
         };
         ws.onclose = function (e) {
-            debugger;
             //服务器关闭连接，客户端即时处理
             //var msg = document.createElement('div');
             //msg.style.color = '#0f0';
@@ -216,7 +213,6 @@
         if (content == undefined || content == "") {
             return;
         }
-        debugger;
         ws.send(content);
     }
 
@@ -255,7 +251,7 @@
 
         setInterval(function () {
             send("心跳");
-        }, 10000);
+        }, 20000);
     }
 
 </script>

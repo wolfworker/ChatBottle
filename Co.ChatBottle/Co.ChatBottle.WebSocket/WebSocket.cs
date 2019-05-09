@@ -25,7 +25,7 @@ namespace Co.ChatBottle.WebSocket
 
         public static void StartSocket()
         {
-            int port = 9019;//监听端口为9018端口
+            int port = 9018;//监听端口为9018端口
             ht = new Hashtable();//用于存放客户端的连接socket
             userht = new Hashtable();//用于存放客户id和客户端的对应关系
             byte[] buffer = new byte[1024];

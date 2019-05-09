@@ -45,5 +45,9 @@ namespace Co.ChatBottle.Model
         public string HeaderImgUrl { get; set; }
         public byte Gender { get; set; }
         public string UpdateTimeDesc { get; set; }
+        /// <summary>
+        /// 已读状态 1：已读，0：未读
+        /// </summary>
+        public int ReadStatus { get; set; }
     }
 }

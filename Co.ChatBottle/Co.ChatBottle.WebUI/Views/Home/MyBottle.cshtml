@@ -38,10 +38,14 @@
         font-weight: bolder;
         font-size: initial;
     }
+
+    .mybottlediv {
+        background-color:lightcoral;
+    }
 </style>
 <p></p>
-<div id="noBottle" style="display:none">暂时还没有瓶子哦，去<a id="pickBottle">捡一个</a>试试？</div>
-<div id="bottleList" style="display:none;font-size:13px"></div>
+<div id="my_noBottle" style="display:none">暂时还没有瓶子哦，去<a id="pickBottle">捡一个</a>试试？</div>
+<div id="my_bottleList" style="display:none;font-size:13px"></div>
 
 <script type="text/javascript">
 
@@ -89,8 +93,8 @@
 
 
     var myBottleInit = function () {
-        $("#bottleList").hide();
-        $("#noBottle").hide();
+        $("#my_bottleList").hide();
+        $("#my_noBottle").hide();
         $.ajax({
             url: serviceurl + "/api/Bottle/QueryByUserId",
             type: "get",
@@ -105,22 +109,24 @@
                             areaName = "(" + areaName.replace(/市/g, "").replace(/区/g, "").replace(/县/g, "") + ")";
                         }
                         var genderUrl = item.Gender == 1 ? "/Content/img/male.png" : "/Content/img/female.png";
-                        html += '<div style="height: 50px;" class = "touchevent">';
+                        html += '<div ' + (item.ReadStatus == 1 ? "" : "class = 'mybottlediv'")+'>';
+                        html += '<div style="height: 50px;" >';
                         html += '<div style="float: left;"><img src=' + item.HeaderImgUrl+' class="userimg"></div>';
                         html += '<div class="openBottle" data-bottleid="' + item.BottleID + '" ><span class="userInfo">' + item.ThrowUserName + areaName + '   <span> <img src=' + genderUrl+' style="width:15px;"></span>  </span><span class="textdesc" >' + item.BottleDesc + '</span></div>';
                         html += '<div class="detailright" ><span>' + item.UpdateTimeDesc + '</span></div>';
                         html += '</div>';
                         html += '<div class="bottleline"></div>';
+                        html += '</div>';
                     });
-                    $("#bottleList").append(html);
-                    $("#bottleList").show();
+                    $("#my_bottleList").append(html);
+                    $("#my_bottleList").show();
                     bindClick();
                 } else {
-                    $("#noBottle").show();
+                    $("#my_noBottle").show();
                 }
             },
             error: function (result) {
-                $("#noBottle").show();
+                $("#my_noBottle").show();
             }
         });
     }

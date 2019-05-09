@@ -23,7 +23,7 @@ namespace Co.ChatBottle.Service.Controllers
         {
             var bottleid = request.BottleID;
             var receiveid = request.ReceiverID;
-            var updateSql = $@"  UPDATE ACT_ChatRecord SET status = 1,remark = '打开瓶子更新已读' WHERE bottleid = {bottleid} AND receiverid = {receiveid} AND status = 0;";
+            var updateSql = $@"  UPDATE ACT_ChatRecord SET status = 1,remark = '瓶子详情页面更新已读' WHERE bottleid = {bottleid} AND receiverid = {receiveid} AND status = 0;";
             chatRecordBiz.ExcuteSql(updateSql);
             return EntityToJson(string.Empty);
         }
