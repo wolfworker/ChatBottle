@@ -2,13 +2,48 @@
     ViewBag.Title = "流浪瓶";
 }
 
+<style>
+    .leftchatstyle {
+        float: left;
+        text-align:left;
+        padding-top: 4px;
+        margin-top: 3px;
+    }
+
+    .female {
+        background-color: pink;
+    }
+
+    .male {
+        background-color: #8888ff;
+    }
+
+    .iconimg {
+        width: 33px;
+        margin-top: -9px;
+    }
+
+    .rightchatstyle {
+        float: right;
+        text-align: right;
+        padding-top: 4px;
+        margin-top: 3px;
+        background-color: #80e46c;
+    }
+
+    .bottleline {
+        border-bottom: 1px solid #ccc;
+        /*padding-top: 5px;*/
+        margin-bottom: 10px;
+    }
+</style>
 <div id="detail_bottle" data-receiveid="" style="overflow:auto;height: 90%;"></div>
 <input type="hidden" id="detail_bottleId" value="0" />
 <input type="hidden" id="receiverid" value="0" />
 <p></p>
 <input type="text" id="replyContent" />
 <input type="button" class="btn-primary" id="btnReply" value="发送" />
-
+@*<div> <img  src="/Content/img/female.png" style="width:30px;"/> <span style="height:35px;"></span></div>*@
 <script type="text/javascript">
     $("#detail_bottleId").val(@ViewBag.bottleId);
     $("#btnReply").attr("disabled", false);
@@ -27,13 +62,40 @@
                     //别人扔的瓶子
                     $("#receiverid").val(chatRecord[0].SenderID);
                 }
+                //对方信息
+                var friendInfo = null;
+                $.ajax({
+                    url: serviceurl + "/api/User/QueryById",
+                    data: { id: $("#receiverid").val() },
+                    async: false,
+                    success: function (result) {
+                        if (result != undefined && result.ErrorCode == 0 && result.Result != undefined) {
+                            friendInfo = result.Result;
+                        }
+                    }, error: function (result) {
+
+                    }
+                });
 
                 var html = "";
-                $.each(chatRecord,function (index, item) {
+                $.each(chatRecord, function (index, item) {
                     html += "<br />";
-                    html += '<textarea style="width:100%;text-align:' + (item.SenderID != userid ? "left;float:left;" : "right;float:right;background-color: lightgreen;") + ';height: 35px" readonly="readonly">' + item.ChatText + '</textarea>';
+                    if (item.SenderID != userid) {
+                        //对方
+                        var maleclass = friendInfo.Gender == 1 ? "male" : "female";
+                        html += '<div class = "leftchatstyle ' + maleclass + '"> <img src="' + friendInfo.HeaderImgUrl + '" class = "iconimg"/> <span style="height:35px;">' + item.ChatText + '</span></div>';
+                    }
+                    else {
+                        //自己
+                        html += '<div class = "rightchatstyle"><span style="height:35px;">' + item.ChatText + '</span><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
+                    }
+                    html += '<div class="bottleline"></div>';
+                    //var divclass = item.SenderID != userid ? "leftchatstyle" : "rightchatstyle";
+                    //html += '<textarea style="width:100%;text-align:' + (item.SenderID != userid ? "left;float:left;" : "right;float:right;background-color: lightgreen;") + ';height: 35px" readonly="readonly">' + item.ChatText + '</textarea>';
+                    //html += '<div class = "'+divclass+'"> <img  src="/Content/img/female.png" style="width:30px;"/> <span style="height:35px;">' + item.ChatText + '</span></div>';
                     //html += '<textarea style="width:100%;text-align:' + (item.SenderID != userid ? "left" : "right") + ';height: 35px" readonly="readonly">' + item.ChatText + '</textarea>';
                 });
+
                 $("#detail_bottle").append(html);
                 $("#detail_bottle")[0].scrollTop = $("#detail_bottle")[0].scrollHeight;
 
@@ -60,7 +122,6 @@
             $("#detail_bottle").append("系统异常啦");
             $("#btnReply").attr("disabled", true);
             $("#replyContent").attr("disabled", true);
-
         }
     });
 

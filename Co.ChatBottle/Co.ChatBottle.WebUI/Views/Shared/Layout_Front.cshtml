@@ -35,9 +35,10 @@
     <script>
         //全局变量
         //var serviceurl = "http://www.buyshoes.club:9001/";
-        //var serviceurl = "http://localhost:9001/";
-        var serviceurl = "http://10.1.8.4:9014/";
+        var serviceurl = "http://localhost:9001/";
+        //var serviceurl = "http://10.1.8.4:9014/";
         var userid = 0;//定义全局用户id
+        var userinfo = null;//用户信息
         var expiredHour = 24;
         var latitude = "";
         var longitude = "";
@@ -88,6 +89,7 @@
                 success: function (result) {
                     if (result != undefined && result.ErrorCode == 0 && result.Result != undefined) {
                         valid = true;//用户存在则通过，不存在则不通过
+                        userinfo = result.Result;
                         //重新设置有效期
                         localStorage.setItem("userid", userid);
                         localStorage.setItem("expiredTime", nowTime);
