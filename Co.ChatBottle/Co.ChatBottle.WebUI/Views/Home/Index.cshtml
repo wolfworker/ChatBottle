@@ -91,6 +91,15 @@
         width: 100%;
         height: 100%
     }
+
+    .redpoint {
+        border-radius: 50px;
+        width: 10px;
+        height: 10px;
+        background-color: red;
+        margin-top: -30px;
+        margin-left: 65%;
+    }
 </style>
 
 <div class="mainDiv">
@@ -111,6 +120,7 @@
             </div>
             <div class="col-xs-4">
                 <img class="icon" id="mybottle" src="~/Content/img/icon_mybottles.png" />
+                <div class="redpoint" style="display:none;"></div>
             </div>
         </div>
     </div>
@@ -122,6 +132,7 @@
     });
 
     var loadPage = function (pageName, param) {
+        currentPage = pageName;
         var pagePath = pageName;
         if (param != undefined && param != "") {
             pagePath += param;
@@ -200,6 +211,10 @@
             ws.send(userid);
         };
         ws.onmessage = function (e) {
+            // 客户端收到信息的时候，只要不是聊天页面，就显示红点
+            //todo
+
+
             //服务器回发消息，客户端即时处理
             var currentbottleid = $("#detail_bottleId").val();
             var backbottleid = 0;
@@ -212,9 +227,7 @@
                 backmsg = msgArr[2];
                 //相同瓶子
                 if (backbottleid == currentbottleid) {
-                    var html = "<br />";
-                    //html += '<textarea style="width:100%;text-align:' + (backsenderid != userid ? "left;float:left;" : "right;float:right;background-color: lightgreen;") + ';height: 35px" readonly="readonly">' + backmsg + '</textarea>';
-
+                    var html = "";
                     if (backsenderid != userid) {
                         //对方发的消息，更新为已读状态
                         var data = {};
@@ -228,12 +241,13 @@
 
                         //对方
                         var maleclass = friendinfo.Gender == 1 ? "male" : "female";
-                        html += '<div class = "chatrecordstyle leftstyle ' + maleclass + '"> <img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg"/> <span style="height:35px;">' + backmsg + '</span></div>';
+                        html += '<div class = "chatrecordstyle leftstyle ' + maleclass + '"> <img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg"/> <span style="height:35px;padding-left:5px;">' + backmsg + '</span></div>';
                     } else {
                         //自己发的消息
-                        html += '<div class = "chatrecordstyle rightstyle "><span style="height:35px;">' + backmsg + '</span><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
+                        html += '<div class = "chatrecordstyle rightstyle "><span style="height:35px;padding-right:5px;">' + backmsg + '</span><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
                     }
                     html += '<div class="bottleline"></div>';
+                    html += "<br />";
                     $("#detail_bottle").append(html);
                     $("#detail_bottle")[0].scrollTop = $("#detail_bottle")[0].scrollHeight;
                 }
@@ -301,6 +315,7 @@
     });
 
     var init = function () {
+        currentPage = pageName.Index;
         if (!checkUserValid()) {
             window.location.href = "/welcome/index";
         }

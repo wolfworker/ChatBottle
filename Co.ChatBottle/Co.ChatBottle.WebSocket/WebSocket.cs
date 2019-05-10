@@ -76,10 +76,6 @@ namespace Co.ChatBottle.WebSocket
             {
                 //将ip地址设置为hashTable的key值 若hashTable中存在该ip地址则不再ht中添加socket以免发送重复数据
                 ht.Add(connecteuserid, clientSocket);
-                //if (!userht.ContainsKey(connecteuserid))
-                //{
-                //    userht.Add(connecteuserid, key);
-                //}
             }
             else
             {
@@ -89,12 +85,9 @@ namespace Co.ChatBottle.WebSocket
                 }
             }
 
-            //clientSocket.Send(PackData("连接时间：" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")));
-
             var chatBll = new ChatRecordBiz();
             try
             {
-
                 while (true)
                 {
                     var errLs = new List<object>();
