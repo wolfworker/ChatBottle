@@ -21,10 +21,11 @@ namespace Co.ChatBottle.Service.Controllers
         [HttpPost]
         public HttpResponseMessage ThrowBottle(BottleRequest request)
         {
-            if (request == null)
+            if (request == null || string.IsNullOrEmpty(request.BottleDesc))
             {
-                return null;
+                return ErrorToJson("瓶子内容为空，请重试！");
             }
+
             ConvertBaseRequest(request);
 
             var bottleInfo = new ACT_Bottle
@@ -165,7 +166,7 @@ namespace Co.ChatBottle.Service.Controllers
                 if (bottleBiz.Update(bottleInfo))
                 {
                     //更新聊天记录的receiveid
-                    var updateSql = $@"  UPDATE ACT_ChatRecord SET receiverid = {userId} WHERE bottleid = {bottleInfo.ID} ;";
+                    var updateSql = $@"  UPDATE ACT_ChatRecord SET receiverid = {userId},UpdateTime = getdate() WHERE bottleid = {bottleInfo.ID} ;";
                     bottleBiz.ExcuteSql(updateSql);
 
                     return EntityToJson(bottleInfo);

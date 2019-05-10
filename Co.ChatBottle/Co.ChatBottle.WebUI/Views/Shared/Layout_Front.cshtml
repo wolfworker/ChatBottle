@@ -29,16 +29,37 @@
         }
     </style>
 
+    <!-- 模态弹出窗内容 -->
+    <div class="modal fade" id="mymodal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title" id="dialogtitle">模态弹出窗标题</h4>
+                </div>
+                <div class="modal-body">
+                    <p id="dialogcontent">模态弹出窗主体内容</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                    @*<button type="button" class="btn btn-primary">保存</button>*@
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
     @RenderBody()
 
     @*服务地址*@
     <script>
         //全局变量
         //var serviceurl = "http://www.buyshoes.club:9001/";
-        var serviceurl = "http://localhost:9001/";
-        //var serviceurl = "http://10.1.8.4:9014/";
+        //var serviceurl = "http://localhost:9001/";
+        var serviceurl = "http://10.1.8.4:9014/";
         var userid = 0;//定义全局用户id
         var userinfo = null;//用户信息
+        var friendinfo = null;//对方的信息
         var expiredHour = 24;
         var latitude = "";
         var longitude = "";
@@ -50,6 +71,7 @@
         var streetNumber = "";
         var addressdetail = "";
         var encypt = '@ChatConst.EncryptStr';
+        //var websocketaddress = "ws://www.buyshoes.club:9018";//websocket地址
         var websocketaddress = "ws://127.0.0.1:9018";//websocket地址
 
         var pageName = {
@@ -61,7 +83,7 @@
             Index: "",
         };
 
-        function checkUserValid() {
+        var checkUserValid = function() {
             userid = localStorage.getItem("userid");
             var expiredtimestr = localStorage.getItem("expiredTime");
             var nowTime = new Date();
@@ -99,6 +121,16 @@
                 }
             });
             return valid;
+        }
+
+        var showDialog = function (content,title) {
+            if (title == undefined || title == "") {
+                title = "流浪瓶通知";
+            }
+            $("#dialogtitle")[0].textContent = title;
+            $("#dialogcontent")[0].textContent = content;
+
+            $("#mymodal").modal();
         }
     </script>
 </body>

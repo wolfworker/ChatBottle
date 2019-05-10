@@ -70,15 +70,17 @@
         var username = $("#username").val();
         var password = $("#password").val();
         if (username == undefined || username == "" || password == undefined || password == "") {
-            alert("昵称或密码不可为空！");
+            showDialog("昵称或密码不可为空！");
             return;
         }
+        console.log(serviceurl);
         $.ajax({
             type: "POST",
             url: serviceurl + "/api/user/login",
             dataType: "json", //表示返回值类型，不必须
             data: { UserName: username, PassChar: password, Gender: gender },
             success: function (result) {
+                console.log(result);
                 if (result.ErrorCode == 0 && result.Result != undefined) {
                     var data = result.Result[0];
                     if (data == undefined) {
@@ -90,11 +92,11 @@
                     }
                     window.location.href = "/home/index?sourceFlag=4";
                 } else {
-                    alert(result.ErrorMsg);
+                    showDialog(result.ErrorMsg);
                 }
             },
             error: function (XMLHttpRequest, textStatus, errorThrown) {
-                alert("系统异常，请重试！");
+                showDialog("系统异常，请重试！");
             }
         });
     });

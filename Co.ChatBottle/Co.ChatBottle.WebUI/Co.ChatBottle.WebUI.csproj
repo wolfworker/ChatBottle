@@ -163,7 +163,6 @@
     <Content Include="Content\img\background.jpg" />
     <Content Include="Content\img\emptybottle.jpg" />
     <Content Include="Content\img\female.png" />
-    <Content Include="Content\img\femalheadurl.jpg" />
     <Content Include="Content\img\findbottle.jpg" />
     <Content Include="Content\img\gender.png" />
     <Content Include="Content\img\icon_mybottles.png" />
@@ -171,8 +170,8 @@
     <Content Include="Content\img\icon_setting.png" />
     <Content Include="Content\img\icon_throwbottle.png" />
     <Content Include="Content\img\male.png" />
-    <Content Include="Content\img\malheadurl.jpg" />
     <Content Include="Content\img\pickbottle.gif" />
+    <Content Include="Content\img\throwbottle.gif" />
     <Content Include="Content\js\common.js" />
     <Content Include="Content\js\jquery.min.js" />
     <Content Include="favicon.ico" />
@@ -201,7 +200,6 @@
     <Content Include="Views\Shared\Layout.cshtml" />
     <Content Include="Views\Welcome\Index.cshtml" />
     <Content Include="Views\Shared\Layout_Front.cshtml" />
-    <Content Include="websocket.html" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Content\css\" />

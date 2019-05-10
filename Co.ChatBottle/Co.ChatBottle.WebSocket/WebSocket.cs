@@ -172,7 +172,7 @@ namespace Co.ChatBottle.WebSocket
                             });
                         });
 
-                        var sendbackMsg = $"{bottleid}{ChatConst.EncryptStr}{connecteuserid}{ChatConst.EncryptStr}{connecteuserid}说：{sendMsg}";
+                        var sendbackMsg = $"{bottleid}{ChatConst.EncryptStr}{connecteuserid}{ChatConst.EncryptStr}{sendMsg}";
                         //给 聊天双方 推送消息
                         try
                         {

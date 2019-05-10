@@ -71,17 +71,17 @@
             data: userData,
             success: function (result) {
                 if (result != undefined && result.ErrorCode == 0) {
-                    alert("更新成功了哦！")
+                    showDialog("更新成功了哦！")
                     $("#rootdiv").empty();
                     //$("#rootdiv").append('<img src="../Content/img/background.jpg" style="width:100%;height:100%" />');
 
                     //$("#rootdiv").load('<img src="~/Content/img/background.jpg" style="width:100%;height:100%" />');
                 } else {
-                    alert(result.ErrorMsg)
+                    showDialog(result.ErrorMsg);
                 }
             },
             error: function (result) {
-                alert("更新失败！")
+                showDialog("更新失败！")
             }
         });
     };
@@ -108,7 +108,7 @@
             });
         },
         error: function (result) {
-            alert("加载失败！")
+            showDialog("加载失败！");
         }
     });
 

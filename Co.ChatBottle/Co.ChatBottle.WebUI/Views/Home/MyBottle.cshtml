@@ -42,10 +42,16 @@
     .mybottlediv {
         background-color:lightcoral;
     }
+
+    #my_bottleList {
+        font-size: 13px;
+        height: 100%;
+        overflow-y: auto;
+    }
 </style>
 <p></p>
 <div id="my_noBottle" style="display:none">暂时还没有瓶子哦，去<a id="pickBottle">捡一个</a>试试？</div>
-<div id="my_bottleList" style="display:none;font-size:13px"></div>
+<div id="my_bottleList" style="display:none;"></div>
 
 <script type="text/javascript">
 
@@ -111,13 +117,14 @@
                         var genderUrl = item.Gender == 1 ? "/Content/img/male.png" : "/Content/img/female.png";
                         html += '<div ' + (item.ReadStatus == 1 ? "" : "class = 'mybottlediv'")+'>';
                         html += '<div style="height: 50px;" >';
-                        html += '<div style="float: left;"><img src=' + item.HeaderImgUrl+' class="userimg"></div>';
-                        html += '<div class="openBottle" data-bottleid="' + item.BottleID + '" ><span class="userInfo">' + item.ThrowUserName + areaName + '   <span> <img src=' + genderUrl+' style="width:15px;"></span>  </span><span class="textdesc" >' + item.BottleDesc + '</span></div>';
+                        html += '<div style="float: left;"><img src=' + item.HeaderImgUrl + ' class="userimg"></div>';
+                        html += '<div class="openBottle" data-bottleid="' + item.BottleID + '" ><span class="userInfo">' + (item.ThrowUserID == userid ? "我扔的瓶子" : (item.ThrowUserName + areaName))+ '   <span> <img src=' + genderUrl+' style="width:15px;"></span>  </span><span class="textdesc" >' + item.BottleDesc + '</span></div>';
                         html += '<div class="detailright" ><span>' + item.UpdateTimeDesc + '</span></div>';
                         html += '</div>';
                         html += '<div class="bottleline"></div>';
                         html += '</div>';
                     });
+                    $("#my_bottleList").empty();
                     $("#my_bottleList").append(html);
                     $("#my_bottleList").show();
                     bindClick();

@@ -38,6 +38,59 @@
     .icon {
         width: 32px;
     }
+
+    .chatrecordstyle {
+        padding-top: 4px;
+        margin-top: 3px;
+        border-radius: 4%;
+    }
+
+    .leftstyle {
+        float: left;
+        text-align: left;
+        padding-right: 10px;
+    }
+
+    .rightstyle {
+        float: right;
+        text-align: right;
+        padding-left: 10px;
+        background-color: #80e46c;
+    }
+
+    .female {
+        background-color: pink;
+    }
+
+    .male {
+        background-color: #8888ff;
+    }
+
+    .iconimg {
+        width: 33px;
+        margin-top: -9px;
+    }
+
+
+    .bottleline {
+        border-bottom: 1px solid #ccc;
+        /*padding-top: 5px;*/
+        margin-bottom: 10px;
+    }
+
+    .fulldiv {
+        width: 100%;
+        height: 100%;
+    }
+
+    .sendtextdiv {
+        height: 80%;
+    }
+
+    .sendtextarea {
+        width: 100%;
+        height: 100%
+    }
 </style>
 
 <div class="mainDiv">
@@ -160,9 +213,8 @@
                 //相同瓶子
                 if (backbottleid == currentbottleid) {
                     var html = "<br />";
-                    html += '<textarea style="width:100%;text-align:' + (backsenderid != userid ? "left;float:left;" : "right;float:right;background-color: lightgreen;") + ';height: 35px" readonly="readonly">' + backmsg + '</textarea>';
-                    $("#detail_bottle").append(html);
-                    $("#detail_bottle")[0].scrollTop = $("#detail_bottle")[0].scrollHeight;
+                    //html += '<textarea style="width:100%;text-align:' + (backsenderid != userid ? "left;float:left;" : "right;float:right;background-color: lightgreen;") + ';height: 35px" readonly="readonly">' + backmsg + '</textarea>';
+
                     if (backsenderid != userid) {
                         //对方发的消息，更新为已读状态
                         var data = {};
@@ -173,7 +225,17 @@
                         //有别人发消息过来，按钮和输入框都应该可以使用
                         $("#btnReply").attr("disabled", false);
                         $("#replyContent").attr("disabled", false);
+
+                        //对方
+                        var maleclass = friendinfo.Gender == 1 ? "male" : "female";
+                        html += '<div class = "chatrecordstyle leftstyle ' + maleclass + '"> <img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg"/> <span style="height:35px;">' + backmsg + '</span></div>';
+                    } else {
+                        //自己发的消息
+                        html += '<div class = "chatrecordstyle rightstyle "><span style="height:35px;">' + backmsg + '</span><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
                     }
+                    html += '<div class="bottleline"></div>';
+                    $("#detail_bottle").append(html);
+                    $("#detail_bottle")[0].scrollTop = $("#detail_bottle")[0].scrollHeight;
                 }
             }
         };
