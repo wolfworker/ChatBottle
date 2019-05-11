@@ -25,12 +25,14 @@ namespace Co.ChatBottle.Service.Controllers
             var receiveid = request.ReceiverID;
             var updateSql = $@"  UPDATE ACT_ChatRecord SET status = 1,remark = '瓶子详情页面更新已读' WHERE bottleid = {bottleid} AND receiverid = {receiveid} AND status = 0;";
             chatRecordBiz.ExcuteSql(updateSql);
-            return EntityToJson(string.Empty);
+
+            var sql = $"SELECT top 1 *  FROM ACT_ChatRecord WHERE ReceiverID = {receiveid} AND Status = 0 ";
+            var result = chatRecordBiz.QueryCustom<ACT_ChatRecord>(sql);
+            return EntityToJson(result);
         }
 
-
         /// <summary>
-        /// 
+        /// 获取瓶子的聊天记录
         /// </summary>
         /// <param name="bottleid"></param>
         /// <returns></returns>
@@ -38,6 +40,19 @@ namespace Co.ChatBottle.Service.Controllers
         public HttpResponseMessage QueryChatByBottleId(long bottleid)
         {
             var sql = $"SELECT * FROM ACT_ChatRecord WHERE BottleID = {bottleid} ORDER BY CreatedTime ";
+            var result = chatRecordBiz.QueryCustom<ACT_ChatRecord>(sql);
+            return EntityToJson(result);
+        }
+
+        /// <summary>
+        /// 是否有未读消息
+        /// </summary>
+        /// <param name="bottleid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        public HttpResponseMessage HasUnreadMessage(long userid)
+        {
+            var sql = $"SELECT top 1 *  FROM ACT_ChatRecord WHERE ReceiverID = {userid} AND Status = 0 ";
             var result = chatRecordBiz.QueryCustom<ACT_ChatRecord>(sql);
             return EntityToJson(result);
         }

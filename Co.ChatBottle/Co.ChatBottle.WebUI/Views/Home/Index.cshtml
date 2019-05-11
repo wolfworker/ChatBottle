@@ -211,10 +211,6 @@
             ws.send(userid);
         };
         ws.onmessage = function (e) {
-            // 客户端收到信息的时候，只要不是聊天页面，就显示红点
-            //todo
-
-
             //服务器回发消息，客户端即时处理
             var currentbottleid = $("#detail_bottleId").val();
             var backbottleid = 0;
@@ -225,6 +221,7 @@
                 backbottleid = msgArr[0];
                 backsenderid = msgArr[1];
                 backmsg = msgArr[2];
+             
                 //相同瓶子
                 if (backbottleid == currentbottleid) {
                     var html = "";
@@ -250,6 +247,13 @@
                     html += "<br />";
                     $("#detail_bottle").append(html);
                     $("#detail_bottle")[0].scrollTop = $("#detail_bottle")[0].scrollHeight;
+                } else {
+                    //非当前聊天页面的消息 都显示红点
+                    $(".redpoint").show();
+                    if (currentPage == pageName.MyBottle) {
+                        //如果是瓶子列表页面，需要刷一下列表数据，把未读消息标红显示出来
+                        loadPage(pageName.MyBottle);
+                    }
                 }
             }
         };
@@ -329,6 +333,17 @@
         setInterval(function () {
             send("心跳");
         }, 20000);
+
+        //首次加载页面 判断是否有未读消息
+        $.get(serviceurl + "/api/ChatRecord/HasUnreadMessage", { "userid": userid }, function (result) {
+            if (result.ErrorCode == 0) {
+                if (result.Result.length > 0) {
+                    $(".redpoint").show();
+                } else {
+                    $(".redpoint").hide();
+                }
+            }
+        });
     }
 
 </script>

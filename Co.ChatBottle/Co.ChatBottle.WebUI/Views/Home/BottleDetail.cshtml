@@ -8,7 +8,6 @@
 <p></p>
 <input type="text" id="replyContent" style="width:85%;float:left;" />
 <input type="button" class="btn btn-primary" style="width:14%" id="btnReply" value="发送" />
-@*<div> <img  src="/Content/img/female.png" style="width:30px;"/> <span style="height:35px;"></span></div>*@
 <script type="text/javascript">
     $("#detail_bottleId").val(@ViewBag.bottleId);
     $("#btnReply").attr("disabled", false);
@@ -63,7 +62,16 @@
                 var data = {};
                 data.BottleID = @ViewBag.bottleId;
                 data.ReceiverID = userid;
-                $.post(serviceurl + "/api/ChatRecord/UpdateChatStatus", data);
+                $.post(serviceurl + "/api/ChatRecord/UpdateChatStatus", data, function (result) {
+                    //更新完状态以后再看是不是还有未读数据
+                    if (result.ErrorCode == 0) {
+                        if (result.Result.length > 0) {
+                            $(".redpoint").show();
+                        } else {
+                            $(".redpoint").hide();
+                        }
+                    }
+                });
 
                 var receiverid = $("#receiverid").val();
                 if (receiverid == undefined || receiverid == "" || receiverid == 0) {
