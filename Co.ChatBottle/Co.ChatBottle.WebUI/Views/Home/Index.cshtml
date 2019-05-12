@@ -100,13 +100,24 @@
         margin-top: -30px;
         margin-left: 65%;
     }
+
+    .labelleft {
+        float: left;
+        font-family: cursive;
+    }
+
+    .profilevaluestyle {
+        width: 65%;
+        margin-left: 20%;
+    }
 </style>
 
 <div class="mainDiv">
 
     <div class="head">
         <span>流浪瓶 V1.0</span>
-        <img class="icon" style="float:right" id="profilesetting" src="~/Content/img/icon_setting.png" />
+        <img class="icon" style="float:right" id="profileInfo" src="~/Content/img/icon_profiles.png" />
+        <img class="icon" style="float:right" id="setting" src="~/Content/img/icon_setting.png" />
     </div>
     <div id="rootdiv">
     </div>
@@ -143,7 +154,7 @@
     var loadPageByIndex = function (pageIndex) {
         switch (pageIndex) {
             case 1:
-                loadPage(pageName.ProfileSetting);
+                loadPage(pageName.ProfileInfo);
                 break;
             case 2:
                 loadPage(pageName.ThrowBottle);
@@ -156,6 +167,9 @@
                 break;
             case 5:
                 loadPage(pageName.BottleDetail);
+                break;
+            case 6:
+                loadPage(pageName.Setting);
                 break;
             case 0:
             default:
@@ -296,8 +310,12 @@
         ws.send(content);
     }
 
-    $("#profilesetting").click(function () {
-        loadPage(pageName.ProfileSetting);
+    $("#profileInfo").click(function () {
+        loadPage(pageName.ProfileInfo);
+    });
+
+    $("#setting").click(function () {
+        loadPage(pageName.Setting);
     });
 
     $("#throwbottle").click(function () {

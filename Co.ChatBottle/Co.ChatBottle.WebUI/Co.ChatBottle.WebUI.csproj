@@ -163,13 +163,16 @@
     <Content Include="Content\img\background.jpg" />
     <Content Include="Content\img\emptybottle.jpg" />
     <Content Include="Content\img\female.png" />
+    <Content Include="Content\img\femalheadurl.jpg" />
     <Content Include="Content\img\findbottle.jpg" />
     <Content Include="Content\img\gender.png" />
     <Content Include="Content\img\icon_mybottles.png" />
     <Content Include="Content\img\icon_pickbottle.png" />
+    <Content Include="Content\img\icon_profiles.png" />
     <Content Include="Content\img\icon_setting.png" />
     <Content Include="Content\img\icon_throwbottle.png" />
     <Content Include="Content\img\male.png" />
+    <Content Include="Content\img\malheadurl.jpg" />
     <Content Include="Content\img\pickbottle.gif" />
     <Content Include="Content\img\throwbottle.gif" />
     <Content Include="Content\js\common.js" />
@@ -210,9 +213,11 @@
     <Content Include="Views\Home\ThrowBottle.cshtml" />
     <Content Include="Views\Home\MyBottle.cshtml" />
     <Content Include="Views\Home\PickBottle.cshtml" />
-    <Content Include="Views\Home\ProfileSetting.cshtml" />
+    <Content Include="Views\Home\ProfileInfo.cshtml" />
     <Content Include="Views\Home\BottleDetail.cshtml" />
+    <None Include="Properties\PublishProfiles\CustomProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
+    <Content Include="Views\Home\Setting.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Co.ChatBottle.Utility\Co.ChatBottle.Utility.csproj">

@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "流浪瓶";
+}
+
+<p></p>
+<input type="button" class="btn btn-primary btn-lg btn-block" id="btnQuit" value="退出当前账号" />
+
+<script type="text/javascript">
+
+    $("#btnQuit").click(function () {
+
+        debugger;
+        //如果数据过期，则跳转到欢迎页
+        localStorage.removeItem("userid");
+        localStorage.removeItem("expiredTime");
+
+        window.location.href = "/welcome/index";
+    });
+</script>

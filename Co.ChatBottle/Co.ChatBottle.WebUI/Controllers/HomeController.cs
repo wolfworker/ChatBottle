@@ -29,7 +29,12 @@ namespace Co.ChatBottle.WebUI.Controllers
             return View();
         }
 
-        public ActionResult ProfileSetting()
+        public ActionResult ProfileInfo()
+        {
+            return View();
+        }
+
+        public ActionResult Setting()
         {
             return View();
         }

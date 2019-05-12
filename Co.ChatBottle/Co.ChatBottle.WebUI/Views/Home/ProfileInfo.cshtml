@@ -1,0 +1,152 @@
+﻿@{
+    ViewBag.Title = "流浪瓶";
+}
+
+<p></p>
+    <div style="height:100%;overflow-y:auto;">
+        <div class="form-group">
+            <label class="control-label col-lg-1 labelleft">昵称</label>
+            <input class="form-control profilevaluestyle" id="username" type="text" placeholder="请输入昵称">
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-1 labelleft">手机</label>
+            <input class="form-control profilevaluestyle" id="phone" type="text" placeholder="请输入手机">
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-1 labelleft">QQ </label>
+            <input class="form-control profilevaluestyle" id="qqnum" type="text" placeholder="请输入QQ">
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-1 labelleft">邮箱</label>
+            <input class="form-control profilevaluestyle" id="mail" type="text"  placeholder="请输入邮箱">
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-1 labelleft">性别</label>
+            <div class="btn-group" data-toggle="buttons" style="margin-left:-24%">
+                <label class="btn btn-primary unactive" style="width:98px">
+                    <input type="radio" class="gender" value="1"> 男
+                </label>
+                <label class="btn btn-danger unactive" style="width:98px">
+                    <input type="radio" class="gender" value="2"> 女
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-1 labelleft">生日</label>
+            <div class="input-group date form_date col-md-3 profilevaluestyle" data-date-format="yyyy-mm-dd">
+                <input input="start" id="birthday" class="form-control" size="16" type="text" placeholder="请选择生日" value="">
+                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label col-lg-1 labelleft">头像</label>
+            <div class="col-lg-5 col-md-6" style="margin-left:16%;">
+                <input type="file" id="headerImg" style="width:100%;" />
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-5 col-md-6">
+                <textarea class="form-control" id="remark" rows="2" placeholder="请输入个人说明"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-lg-5">
+                <input type="button" class="btn btn-primary btn-block" id="btnupdateprofile" value="更新个人信息">
+            </div>
+        </div>
+    </div>
+
+<script type="text/javascript">
+
+    var updateUser = function (userData) {
+        $.ajax({
+            url: serviceurl + "/api/user/update",
+            type: "post",
+            data: userData,
+            success: function (result) {
+                if (result != undefined && result.ErrorCode == 0) {
+                    showDialog("更新成功了哦！")
+                    $("#rootdiv").empty();
+                    //$("#rootdiv").append('<img src="../Content/img/background.jpg" style="width:100%;height:100%" />');
+
+                    //$("#rootdiv").load('<img src="~/Content/img/background.jpg" style="width:100%;height:100%" />');
+                } else {
+                    showDialog(result.ErrorMsg);
+                }
+            },
+            error: function (result) {
+                showDialog("更新失败！")
+            }
+        });
+    };
+
+    $.ajax({
+        url: serviceurl + "/api/user/QueryById",
+        type: "get",
+        data: { id: userid },
+        success: function (result) {
+            var data = result.Result;
+            $("#username").val(data.UserName);
+            $("#phone").val(data.Phone);
+            $("#qqnum").val(data.QQ);
+            $("#mail").val(data.Mail);
+            if (data.Birthday != undefined && data.Birthday != "") {
+                $("#birthday").val(data.Birthday.substring(0, 10));
+            }
+            $("#remark").val(data.Remark);
+            $(".gender").each(function () {
+                if (this.value == data.Gender) {
+                    $(this.parentNode).addClass("active focus");
+                    return;
+                }
+            });
+        },
+        error: function (result) {
+            showDialog("加载失败！");
+        }
+    });
+
+    $("#btnupdateprofile").click(function () {
+        var userData = {};
+        userData.id = userid;
+        userData.username = $("#username").val();
+        userData.phone = $("#phone").val();
+        userData.qq = $("#qqnum").val();
+        userData.mail = $("#mail").val();
+        userData.gender = $(".gender").val();
+        $(".gender").each(function () {
+            if (this.checked) {
+                userData.gender = this.value;
+                return;
+            }
+        });
+        userData.birthday = $("#birthday").val();
+        userData.remark = $("#remark").val();
+        var file = $("#headerImg")[0].files[0]; // js 获取文件对象
+        var reader = new FileReader();
+        if (file) {
+            //将文件以Data URL形式读入页面
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function (f) {
+                console.log(this.result);
+                userData.FileBase64 = this.result;
+                updateUser(userData);
+            };
+        } else {
+            updateUser(userData);
+        }
+    });
+
+    $('.form_date').datetimepicker({
+        language: 'zh-CN',
+        weekStart: 1,
+        todayBtn: 1,   //今日日期按钮
+        autoclose: 1,   //自动关闭
+        todayHighlight: 1,   //高亮今日日期
+        startView: 2,       //从日期视图开始
+        minView: 2,
+        forceParse: 0
+    });
+
+</script>
