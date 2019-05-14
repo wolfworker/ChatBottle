@@ -54,9 +54,9 @@
     @*服务地址*@
     <script>
         //全局变量
-        var serviceurl = "http://www.buyshoes.club:9001/";
+        //var serviceurl = "http://www.buyshoes.club:9001/";
         //var serviceurl = "http://localhost:9001/";
-        //var serviceurl = "http://10.1.8.4:9014/";
+        var serviceurl = "http://10.1.8.4:9014/";
         var userid = 0;//定义全局用户id
         var userinfo = null;//用户信息
         var friendinfo = null;//对方的信息
@@ -73,8 +73,8 @@
         var streetNumber = "";
         var addressdetail = "";
         var encypt = '@ChatConst.EncryptStr';
-        var websocketaddress = "ws://www.buyshoes.club:9018";//websocket地址
-        //var websocketaddress = "ws://127.0.0.1:9018";//websocket地址
+        //var websocketaddress = "ws://www.buyshoes.club:9018";//websocket地址
+        var websocketaddress = "ws://127.0.0.1:9018";//websocket地址
 
         var pageName = {
             ProfileInfo: "/Home/ProfileInfo",
@@ -85,6 +85,7 @@
             Setting: "/Home/Setting",
             Index: "",
             Welcome: "/Welcome/Index",
+            ProfileInfoView: "/Home/ProfileInfoView",
         };
 
         var checkUserValid = function() {

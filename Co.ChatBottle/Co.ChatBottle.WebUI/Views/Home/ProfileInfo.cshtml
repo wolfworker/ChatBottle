@@ -58,6 +58,21 @@
 
 <script type="text/javascript">
 
+    $("#username").val(userinfo.UserName);
+    $("#phone").val(userinfo.Phone);
+    $("#qqnum").val(userinfo.QQ);
+    $("#mail").val(userinfo.Mail);
+    if (userinfo.Birthday != undefined && userinfo.Birthday != "") {
+        $("#birthday").val(userinfo.Birthday.substring(0, 10));
+    }
+    $("#remark").val(userinfo.Remark);
+    $(".gender").each(function () {
+        if (this.value == userinfo.Gender) {
+            $(this.parentNode).addClass("active focus");
+            return;
+        }
+    });
+
     var updateUser = function (userData) {
         $.ajax({
             url: serviceurl + "/api/user/update",
@@ -67,44 +82,16 @@
                 if (result != undefined && result.ErrorCode == 0) {
                     showDialog("更新成功了哦！")
                     $("#rootdiv").empty();
-                    //$("#rootdiv").append('<img src="../Content/img/background.jpg" style="width:100%;height:100%" />');
-
-                    //$("#rootdiv").load('<img src="~/Content/img/background.jpg" style="width:100%;height:100%" />');
                 } else {
                     showDialog(result.ErrorMsg);
                 }
             },
             error: function (result) {
+                debugger;
                 showDialog("更新失败！")
             }
         });
     };
-
-    $.ajax({
-        url: serviceurl + "/api/user/QueryById",
-        type: "get",
-        data: { id: userid },
-        success: function (result) {
-            var data = result.Result;
-            $("#username").val(data.UserName);
-            $("#phone").val(data.Phone);
-            $("#qqnum").val(data.QQ);
-            $("#mail").val(data.Mail);
-            if (data.Birthday != undefined && data.Birthday != "") {
-                $("#birthday").val(data.Birthday.substring(0, 10));
-            }
-            $("#remark").val(data.Remark);
-            $(".gender").each(function () {
-                if (this.value == data.Gender) {
-                    $(this.parentNode).addClass("active focus");
-                    return;
-                }
-            });
-        },
-        error: function (result) {
-            showDialog("加载失败！");
-        }
-    });
 
     $("#btnupdateprofile").click(function () {
         var userData = {};

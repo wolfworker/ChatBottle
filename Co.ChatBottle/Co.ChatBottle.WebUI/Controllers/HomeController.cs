@@ -34,6 +34,12 @@ namespace Co.ChatBottle.WebUI.Controllers
             return View();
         }
 
+        public ActionResult ProfileInfoView(int userid = 0)
+        {
+            ViewBag.userid = userid;
+            return View();
+        }
+
         public ActionResult Setting()
         {
             return View();

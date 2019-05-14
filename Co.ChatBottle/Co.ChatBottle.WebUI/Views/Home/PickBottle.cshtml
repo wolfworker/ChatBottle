@@ -30,8 +30,16 @@
             setTimeout(function () {
                 $("#pickbottlegif").hide();
                 if (result.ErrorCode == 0 && result.Result != undefined) {
-                    $("#openBottle")[0].dataset.bottleid = result.Result.ID;
+                    var bottleid = result.Result.ID;
+                    var throwuserid = result.Result.ThrowUserID;
+
+                    $("#openBottle")[0].dataset.bottleid = bottleid;
                     $("#pick_bottle").show();
+
+                    debugger;
+                    var content = encypt + bottleid + encypt + throwuserid + encypt + "你的瓶子被我捡到啦，来聊聊吧！";
+                    send(content);
+
                 } else {
                     $("#pick_noBottle").show();
                 }

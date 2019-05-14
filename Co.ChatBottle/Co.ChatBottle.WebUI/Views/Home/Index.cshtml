@@ -68,6 +68,7 @@
 
     .iconimg {
         width: 33px;
+        height: 33px;
         margin-top: -9px;
     }
 
@@ -103,13 +104,54 @@
 
     .labelleft {
         float: left;
-        font-family: cursive;
+        font-weight: 400;
     }
 
     .profilevaluestyle {
         width: 65%;
         margin-left: 20%;
     }
+
+    .userimg {
+        height: 50px;
+        width: 50px;
+    }
+
+    .openBottle {
+        float: left;
+        padding-left: 5px;
+        width: 70%;
+        text-align: left;
+    }
+
+    .textdesc {
+        padding-top: 15px;
+        display: block;
+        color: dimgray;
+    }
+
+    .detailright {
+        float: right;
+        padding-right: 5px;
+        width: 15%;
+        text-align: right;
+    }
+
+    .userInfo {
+        font-weight: bolder;
+        font-size: initial;
+    }
+
+    .mybottlediv {
+        background-color: lightcoral;
+    }
+
+    #my_bottleList {
+        font-size: 13px;
+        height: 100%;
+        overflow-y: auto;
+    }
+
 </style>
 
 <div class="mainDiv">
@@ -170,6 +212,9 @@
                 break;
             case 6:
                 loadPage(pageName.Setting);
+                break;
+            case 7:
+                loadPage(pageName.ProfileInfoView);
                 break;
             case 0:
             default:
@@ -328,7 +373,6 @@
 
     $("#mybottle").click(function () {
         loadPage(pageName.MyBottle);
-        getLocation();
     });
 
     $("#topbtn").click(function () {
@@ -348,9 +392,15 @@
             loadPageByIndex(@ViewBag.sourceFlag);//防止跳到主页 死循环
         }
 
+        //每20秒发一次心跳包确保websocket链接不断开
         setInterval(function () {
             send("心跳");
         }, 20000);
+
+        //每分钟上报一次当前位置
+        setInterval(function () {
+            getLocation();
+        }, 60000);
 
         //首次加载页面 判断是否有未读消息
         $.get(serviceurl + "/api/ChatRecord/HasUnreadMessage", { "userid": userid }, function (result) {

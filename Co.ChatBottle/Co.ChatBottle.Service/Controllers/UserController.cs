@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -23,6 +24,8 @@ namespace Co.ChatBottle.Service.Controllers
         [HttpPost]
         public HttpResponseMessage Login(UserRequest request)
         {
+           
+
             if (request == null || string.IsNullOrEmpty(request.UserName)
                 || string.IsNullOrEmpty(request.UserName.Trim()))
             {
@@ -57,6 +60,12 @@ namespace Co.ChatBottle.Service.Controllers
             ACT_User userEntity = null;
             try
             {
+                //没有头像用默认头像
+                if (string.IsNullOrEmpty(userInfo.HeaderImgUrl))
+                {
+                    userInfo.HeaderImgUrl = System.Configuration.ConfigurationManager.AppSettings.Get("DefaultHeaderUrl");
+                }
+
                 userEntity = userBiz.Add(userInfo);
             }catch(Exception ex)
             {
@@ -100,9 +109,11 @@ namespace Co.ChatBottle.Service.Controllers
             userEntity.Remark = request.Remark;
             userEntity.UpdateUserID = 1;
             userEntity.UpdateTime = DateTime.Now;
+
             //保存头像
             if (!string.IsNullOrEmpty(request.FileBase64))
             {
+                var fileFullPath = "";
                 try
                 {
                     var imgBase64 = request.FileBase64.Replace("data:image/png;base64,", "").Replace("data:image/jpeg;base64,", "").Replace("data:image/bmp;base64,", "").Replace("data:image/gif;base64,", "");
@@ -111,17 +122,21 @@ namespace Co.ChatBottle.Service.Controllers
                     var image = Bitmap.FromStream(stream, true);
                     var filePath = System.Configuration.ConfigurationManager.AppSettings.Get("PhysicsHeaderPath");
                     var webImageUrl = System.Configuration.ConfigurationManager.AppSettings.Get("WebHeaderUrl");
-                    var fileFullPath = filePath + "\\" + request.ID+".bmp";
-
-                    image.Save(fileFullPath, System.Drawing.Imaging.ImageFormat.Bmp);
-                    userEntity.HeaderImgUrl = webImageUrl + request.ID + ".bmp";
+                    fileFullPath = filePath + "\\" + request.ID+".jpg";
+                    CompressSave(image, fileFullPath,10);
+                    userEntity.HeaderImgUrl = webImageUrl + request.ID + ".jpg?tag=" + DateTime.Now.Ticks;
                 }
                 catch (Exception ex)
                 {
-
+                   var message = $"更新头像 出错 -> 错误信息：{ex.Message}, 堆栈信息：{ex.StackTrace}, 物理地址：{fileFullPath}";
+                    WriteLog(message);
                 }
             }
-
+            //没有头像用默认头像
+            if (string.IsNullOrEmpty(userEntity.HeaderImgUrl))
+            {
+                userEntity.HeaderImgUrl = System.Configuration.ConfigurationManager.AppSettings.Get("DefaultHeaderUrl");
+            }
             if (userBiz.Update(userEntity))
             {
                 response.ErrorCode = 0;
@@ -133,6 +148,35 @@ namespace Co.ChatBottle.Service.Controllers
                 return ErrorToJson("更新失败");
             }
             
+        }
+
+        //将图片按百分比压缩，flag取值1到100，越小压缩比越大
+        public void CompressSave(Image iSource, string outPath, int flag)
+        {
+            ImageFormat tFormat = iSource.RawFormat;
+            EncoderParameters ep = new EncoderParameters();
+            long[] qy = new long[1];
+            qy[0] = flag;
+            EncoderParameter eParam = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, qy);
+            ep.Param[0] = eParam;
+            ImageCodecInfo[] arrayICI = ImageCodecInfo.GetImageDecoders();
+            ImageCodecInfo jpegICIinfo = null;
+            for (int x = 0; x < arrayICI.Length; x++)
+            {
+                if (arrayICI[x].FormatDescription.Equals("JPEG"))
+                {
+                    jpegICIinfo = arrayICI[x];
+                    break;
+                }
+            }
+            if (jpegICIinfo != null)
+            {
+                iSource.Save(outPath, jpegICIinfo, ep);
+            }
+            else
+            {
+                iSource.Save(outPath, tFormat);
+            }
         }
 
         [HttpGet]

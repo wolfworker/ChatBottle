@@ -3,50 +3,10 @@
 }
 
 <style>
-    .userimg {
-        height: 50px;
-        width: 50px;
-    }
-
-    .openBottle {
-        float: left;
-        padding-left: 5px;
-        width: 70%;
-        text-align: left;
-    }
-
-    .textdesc {
-        padding-top: 15px;
-        display: block;
-        color: dimgray;
-    }
-
-    .detailright {
-        float: right;
-        padding-right: 5px;
-        width: 15%;
-        text-align: right;
-    }
-
     .bottleline {
         border-bottom: 1px solid #ccc;
         padding-top: 5px;
         margin-bottom: 5px;
-    }
-
-    .userInfo {
-        font-weight: bolder;
-        font-size: initial;
-    }
-
-    .mybottlediv {
-        background-color:lightcoral;
-    }
-
-    #my_bottleList {
-        font-size: 13px;
-        height: 100%;
-        overflow-y: auto;
     }
 </style>
 <p></p>
@@ -62,42 +22,51 @@
     var bindClick = function () {
         var longClick = 0;
         $(".openBottle").on({
-            touchstart: function (e) {
-                event.preventDefault();
-                longClick = 0;//设置初始为0
-                self = this;
-                timeOutEvent = setTimeout(function () {
-                    //此处为长按事件-----在此显示遮罩层及删除按钮
-                    longClick = 1;//假如长按，则设置为1
-                    if (confirm("确定要删除吗?")) {
-                        $.post(serviceurl + "/api/Bottle/DeleteBottle", { bottleid: self.dataset.bottleid }, function () {
-                            loadPage(pageName.MyBottle);
-                        });
-                    }
-                }, 1000);
-            },
-            touchmove: function (e) {
-                clearTimeout(timeOutEvent);
-                timeOutEvent = 0;
-                e.preventDefault();
-            },
-            touchend: function (e) {
-                clearTimeout(timeOutEvent);
-                if (timeOutEvent != 0 && longClick == 0) {//点击
-                    //此处为点击事件----在此处添加跳转详情页
-                    var param = "?bottleId=" + this.dataset.bottleid;
-                    loadPage(pageName.BottleDetail, param);
-                }
-                //return false;
-            },
+            //长按事件先去掉，因为手机兼容性不好，会导致点击事件无法触发
+            //touchstart: function (e) {
+            //    event.preventDefault();
+            //    longClick = 0;//设置初始为0
+            //    self = this;
+            //    timeOutEvent = setTimeout(function () {
+            //        //此处为长按事件-----在此显示遮罩层及删除按钮
+            //        longClick = 1;//假如长按，则设置为1
+            //        if (confirm("确定要删除吗?")) {
+            //            $.post(serviceurl + "/api/Bottle/DeleteBottle", { bottleid: self.dataset.bottleid }, function () {
+            //                loadPage(pageName.MyBottle);
+            //            });
+            //        }
+            //    }, 1000);
+            //},
+            //touchmove: function (e) {
+            //    clearTimeout(timeOutEvent);
+            //    timeOutEvent = 0;
+            //    e.preventDefault();
+            //},
+            //touchend: function (e) {
+            //    clearTimeout(timeOutEvent);
+            //    if (timeOutEvent != 0 && longClick == 0) {//点击
+            //        //此处为点击事件----在此处添加跳转详情页
+            //        var param = "?bottleId=" + this.dataset.bottleid;
+            //        loadPage(pageName.BottleDetail, param);
+            //    }
+            //    return false;
+            //},
             click: function (e) {
                 var param = "?bottleId=" + this.dataset.bottleid;
                 loadPage(pageName.BottleDetail, param);
             }
         });
+
+        $(".userimg").click(function () {
+            debugger;
+            var frienduserid = this.dataset.userid;
+            if (frienduserid == userid) {
+                loadPage(pageName.ProfileInfo);
+            } else {
+                loadPage(pageName.ProfileInfoView, "?userid=" + frienduserid);
+            }
+        });
     }
-
-
 
     var myBottleInit = function () {
         $("#my_bottleList").hide();
@@ -115,11 +84,11 @@
                         if (areaName != undefined && areaName != "") {
                             areaName = "(" + areaName.replace(/市/g, "").replace(/区/g, "").replace(/县/g, "") + ")";
                         }
-                        var genderUrl = item.Gender == 1 ? "/Content/img/male.png" : "/Content/img/female.png";
+                        var genderUrl = item.BottleGender == 1 ? "/Content/img/male.png" : "/Content/img/female.png";
                         html += '<div ' + (item.ReadStatus == 1 ? "" : "class = 'mybottlediv'")+'>';
-                        html += '<div style="height: 50px;" >';
-                        html += '<div style="float: left;"><img src=' + item.HeaderImgUrl + ' class="userimg"></div>';
-                        html += '<div class="openBottle" data-bottleid="' + item.BottleID + '" ><span class="userInfo">' + (item.ThrowUserID == userid ? "我扔的瓶子" : (item.ThrowUserName + areaName))+ '   <span> <img src=' + genderUrl+' style="width:15px;"></span>  </span><span class="textdesc" >' + item.BottleDesc + '</span></div>';
+                        html += '<div style="height:50px;" >';
+                        html += '<div style="float:left;"><img src=' + item.BottleHeaderUrl + ' class="userimg" data-userid="' + item.BottleUserID + '" ></div>';
+                        html += '<div class="openBottle" data-bottleid="' + item.BottleID + '" ><span class="userInfo">' + (item.BottleUserName + areaName)+ '   <span> <img src=' + genderUrl+' style="width:15px;"></span>  </span><span class="textdesc" >' + item.BottleDesc + '</span></div>';
                         html += '<div class="detailright" ><span>' + item.UpdateTimeDesc + '</span></div>';
                         html += '</div>';
                         html += '<div class="bottleline"></div>';

@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "流浪瓶";
+}
+
+<p></p>
+<div style="height:100%;overflow-y:auto;">
+    <div class="form-group">
+        <img src="" id="userimg" style="width:30px;height:30px;"/>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-1 labelleft">昵称</label>
+        <span class="form-control profilevaluestyle" id="username" />
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-1 labelleft">手机</label>
+        <span class="form-control profilevaluestyle" id="phone" />
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-1 labelleft">QQ </label>
+        <span class="form-control profilevaluestyle" id="qqnum" />
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-1 labelleft">邮箱</label>
+        <span class="form-control profilevaluestyle" id="mail" />
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-1 labelleft">性别</label>
+        <div class="btn-group" data-toggle="buttons" style="margin-left:-24%">
+            <label class="btn btn-primary unactive" style="width:98px">
+                <input type="radio" class="gender" value="1"> 男
+            </label>
+            <label class="btn btn-danger unactive" style="width:98px">
+                <input type="radio" class="gender" value="2"> 女
+            </label>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-lg-1 labelleft">生日</label>
+        <span class="form-control profilevaluestyle" id="birthday" />
+    </div>
+
+    <div class="form-group">
+        <label class="control-label col-lg-1 labelleft">个人说明</label>
+        <textarea class="form-control" id="remark" rows="2" readonly="readonly"></textarea>
+    </div>
+</div>
+
+<script type="text/javascript">
+
+    $.ajax({
+        url: serviceurl + "/api/User/QueryById",
+        data: { id: @ViewBag.userid },
+        async: false,
+        success: function (result) {
+            if (result != undefined && result.ErrorCode == 0 && result.Result != undefined) {
+                var userinfo = result.Result;
+                $("#userimg").attr("src", userinfo.HeaderImgUrl);
+                $("#username").val(userinfo.UserName);
+                $("#phone").val(userinfo.Phone);
+                $("#qqnum").val(userinfo.QQ);
+                $("#mail").val(userinfo.Mail);
+                if (userinfo.Birthday != undefined && userinfo.Birthday != "") {
+                    $("#birthday").val(userinfo.Birthday.substring(0, 10));
+                }
+                $("#remark").val(userinfo.Remark);
+                $(".gender").each(function () {
+                    if (this.value == userinfo.Gender) {
+                        $(this.parentNode).addClass("active focus");
+                        return;
+                    }
+                });
+
+            }
+        }, error: function (result) {
+
+        }
+    });
+
+    
+</script>

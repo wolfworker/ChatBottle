@@ -38,12 +38,14 @@ namespace Co.ChatBottle.Model
         public string BottleDesc { get; set; }
         public string Longitude { get; set; }
         public string Latitude { get; set; }
-        public string ThrowUserName { get; set; }
         public DateTime UpdateTime { get; set; }
+        public DateTime RealUpdateTime { get; set; }
         public string City { get; set; }
         public string District { get; set; }
-        public string HeaderImgUrl { get; set; }
-        public byte Gender { get; set; }
+        public long BottleUserID { get; set; }
+        public string BottleUserName { get; set; }
+        public string BottleHeaderUrl { get; set; }
+        public byte BottleGender { get; set; }
         public string UpdateTimeDesc { get; set; }
         /// <summary>
         /// 已读状态 1：已读，0：未读
