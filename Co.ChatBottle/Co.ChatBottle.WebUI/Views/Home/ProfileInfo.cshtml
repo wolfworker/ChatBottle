@@ -111,7 +111,6 @@
             data: userData,
             success: function (result) {
                 if (result != undefined && result.ErrorCode == 0) {
-                    debugger;
                     userinfo = result.Result;
                     showDialog("更新成功了哦！");
                     $("#rootdiv").empty();

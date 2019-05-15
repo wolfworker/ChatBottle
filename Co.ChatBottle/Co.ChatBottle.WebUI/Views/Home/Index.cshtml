@@ -43,6 +43,7 @@
         padding-top: 4px;
         margin-top: 3px;
         border-radius: 4%;
+        word-break: break-all;
     }
 
     .leftstyle {
@@ -276,7 +277,6 @@
         ws.onmessage = function (e) {
             //服务器回发消息，客户端即时处理
             var currentbottleid = $("#detail_bottleId").val();
-            debugger;
             var callMsgjson = null;
             try {
                 callMsgjson = JSON.parse(e.data);

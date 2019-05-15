@@ -43,7 +43,6 @@
                 chatData.ChatType = 1;
                 $.post(serviceurl + "/api/ChatRecord/Add", chatData, function (data) {
                     if (data != undefined && data.ErrorCode == 0 && data.Result != undefined) {
-                        debugger;
                         var chatJson = {};
                         chatJson.BottleID = $("#detail_bottleId").val();
                         chatJson.ReceiveID = $("#receiverid").val();
@@ -169,7 +168,6 @@
 
     var sendmessage = function () {
         //发送消息
-        debugger;
         var content = $("#replyContent").val();
         if (content != undefined && content != "") {
             var chatJson = {};
