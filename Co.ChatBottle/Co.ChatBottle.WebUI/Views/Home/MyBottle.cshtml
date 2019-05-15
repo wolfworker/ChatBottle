@@ -59,7 +59,7 @@
 
         $(".userimg").click(function () {
             var frienduserid = this.dataset.userid;
-            if (frienduserid == userid) {
+            if (frienduserid == undefined || frienduserid == userid) {
                 loadPage(pageName.ProfileInfo);
             } else {
                 loadPage(pageName.ProfileInfoView, "?userid=" + frienduserid);

@@ -14,9 +14,6 @@
         padding-top: 17px;
     }
 
-    /*.form-control {
-        background-color: initial;
-    }*/
 </style>
 
 <p></p>
@@ -25,7 +22,7 @@
     <div class="form-group" style="height:140px;">
         <div style="float:left;">
             <img src="" id="userimg" style="width:130px;height:130px;">
-            <input type="file" id="headerImg" style="display:none" />
+            <input type="file" id="headerImg" accept="image/*"  onchange="uploadfile()" style="display:none" />
         </div>
         <div class="userinfodiv" style="padding-top:5px;">
             <label class="control-label col-lg-1 labelleft">昵称:</label>
@@ -47,7 +44,7 @@
     </div>
     <div class="form-group">
         <label class="control-label col-lg-1 labelleft">性别</label>
-        <div class="btn-group" data-toggle="buttons" style="margin-left:-24%">
+        <div class="btn-group" data-toggle="buttons" style="margin-left:20%;display:table;">
             <label class="btn btn-primary unactive" style="width:98px">
                 <input type="radio" class="gender" value="1"> 男
             </label>
@@ -114,18 +111,32 @@
             data: userData,
             success: function (result) {
                 if (result != undefined && result.ErrorCode == 0) {
-                    showDialog("更新成功了哦！")
+                    debugger;
+                    userinfo = result.Result;
+                    showDialog("更新成功了哦！");
                     $("#rootdiv").empty();
                 } else {
                     showDialog(result.ErrorMsg);
                 }
             },
             error: function (result) {
-                debugger;
                 showDialog("更新失败！")
             }
         });
     };
+
+    var uploadfile = function () {
+        var file = $("#headerImg")[0].files[0]; // js 获取文件对象
+        var reader = new FileReader();
+        if (file) {
+            //将文件以Data URL形式读入页面
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function (f) {
+                $('#userimg').attr("src", this.result);
+            };
+        }
+    }
 
     $("#userimg").click(function () {
         $("#headerImg").click();
@@ -138,7 +149,7 @@
         userData.phone = $("#phone").val();
         userData.qq = $("#qqnum").val();
         userData.mail = $("#mail").val();
-        userData.gender = $(".gender").val();
+        //userData.gender = $(".gender").val();
         $(".gender").each(function () {
             if (this.checked) {
                 userData.gender = this.value;

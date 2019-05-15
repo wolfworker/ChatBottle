@@ -1,5 +1,6 @@
 ﻿using Co.ChatBottle.Business;
 using Co.ChatBottle.Model;
+using Co.ChatBottle.Utility;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -24,8 +25,6 @@ namespace Co.ChatBottle.Service.Controllers
         [HttpPost]
         public HttpResponseMessage Login(UserRequest request)
         {
-           
-
             if (request == null || string.IsNullOrEmpty(request.UserName)
                 || string.IsNullOrEmpty(request.UserName.Trim()))
             {
@@ -63,7 +62,7 @@ namespace Co.ChatBottle.Service.Controllers
                 //没有头像用默认头像
                 if (string.IsNullOrEmpty(userInfo.HeaderImgUrl))
                 {
-                    userInfo.HeaderImgUrl = System.Configuration.ConfigurationManager.AppSettings.Get("DefaultHeaderUrl");
+                    userInfo.HeaderImgUrl = AppConfig.ImgDefaultUrl;
                 }
 
                 userEntity = userBiz.Add(userInfo);
@@ -116,26 +115,26 @@ namespace Co.ChatBottle.Service.Controllers
                 var fileFullPath = "";
                 try
                 {
-                    var imgBase64 = request.FileBase64.Replace("data:image/png;base64,", "").Replace("data:image/jpeg;base64,", "").Replace("data:image/bmp;base64,", "").Replace("data:image/gif;base64,", "");
-                    var imgBtyes = Convert.FromBase64String(imgBase64);
-                    var stream = new MemoryStream(imgBtyes);
-                    var image = Bitmap.FromStream(stream, true);
-                    var filePath = System.Configuration.ConfigurationManager.AppSettings.Get("PhysicsHeaderPath");
-                    var webImageUrl = System.Configuration.ConfigurationManager.AppSettings.Get("WebHeaderUrl");
-                    fileFullPath = filePath + "\\" + request.ID+".jpg";
-                    CompressSave(image, fileFullPath,10);
-                    userEntity.HeaderImgUrl = webImageUrl + request.ID + ".jpg?tag=" + DateTime.Now.Ticks;
+                    var fileName = request.ID + AppConst.ImgExtion;
+                    var directFolder = AppConfig.ImgRootPath + AppConfig.ImgHeaderFolder;
+                    fileFullPath = directFolder + fileName;
+                   
+                    var success = ImageUtil.SaveImageToLocal(request.FileBase64, directFolder, fileName);
+                    if (success)
+                    {
+                        userEntity.HeaderImgUrl = AppConfig.ImgRootUrl + AppConfig.ImgHeaderFolder + fileName + "?tag=" + DateTime.Now.Ticks;
+                    }
                 }
                 catch (Exception ex)
                 {
-                   var message = $"更新头像 出错 -> 错误信息：{ex.Message}, 堆栈信息：{ex.StackTrace}, 物理地址：{fileFullPath}";
+                    var message = $"更新头像 出错 -> 错误信息：{ex.Message}, 堆栈信息：{ex.StackTrace}, 物理地址：{fileFullPath}";
                     WriteLog(message);
                 }
             }
             //没有头像用默认头像
             if (string.IsNullOrEmpty(userEntity.HeaderImgUrl))
             {
-                userEntity.HeaderImgUrl = System.Configuration.ConfigurationManager.AppSettings.Get("DefaultHeaderUrl");
+                userEntity.HeaderImgUrl = AppConfig.ImgDefaultUrl;
             }
             if (userBiz.Update(userEntity))
             {
@@ -150,34 +149,34 @@ namespace Co.ChatBottle.Service.Controllers
             
         }
 
-        //将图片按百分比压缩，flag取值1到100，越小压缩比越大
-        public void CompressSave(Image iSource, string outPath, int flag)
-        {
-            ImageFormat tFormat = iSource.RawFormat;
-            EncoderParameters ep = new EncoderParameters();
-            long[] qy = new long[1];
-            qy[0] = flag;
-            EncoderParameter eParam = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, qy);
-            ep.Param[0] = eParam;
-            ImageCodecInfo[] arrayICI = ImageCodecInfo.GetImageDecoders();
-            ImageCodecInfo jpegICIinfo = null;
-            for (int x = 0; x < arrayICI.Length; x++)
-            {
-                if (arrayICI[x].FormatDescription.Equals("JPEG"))
-                {
-                    jpegICIinfo = arrayICI[x];
-                    break;
-                }
-            }
-            if (jpegICIinfo != null)
-            {
-                iSource.Save(outPath, jpegICIinfo, ep);
-            }
-            else
-            {
-                iSource.Save(outPath, tFormat);
-            }
-        }
+        ////将图片按百分比压缩，flag取值1到100，越小压缩比越大
+        //public void CompressSave(Image iSource, string outPath, int flag)
+        //{
+        //    ImageFormat tFormat = iSource.RawFormat;
+        //    EncoderParameters ep = new EncoderParameters();
+        //    long[] qy = new long[1];
+        //    qy[0] = flag;
+        //    EncoderParameter eParam = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, qy);
+        //    ep.Param[0] = eParam;
+        //    ImageCodecInfo[] arrayICI = ImageCodecInfo.GetImageDecoders();
+        //    ImageCodecInfo jpegICIinfo = null;
+        //    for (int x = 0; x < arrayICI.Length; x++)
+        //    {
+        //        if (arrayICI[x].FormatDescription.Equals("JPEG"))
+        //        {
+        //            jpegICIinfo = arrayICI[x];
+        //            break;
+        //        }
+        //    }
+        //    if (jpegICIinfo != null)
+        //    {
+        //        iSource.Save(outPath, jpegICIinfo, ep);
+        //    }
+        //    else
+        //    {
+        //        iSource.Save(outPath, tFormat);
+        //    }
+        //}
 
         [HttpGet]
         public HttpResponseMessage QueryAll()

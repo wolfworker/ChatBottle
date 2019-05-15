@@ -6,14 +6,64 @@
 <input type="hidden" id="detail_bottleId" value="0" />
 <input type="hidden" id="receiverid" value="0" />
 <p></p>
-<input type="text" id="replyContent" style="width:85%;float:left;" />
-<input type="button" class="btn btn-primary" style="width:14%" id="btnReply" value="发送" />
+<input type="text" id="replyContent" style="width:78%;float:left;" />
+<input type="button" class="btn btn-primary" style="width:10%;padding-left:1%;" id="btnReply" value="发送" />
+<input type="button" class="btn btn-primary" style="width:10%;padding-left:1%;" id="btnimgreply" value="图片" />
+<input type="file" id="chatimgImgfile" accept="image/*" style="display:none"  onchange="uploadfile()" />
 <p></p>
 <br />
 <script type="text/javascript">
     $("#detail_bottleId").val(@ViewBag.bottleId);
     $("#btnReply").attr("disabled", false);
     $("#replyContent").attr("disabled", false);
+
+
+    $("#btnReply").click(function () {
+        sendmessage();
+    });
+
+    $("#btnimgreply").click(function () {
+        $("#chatimgImgfile").click();
+    });
+
+    var uploadfile = function () {
+        var file = $("#chatimgImgfile")[0].files[0]; // js 获取文件对象
+        var reader = new FileReader();
+        if (file) {
+            //将文件以Data URL形式读入页面
+            var reader = new FileReader();
+            reader.readAsDataURL(file);
+            reader.onloadend = function (f) {
+                
+                var chatData = {};
+                chatData.ChatText = this.result;
+                chatData.BottleID = $("#detail_bottleId").val();
+                chatData.ReceiverID = $("#receiverid").val();
+                chatData.SenderID = userid;
+                chatData.ChatType = 1;
+                $.post(serviceurl + "/api/ChatRecord/Add", chatData, function (data) {
+                    if (data != undefined && data.ErrorCode == 0 && data.Result != undefined) {
+                        var chatimgurl = data.Result.ChatText; 
+                        var content = encypt + $("#detail_bottleId").val() + encypt + $("#receiverid").val() + encypt + chatimgurl + encypt + "1";
+                        send(content);
+                    }
+                });
+                //清空file控件的值，可以选择相同文件
+                $("#chatimgImgfile")[0].value = '';
+            };
+        }
+    }
+
+    var bindClickEvent = function () {
+        $(".iconimg").click(function () {
+            var frienduserid = this.dataset.userid;
+            if (frienduserid == undefined || frienduserid == userid) {
+                loadPage(pageName.ProfileInfo);
+            } else {
+                loadPage(pageName.ProfileInfoView, "?userid=" + frienduserid);
+            }
+        });
+    };
 
     $.ajax({
         url: serviceurl + "/api/ChatRecord/QueryChatByBottleId",
@@ -47,18 +97,33 @@
                     if (item.SenderID != userid) {
                         //对方
                         var maleclass = friendinfo.Gender == 1 ? "male" : "female";
-                        html += '<div class = "chatrecordstyle leftstyle ' + maleclass + '"> <img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg"/> <span style="height:35px;padding-left:5px;">' + item.ChatText + '</span></div>';
+                        if (item.ChatType == 1) {
+                            html += '<div class = "chatrecordstyle leftstyle ' + maleclass + '" style="background-color: rgba(0,0,0,0.0);" > <img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg" data-userid="' + item.SenderID + '"/> <img src="' + item.ChatText + '" style="height:100px;width:130px;padding-left:5px;"/></div>';
+                        } else {
+                            html += '<div class = "chatrecordstyle leftstyle ' + maleclass + '"> <img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg" data-userid="' + item.SenderID + '"/> <span style="height:35px;padding-left:5px;">' + item.ChatText + '</span></div>';
+                        }
                     }
                     else {
                         //自己
-                        html += '<div class = "chatrecordstyle rightstyle"><span style="height:35px;padding-right:5px;">' + item.ChatText + '</span><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
+                        if (item.ChatType == 1) {
+                            html += '<div class = "chatrecordstyle rightstyle" style="background-color: rgba(0,0,0,0.0);" ><img src="' + item.ChatText + '" style="height:100px;width:130px;padding-right:5px;"/><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
+                        }
+                        else {
+                            html += '<div class = "chatrecordstyle rightstyle"><span style="height:35px;padding-right:5px;">' + item.ChatText + '</span><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
+                        }
                     }
-                    html += '<div class="bottleline"></div>';
+                    if (item.ChatType == 1) {
+                        html += '<div class="bottlelineimg" ></div>';
+                    } else {
+                        html += '<div class="bottlelinetext" ></div>';
+                    }
                     html += "<br />";
                 });
 
                 $("#detail_bottle").append(html);
                 $("#detail_bottle")[0].scrollTop = $("#detail_bottle")[0].scrollHeight;
+
+                bindClickEvent();
 
                 //打开瓶子界面时 更新聊天记录状态为已读
                 var data = {};
@@ -106,9 +171,7 @@
         }
     }
 
-    $("#btnReply").click(function(){
-        sendmessage();
-    });
+
 
     document.onkeydown = function (e) {
         if (e.keyCode == 13) {

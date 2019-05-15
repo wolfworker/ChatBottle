@@ -12,7 +12,7 @@
         padding-top: 17px;
     }
     .form-control {
-        background-color: initial;
+        background-color: lightsteelblue;
     }
 </style>
 <p></p>
@@ -22,16 +22,16 @@
             <img src="" id="userimg" style="width: 140px;height:140px;">
         </div>
         <div class="userinfodiv" style="padding-top:5px;">
-            <label class="control-label col-lg-1 labelleft">昵称:</label>
-            <span id="username" class="form-control userspan">wolfworker</span>
+            <label class="control-label col-lg-1 labelleft">昵称</label>
+            <span id="username" class="form-control userspan"></span>
         </div>
         <div class="userinfodiv" >
-            <label class="control-label col-lg-1 labelleft">手机:</label>
-            <span id="phone" class="form-control userspan">15051432856</span>
+            <label class="control-label col-lg-1 labelleft">手机</label>
+            <span id="phone" class="form-control userspan"></span>
         </div>
         <div class="userinfodiv" >
-            <label class="control-label col-lg-1 labelleft">QQ:</label>
-            <span id="qqnum" class="form-control userspan">1195747247</span>
+            <label class="control-label col-lg-1 labelleft">QQ</label>
+            <span id="qqnum" class="form-control userspan"></span>
         </div>
     </div>
 
@@ -50,7 +50,7 @@
 
     <div class="form-group">
         <label class="control-label col-lg-1 labelleft">个人说明</label>
-        <textarea class="form-control" style="background-color: initial;" id="remark" rows="2" readonly="readonly"></textarea>
+        <textarea class="form-control" style="background-color: lightsteelblue;" id="remark" rows="2" readonly="readonly"></textarea>
     </div>
 </div>
 
@@ -71,7 +71,6 @@
                 $("#birthday")[0].textContent = userinfo.Birthday.substring(0, 10);
                 $("#remark")[0].textContent = userinfo.Remark;
                 $("#gender")[0].textContent = userinfo.Gender == 1 ? "男" : "女";
-
             }
         }, error: function (result) {
 

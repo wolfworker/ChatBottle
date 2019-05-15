@@ -67,18 +67,29 @@
     });
 
     $("#btnSubmit").click(function () {
-        var gender = $(".gender").val();
+        var userData = {};
+        $(".gender").each(function () {
+            if (this.checked) {
+                userData.gender = this.value;
+                return;
+            }
+        });
+
         var username = $("#username").val();
         var password = $("#password").val();
+      
         if (username == undefined || username == "" || password == undefined || password == "") {
             showDialog("昵称或密码不可为空！");
             return;
         }
+        userData.UserName = username;
+        userData.PassChar = password;
+
         $.ajax({
             type: "POST",
             url: serviceurl + "/api/user/login",
             dataType: "json", //表示返回值类型，不必须
-            data: { UserName: username, PassChar: password, Gender: gender },
+            data: userData,
             success: function (result) {
                 if (result.ErrorCode == 0 && result.Result != undefined) {
                     var data = result.Result[0];

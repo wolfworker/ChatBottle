@@ -13,6 +13,7 @@ namespace Co.ChatBottle.Model
         public long SenderID { get; set; } = 0;
         public long ReceiverID { get; set; } = 0;
         public string ChatText { get; set; }
+        public byte ChatType { get; set; } = 0;
         public byte Status { get; set; }
         public string Remark { get; set; }
     }

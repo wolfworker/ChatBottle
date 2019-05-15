@@ -19,10 +19,25 @@ namespace Co.ChatBottle.Business
                 var entity = commonDal.Add(request);
                 if (entity != null && !string.IsNullOrEmpty(entity.ID))
                 {
-                    //聊天记录新增一条，对应瓶子的聊天预览文案也要更新
+                    //聊天记录新增一条，对应瓶子列表的聊天预览文案也要更新
                     var bittleBiz = new BottleBiz();
                     var bottle = bittleBiz.Query<ACT_Bottle>(request.BottleID);
-                    bottle.BottleDesc = request.ChatText;
+                    if (request.ChatType == 1)
+                    {
+                        bottle.BottleDesc = "[图片消息]";
+                    }
+                    else if (request.ChatType == 2)
+                    {
+                        bottle.BottleDesc = "[语音消息]";
+                    }
+                    else if (request.ChatType == 3)
+                    {
+                        bottle.BottleDesc = "[视频消息]";
+                    }
+                    else
+                    {
+                        bottle.BottleDesc = request.ChatText;
+                    }
                     bottle.UpdateTime = DateTime.Now;
                     bottle.UpdateUserID = request.SenderID;
                     new BottleBiz().Update(bottle);

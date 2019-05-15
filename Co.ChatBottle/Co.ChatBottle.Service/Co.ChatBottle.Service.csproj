@@ -134,6 +134,10 @@
       <Project>{C39FF08B-F058-443B-B48C-2CDC758D2DAC}</Project>
       <Name>Co.ChatBottle.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Co.ChatBottle.Utility\Co.ChatBottle.Utility.csproj">
+      <Project>{08E687B0-6A28-48AF-BBD7-F8C7CC884F4D}</Project>
+      <Name>Co.ChatBottle.Utility</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

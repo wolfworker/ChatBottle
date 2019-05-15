@@ -122,10 +122,10 @@ namespace Co.ChatBottle.WebSocket
 
                     string clientMsg = AnalyticData(buffer, length);
                     Console.WriteLine("接受到客户端数据：" + clientMsg);
-                    var clientMsgArr = clientMsg.Split(new string[] { ChatConst.EncryptStr }, StringSplitOptions.RemoveEmptyEntries);
+                    var clientMsgArr = clientMsg.Split(new string[] { AppConst.EncryptStr }, StringSplitOptions.RemoveEmptyEntries);
                     var bottleid = 0L;
                     var receiveid = 0L;
-
+                    var chatType = 0;
                     if (clientMsgArr.Length < 3)
                     {
                         //回发到客户端，用于心跳包检测
@@ -137,6 +137,11 @@ namespace Co.ChatBottle.WebSocket
                         bottleid = Convert.ToInt64(clientMsgArr[0]);
                         receiveid = Convert.ToInt64(clientMsgArr[1]);
                         clientMsg = clientMsgArr[2];
+                        if (clientMsgArr.Length > 3)
+                        {
+                            chatType = Convert.ToInt32(clientMsgArr[3]);
+                        }
+                        
                         if (bottleid == 0 || receiveid == 0 || string.IsNullOrEmpty(clientMsg))
                         {
                             continueFlag = false;
@@ -144,28 +149,34 @@ namespace Co.ChatBottle.WebSocket
                     }
                     if (continueFlag)
                     {
-                        //发送数据
-                        string sendMsg = "" + clientMsg;
-                        Console.WriteLine("发送数据：“" + sendMsg + "” 至客户端....");
 
                         //保存聊天记录到数据库
-                        Task.Run(() =>
-                        {
-                            chatBll.Add(new ACT_ChatRecord
-                            {
-                                ID = Guid.NewGuid().ToString(),
-                                BottleID = bottleid,
-                                SenderID = long.Parse(connecteuserid),
-                                ReceiverID = receiveid,
-                                ChatText = clientMsg,
-                                CreatedTime = DateTime.Now,
-                                UpdateTime = DateTime.Now,
-                                CreatedUserID = long.Parse(connecteuserid),
-                                UpdateUserID = long.Parse(connecteuserid),
-                            });
-                        });
 
-                        var sendbackMsg = $"{bottleid}{ChatConst.EncryptStr}{connecteuserid}{ChatConst.EncryptStr}{sendMsg}";
+                        if (chatType == 1)
+                        {
+                            clientMsg = $"{clientMsg}{AppConst.EncryptStr}1";
+                        }
+                        else
+                        {
+                            //保存聊天记录到数据库
+                            Task.Run(() =>
+                            {
+                                chatBll.Add(new ACT_ChatRecord
+                                {
+                                    ID = Guid.NewGuid().ToString(),
+                                    BottleID = bottleid,
+                                    SenderID = long.Parse(connecteuserid),
+                                    ReceiverID = receiveid,
+                                    ChatText = clientMsg,
+                                    CreatedTime = DateTime.Now,
+                                    UpdateTime = DateTime.Now,
+                                    CreatedUserID = long.Parse(connecteuserid),
+                                    UpdateUserID = long.Parse(connecteuserid),
+                                });
+                            });
+                        }
+
+                        var sendbackMsg = $"{bottleid}{AppConst.EncryptStr}{connecteuserid}{AppConst.EncryptStr}{clientMsg}";
                         //给 聊天双方 推送消息
                         try
                         {

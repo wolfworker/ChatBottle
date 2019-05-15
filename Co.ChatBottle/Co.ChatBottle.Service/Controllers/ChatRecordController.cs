@@ -1,10 +1,13 @@
 ﻿using Co.ChatBottle.Business;
 using Co.ChatBottle.Model;
+using Co.ChatBottle.Utility;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -17,6 +20,47 @@ namespace Co.ChatBottle.Service.Controllers
     public class ChatRecordController : BaseController
     {
         public ChatRecordBiz chatRecordBiz { get; set; } = new ChatRecordBiz();
+
+        [HttpPost]
+        public HttpResponseMessage Add(ACT_ChatRecord request)
+        {
+            //保存图片
+            if (request.ChatType == 1)
+            {
+                if (string.IsNullOrEmpty(request.ChatText))
+                {
+                    return ErrorToJson("未检测到图片");
+                }
+                var fileFullPath = "";
+                try
+                {
+                    var fileName = DateTime.Now.Ticks + AppConst.ImgExtion;
+                    var imgFolder = AppConfig.ImgChatFolder + request.BottleID + "/";
+                    var directFolder = AppConfig.ImgRootPath + imgFolder;
+                    fileFullPath = directFolder + fileName;
+                    var success = ImageUtil.SaveImageToLocal(request.ChatText, directFolder, fileName);
+                    if (success)
+                    {
+                        request.ChatText = AppConfig.ImgRootUrl + imgFolder + fileName;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    var message = $"聊天图片保存 出错 -> 错误信息：{ex.Message}, 堆栈信息：{ex.StackTrace}, 物理地址：{fileFullPath}";
+                    WriteLog(message);
+                    return ErrorToJson("发送图片失败");
+                }
+            }
+
+            request.ID = Guid.NewGuid().ToString();
+            request.UpdateTime = DateTime.Now;
+            request.CreatedTime = DateTime.Now;
+            request.CreatedUserID = request.SenderID;
+            request.UpdateUserID = request.SenderID;
+
+            var entity = chatRecordBiz.Add(request);
+            return EntityToJson(entity);
+        }
 
         [HttpPost]
         public HttpResponseMessage UpdateChatStatus(ChatRecordRequest request)

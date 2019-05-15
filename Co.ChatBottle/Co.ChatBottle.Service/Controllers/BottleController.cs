@@ -1,5 +1,6 @@
 ﻿using Co.ChatBottle.Business;
 using Co.ChatBottle.Model;
+using Co.ChatBottle.Utility;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -121,8 +122,10 @@ namespace Co.ChatBottle.Service.Controllers
 		                                CASE WHEN bottle.ReceiveUserID = {userId} OR (bottle.ThrowUserID = {userId} AND bottle.ReceiveUserID = 0)  THEN  throwusers.Gender else receiveusers.Gender END  AS BottleGender,
                                         CASE WHEN bottle.ReceiveUserID = {userId} OR ( bottle.ThrowUserID = {userId} AND bottle.ReceiveUserID = 0 ) THEN throwusers.ID ELSE receiveusers.ID END AS BottleUserID ,
                                         (SELECT TOP 1 (CASE WHEN chat.ReceiverID != {userId} THEN 1 ELSE chat.Status END) FROM ACT_ChatRecord chat WHERE chat.BottleID = bottle.ID ORDER BY UpdateTime DESC )AS ReadStatus,
-								        (SELECT TOP 1 chat.ChatText FROM ACT_ChatRecord chat WHERE chat.BottleID = bottle.ID ORDER BY UpdateTime DESC )AS BottleDesc,
-                                        (SELECT TOP 1 chat.UpdateTime FROM ACT_ChatRecord chat WHERE chat.BottleID = bottle.ID ORDER BY UpdateTime DESC )AS RealUpdateTime
+								        --(SELECT TOP 1 chat.ChatText FROM ACT_ChatRecord chat WHERE chat.BottleID = bottle.ID ORDER BY UpdateTime DESC )AS BottleDesc,
+                                        --(SELECT TOP 1 chat.UpdateTime FROM ACT_ChatRecord chat WHERE chat.BottleID = bottle.ID ORDER BY UpdateTime DESC )AS RealUpdateTime
+                                        bottle.BottleDesc AS BottleDesc,
+                                        bottle.UpdateTime AS RealUpdateTime
                                  FROM    ACT_Bottle bottle LEFT JOIN dbo.ACT_User throwusers ON throwusers.ID = bottle.ThrowUserID
                                                            LEFT JOIN dbo.ACT_User receiveusers ON receiveusers.ID = bottle.ReceiveUserID
                                  WHERE   bottle.ThrowUserID = {userId} OR bottle.ReceiveUserID = {userId} ) temp ORDER BY temp.RealUpdateTime DESC; ";
@@ -135,7 +138,7 @@ namespace Co.ChatBottle.Service.Controllers
                 {
                     if (string.IsNullOrEmpty(p.BottleHeaderUrl))
                     {
-                        p.BottleHeaderUrl = System.Configuration.ConfigurationManager.AppSettings.Get("DefaultHeaderUrl");
+                        p.BottleHeaderUrl = AppConfig.ImgDefaultUrl;
                     }
                     if (p.RealUpdateTime > DateTime.Today)
                     {
