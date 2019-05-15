@@ -276,18 +276,30 @@
         ws.onmessage = function (e) {
             //服务器回发消息，客户端即时处理
             var currentbottleid = $("#detail_bottleId").val();
-            var backbottleid = 0;
-            var backsenderid = 0;
-            var backmsg = e.data;
-            var msgArr = backmsg.split(encypt);
-            if (msgArr.length > 2) {
-                backbottleid = msgArr[0];
-                backsenderid = msgArr[1];
-                backmsg = msgArr[2];
-                var chatType = 0; //0:文字，1：图片
-                if (msgArr.length > 3) {
-                    chatType = msgArr[3];
-                }
+            debugger;
+            var callMsgjson = null;
+            try {
+                callMsgjson = JSON.parse(e.data);
+            } catch (e) {
+                //log
+            }
+            if (callMsgjson == undefined || callMsgjson.BottleID == undefined) {
+                return;
+            }
+            var backbottleid = callMsgjson.BottleID;
+            var backsenderid = callMsgjson.SenderID;
+            var backmsg = callMsgjson.ClientMsg;
+            var chatType = callMsgjson.ChatType;
+
+            //var msgArr = backmsg.split(encypt);
+            //if (msgArr.length > 2) {
+            //    backbottleid = msgArr[0];
+            //    backsenderid = msgArr[1];
+            //    backmsg = msgArr[2];
+            //    var chatType = 0; //0:文字，1：图片
+            //    if (msgArr.length > 3) {
+            //        chatType = msgArr[3];
+            //    }
                 //相同瓶子
                 if (backbottleid == currentbottleid) {
                     var html = "";
@@ -334,7 +346,7 @@
                         loadPage(pageName.MyBottle);
                     }
                 }
-            }
+            //}
         };
         ws.onerror = function (e) {
             //服务器出错，客户端即时处理

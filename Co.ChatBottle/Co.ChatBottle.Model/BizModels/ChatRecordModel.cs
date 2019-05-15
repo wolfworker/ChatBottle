@@ -14,4 +14,13 @@ namespace Co.ChatBottle.Model
         public long BottleID { get; set; } = 0;
         public long ReceiverID { get; set; } = 0;
     }
+
+    public class WebsocketChatEntity
+    {
+        public long BottleID { get; set; }
+        public long ReceiveID { get; set; }
+        public long SenderID { get; set; }
+        public string ClientMsg { get; set; }
+        public byte ChatType { get; set; }
+    }
 }

@@ -43,8 +43,16 @@
                 chatData.ChatType = 1;
                 $.post(serviceurl + "/api/ChatRecord/Add", chatData, function (data) {
                     if (data != undefined && data.ErrorCode == 0 && data.Result != undefined) {
-                        var chatimgurl = data.Result.ChatText; 
-                        var content = encypt + $("#detail_bottleId").val() + encypt + $("#receiverid").val() + encypt + chatimgurl + encypt + "1";
+                        debugger;
+                        var chatJson = {};
+                        chatJson.BottleID = $("#detail_bottleId").val();
+                        chatJson.ReceiveID = $("#receiverid").val();
+                        chatJson.SenderID = userid;
+                        chatJson.ClientMsg = data.Result.ChatText; ;
+                        chatJson.ChatType = 1;
+
+                        //var content = encypt + $("#detail_bottleId").val() + encypt + $("#receiverid").val() + encypt + chatimgurl + encypt + "1";
+                        var content = JSON.stringify(chatJson);
                         send(content);
                     }
                 });
@@ -161,17 +169,23 @@
 
     var sendmessage = function () {
         //发送消息
+        debugger;
         var content = $("#replyContent").val();
         if (content != undefined && content != "") {
-            content = encypt + $("#detail_bottleId").val() + encypt + $("#receiverid").val() + encypt + content;
+            var chatJson = {};
+            chatJson.BottleID = $("#detail_bottleId").val();
+            chatJson.ReceiveID = $("#receiverid").val();
+            chatJson.SenderID = userid;
+            chatJson.ClientMsg = content;
+            chatJson.ChatType = 0;
+            content = JSON.stringify(chatJson);
+            //content = encypt + $("#detail_bottleId").val() + encypt + $("#receiverid").val() + encypt + content;
             send(content);
             $("#replyContent").val('');
         } else {
             showDialog("发送内容为空！");
         }
     }
-
-
 
     document.onkeydown = function (e) {
         if (e.keyCode == 13) {

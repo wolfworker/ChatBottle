@@ -14,6 +14,7 @@ using Co.ChatBottle.Business;
 using Co.ChatBottle.Model;
 using Co.ChatBottle.Utility;
 using System.Data.Entity.SqlServer;
+using Newtonsoft.Json;
 
 namespace Co.ChatBottle.WebSocket
 {
@@ -122,43 +123,75 @@ namespace Co.ChatBottle.WebSocket
 
                     string clientMsg = AnalyticData(buffer, length);
                     Console.WriteLine("接受到客户端数据：" + clientMsg);
-                    var clientMsgArr = clientMsg.Split(new string[] { AppConst.EncryptStr }, StringSplitOptions.RemoveEmptyEntries);
+                    //todo 
                     var bottleid = 0L;
                     var receiveid = 0L;
                     var chatType = 0;
-                    if (clientMsgArr.Length < 3)
+
+                    WebsocketChatEntity chatInfo = null;
+                    if (clientMsg != "心跳" && clientMsg.IndexOf("\u0003") != 0)//以\u0003开头
                     {
-                        //回发到客户端，用于心跳包检测
-                        sendersocket.Send(PackData(clientMsg));
+                        try
+                        {
+                            chatInfo = JsonConvert.DeserializeObject<WebsocketChatEntity>(clientMsg);
+                        }
+                        catch (Exception e)
+                        {
+                            //log
+                        }
+                    }
+                    if (chatInfo == null)
+                    {
+                        if (clientMsg.IndexOf("\u0003") != 0)//以\u0003开头
+                        {
+                            //回发到客户端，用于心跳包检测
+                            sendersocket.Send(PackData(clientMsg));
+                        }
                         continueFlag = false;
                     }
                     else
                     {
-                        bottleid = Convert.ToInt64(clientMsgArr[0]);
-                        receiveid = Convert.ToInt64(clientMsgArr[1]);
-                        clientMsg = clientMsgArr[2];
-                        if (clientMsgArr.Length > 3)
-                        {
-                            chatType = Convert.ToInt32(clientMsgArr[3]);
-                        }
-                        
+                        bottleid = chatInfo.BottleID;
+                        receiveid = chatInfo.ReceiveID;
+                        clientMsg = chatInfo.ClientMsg;
+                        chatType = chatInfo.ChatType;
                         if (bottleid == 0 || receiveid == 0 || string.IsNullOrEmpty(clientMsg))
                         {
                             continueFlag = false;
                         }
                     }
+
+                    //var clientMsgArr = clientMsg.Split(new string[] { AppConst.EncryptStr }, StringSplitOptions.RemoveEmptyEntries);
+                    //var bottleid = 0L;
+                    //var receiveid = 0L;
+                    //var chatType = 0;
+                    //if (clientMsgArr.Length < 3)
+                    //{
+                    //    //回发到客户端，用于心跳包检测
+                    //    sendersocket.Send(PackData(clientMsg));
+                    //    continueFlag = false;
+                    //}
+                    //else
+                    //{
+                    //    bottleid = Convert.ToInt64(clientMsgArr[0]);
+                    //    receiveid = Convert.ToInt64(clientMsgArr[1]);
+                    //    clientMsg = clientMsgArr[2];
+                    //    if (clientMsgArr.Length > 3)
+                    //    {
+                    //        chatType = Convert.ToInt32(clientMsgArr[3]);
+                    //    }
+                        
+                    //    if (bottleid == 0 || receiveid == 0 || string.IsNullOrEmpty(clientMsg))
+                    //    {
+                    //        continueFlag = false;
+                    //    }
+                    //}
+
                     if (continueFlag)
                     {
-
-                        //保存聊天记录到数据库
-
-                        if (chatType == 1)
+                        //文字聊天 保存记录到数据库
+                        if (chatType != 1)
                         {
-                            clientMsg = $"{clientMsg}{AppConst.EncryptStr}1";
-                        }
-                        else
-                        {
-                            //保存聊天记录到数据库
                             Task.Run(() =>
                             {
                                 chatBll.Add(new ACT_ChatRecord
@@ -176,7 +209,14 @@ namespace Co.ChatBottle.WebSocket
                             });
                         }
 
-                        var sendbackMsg = $"{bottleid}{AppConst.EncryptStr}{connecteuserid}{AppConst.EncryptStr}{clientMsg}";
+                        if (chatInfo.SenderID != long.Parse(connecteuserid))
+                        {
+                            chatInfo.SenderID = long.Parse(connecteuserid);
+                        }
+
+                        var sendbackMsg = JsonConvert.SerializeObject(chatInfo);
+
+                        //var sendbackMsg = $"{bottleid}{AppConst.EncryptStr}{connecteuserid}{AppConst.EncryptStr}{clientMsg}";
                         //给 聊天双方 推送消息
                         try
                         {
@@ -367,7 +407,7 @@ namespace Co.ChatBottle.WebSocket
             else if (temp.Length < 0xFFFF)
             {
                 contentBytes = new byte[temp.Length + 4];
-                contentBytes[0] = 0x81;
+                contentBytes[0] = 0x82;
                 contentBytes[1] = 126;
                 contentBytes[2] = (byte)(temp.Length & 0xFF);
                 contentBytes[3] = (byte)(temp.Length >> 8 & 0xFF);
