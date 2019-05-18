@@ -36,7 +36,15 @@
                     $("#openBottle")[0].dataset.bottleid = bottleid;
                     $("#pick_bottle").show();
 
-                    var content = encypt + bottleid + encypt + throwuserid + encypt + "你的瓶子被我捡到啦，来聊聊吧！";
+                    debugger;
+                    var chatJson = {};
+                    chatJson.BottleID = bottleid;
+                    chatJson.ReceiveID = throwuserid;
+                    chatJson.SenderID = userid;
+                    chatJson.ClientMsg = "你的瓶子被我捡到啦，来聊聊吧！";
+                    chatJson.ChatType = 0;
+
+                    var content = JSON.stringify(chatJson);
                     send(content);
 
                 } else {

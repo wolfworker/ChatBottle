@@ -21,7 +21,7 @@
         top: 6%;
         width: 100%;
         position: absolute;
-        height: 85%;
+        height: 84%;
         background-image: url(../../Content/img/background.jpg);
         background-repeat: no-repeat;
         background-size: cover;
@@ -29,10 +29,10 @@
 
     .foot {
         width: 100%;
-        height: 9%;
+        height: 10%;
         position: absolute;
         background-color: khaki;
-        bottom: 0;
+        bottom: 0px;
     }
 
     .icon {
@@ -54,7 +54,7 @@
 
     .rightstyle {
         float: right;
-        text-align: right;
+        text-align: left;
         padding-left: 10px;
         background-color: #80e46c;
     }
@@ -133,6 +133,8 @@
         padding-top: 10px;
         display: block;
         color: dimgray;
+        overflow: hidden;
+        white-space: nowrap;
     }
 
     .detailright {
@@ -169,7 +171,7 @@
     <div id="rootdiv">
     </div>
     <div class="foot">
-        <div style="padding-top:2%">
+        <div style="margin-top:4%">
             <div class="col-xs-4">
                 <img class="icon" id="throwbottle" src="~/Content/img/icon_throwbottle.png" />
             </div>
@@ -377,7 +379,6 @@
             ws = null;
         }
     }
-
     var send = function (content) {
         //客户端发送消息
         if (content == undefined || content == "") {
@@ -431,7 +432,7 @@
         //每分钟上报一次当前位置
         setInterval(function () {
             getLocation();
-        }, 60000);
+        }, 20000);
 
         //首次加载页面 判断是否有未读消息
         $.get(serviceurl + "/api/ChatRecord/HasUnreadMessage", { "userid": userid }, function (result) {

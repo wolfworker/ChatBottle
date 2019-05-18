@@ -3,15 +3,16 @@
 }
 
 <div id="detail_bottle" data-receiveid="" style="overflow:auto;height: 90%;"></div>
+<div style="height:10%;margin-top:-1%">
+    <input type="text" id="replyContent" style="width:73%;float:left;height:40px;border-radius:10px;" />
+    <input type="button" class="btn btn-primary" style="width:12%;padding-left:2%;height:40px;" id="btnReply" value="发送" />
+    <input type="button" class="btn btn-primary" style="width:12%;padding-left:2%;height:40px;" id="btnimgreply" value="图片" />
+    <input type="file" id="chatimgImgfile" accept="image/*" style="display:none" onchange="uploadfile()" />
+</div>
+
 <input type="hidden" id="detail_bottleId" value="0" />
 <input type="hidden" id="receiverid" value="0" />
-<p></p>
-<input type="text" id="replyContent" style="width:78%;float:left;" />
-<input type="button" class="btn btn-primary" style="width:10%;padding-left:1%;" id="btnReply" value="发送" />
-<input type="button" class="btn btn-primary" style="width:10%;padding-left:1%;" id="btnimgreply" value="图片" />
-<input type="file" id="chatimgImgfile" accept="image/*" style="display:none"  onchange="uploadfile()" />
-<p></p>
-<br />
+
 <script type="text/javascript">
     $("#detail_bottleId").val(@ViewBag.bottleId);
     $("#btnReply").attr("disabled", false);
@@ -113,10 +114,10 @@
                     else {
                         //自己
                         if (item.ChatType == 1) {
-                            html += '<div class = "chatrecordstyle rightstyle" style="background-color: rgba(0,0,0,0.0);" ><img src="' + item.ChatText + '" style="height:100px;width:130px;padding-right:5px;"/><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
+                            html += '<div class = "chatrecordstyle rightstyle " style="background-color: rgba(0,0,0,0.0);" ><img src="' + item.ChatText + '" style="height:100px;width:130px;padding-right:5px;"/><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
                         }
                         else {
-                            html += '<div class = "chatrecordstyle rightstyle"><span style="height:35px;padding-right:5px;">' + item.ChatText + '</span><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
+                            html += '<div class = "chatrecordstyle rightstyle "><span style="height:35px;padding-right:5px;">' + item.ChatText + '</span><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
                         }
                     }
                     if (item.ChatType == 1) {
