@@ -313,7 +313,8 @@
             //    }
                 //相同瓶子
                 if (backbottleid == currentbottleid) {
-                    var html = "";
+                    //var html = "";
+                    var html = "<ul>";
                     if (backsenderid != userid) {
                         //对方发的消息，更新为已读状态
                         var data = {};
@@ -328,25 +329,39 @@
                         //对方
                         var maleclass = friendinfo.Gender == 1 ? "male" : "female";
                         if (chatType == 1) {
-                            html += '<div class = "chatrecordstyle leftstyle ' + maleclass + '" style="background-color: rgba(0,0,0,0.0);" > <img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg"/> <img src="' + backmsg +'" style="height:100px;width:130px;padding-left:5px;"/></div>';
+                            html += '<li class="textLeft chatrecordstyle "><img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg"/><img src="' + backmsg + '" class="imgcontent"/></li>';
                         } else {
-                            html += '<div class = "chatrecordstyle leftstyle ' + maleclass + '"> <img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg"/> <span style="height:35px;padding-left:5px;">' + backmsg + '</span></div>';
+                            html += '<li class="textLeft chatrecordstyle "><img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg"/><span class="spantext ' + maleclass + '">' + backmsg + '</span></li>';
                         }
+
+                        //var maleclass = friendinfo.Gender == 1 ? "male" : "female";
+                        //if (chatType == 1) {
+                        //    html += '<div class = "chatrecordstyle leftstyle ' + maleclass + '" style="background-color: rgba(0,0,0,0.0);" > <img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg"/> <img src="' + backmsg +'" style="height:100px;width:130px;padding-left:5px;"/></div>';
+                        //} else {
+                        //    html += '<div class = "chatrecordstyle leftstyle ' + maleclass + '"> <img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg"/> <span style="height:35px;padding-left:5px;">' + backmsg + '</span></div>';
+                        //}
                     } else {
                         //自己发的消息
                         if (chatType == 1) {
-                            //图片
-                            html += '<div class = "chatrecordstyle rightstyle " style="background-color: rgba(0,0,0,0.0);" ><img src="' + backmsg +'" style="height:100px;width:130px;padding-right:5px;"/><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
+                            html += '<li class="textRight chatrecordstyle "><img src="' + backmsg + '" class="imgcontent"/><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></li>';
                         } else {
-                            html += '<div class = "chatrecordstyle rightstyle "><span style="height:35px;padding-right:5px;">' + backmsg + '</span><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
+                            html += '<li class="textRight chatrecordstyle "><span class="spantext" style="background-color: lightgreen;" >' + backmsg + '</span><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></li>';
                         }
+
+                        //if (chatType == 1) {
+                        //    //图片
+                        //    html += '<div class = "chatrecordstyle rightstyle " style="background-color: rgba(0,0,0,0.0);" ><img src="' + backmsg +'" style="height:100px;width:130px;padding-right:5px;"/><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
+                        //} else {
+                        //    html += '<div class = "chatrecordstyle rightstyle "><span style="height:35px;padding-right:5px;">' + backmsg + '</span><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
+                        //}
                     }
-                    if (chatType == 1) {
-                        html += '<div class="bottlelineimg" ></div>';
-                    } else {
-                        html += '<div class="bottlelinetext" ></div>';
-                    }
-                    html += "<br />";
+                    //if (chatType == 1) {
+                    //    html += '<div class="bottlelineimg" ></div>';
+                    //} else {
+                    //    html += '<div class="bottlelinetext" ></div>';
+                    //}
+                    //html += "<br />";
+                    html += "</ul>";
                     $("#detail_bottle").append(html);
                     $("#detail_bottle")[0].scrollTop = $("#detail_bottle")[0].scrollHeight;
                 } else {

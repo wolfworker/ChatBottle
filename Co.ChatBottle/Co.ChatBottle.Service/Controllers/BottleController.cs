@@ -140,6 +140,7 @@ namespace Co.ChatBottle.Service.Controllers
                     {
                         p.BottleHeaderUrl = AppConfig.ImgDefaultUrl;
                     }
+
                     if (p.RealUpdateTime > DateTime.Today)
                     {
                         p.UpdateTimeDesc = p.RealUpdateTime.ToString("HH:mm");

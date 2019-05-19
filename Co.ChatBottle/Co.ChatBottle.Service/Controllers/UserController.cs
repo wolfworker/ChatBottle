@@ -64,9 +64,10 @@ namespace Co.ChatBottle.Service.Controllers
                 {
                     userInfo.HeaderImgUrl = AppConfig.ImgDefaultUrl;
                 }
-
+                userInfo.HeaderImgUrl = ImageUtil.GetImgUrlWithTag(userInfo.HeaderImgUrl);
                 userEntity = userBiz.Add(userInfo);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 return ErrorToJson(ex.Message);
             }
@@ -122,7 +123,7 @@ namespace Co.ChatBottle.Service.Controllers
                     var success = ImageUtil.SaveImageToLocal(request.FileBase64, directFolder, fileName);
                     if (success)
                     {
-                        userEntity.HeaderImgUrl = AppConfig.ImgRootUrl + AppConfig.ImgHeaderFolder + fileName + "?tag=" + DateTime.Now.Ticks;
+                        userEntity.HeaderImgUrl = AppConfig.ImgRootUrl + AppConfig.ImgHeaderFolder + fileName;
                     }
                 }
                 catch (Exception ex)
@@ -136,6 +137,7 @@ namespace Co.ChatBottle.Service.Controllers
             {
                 userEntity.HeaderImgUrl = AppConfig.ImgDefaultUrl;
             }
+            userEntity.HeaderImgUrl = ImageUtil.GetImgUrlWithTag(userEntity.HeaderImgUrl);
             if (userBiz.Update(userEntity))
             {
                 response.ErrorCode = 0;

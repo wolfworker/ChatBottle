@@ -70,5 +70,21 @@ namespace Co.ChatBottle.Utility
                 throw ex;
             }
         }
+
+        public static string GetImgUrlWithTag(string imgurl)
+        {
+            if (!string.IsNullOrEmpty(imgurl))
+            {
+                if (imgurl.Contains("?"))
+                {
+                    imgurl += "&tag="+DateTime.Now.Ticks;
+                }
+                else
+                {
+                    imgurl += "?tag=" + DateTime.Now.Ticks;
+                }
+            }
+            return imgurl;
+        }
     }
 }
