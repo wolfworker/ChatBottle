@@ -43,9 +43,13 @@ namespace Co.ChatBottle.Service.Controllers
                 if (exsitUser.FirstOrDefault().PassChar == request.PassChar
                     && !string.IsNullOrEmpty(exsitUser.FirstOrDefault().PassChar))
                 {
+                   commonBiz.WriteRequestLog(exsitUser.FirstOrDefault().ID, EnumModel.LogType.Login_Request, JsonConvert.SerializeObject(request),"登陆成功");
+
                     //登陆成功
                     return EntityToJson(exsitUser);
                 }
+                commonBiz.WriteRequestLog(exsitUser.FirstOrDefault().ID, EnumModel.LogType.Login_Request, JsonConvert.SerializeObject(request),"昵称已经存在，登录或注册失败");
+
                 return ErrorToJson("这个昵称已经有人用了，换一个吧！");
             }
 
@@ -66,6 +70,9 @@ namespace Co.ChatBottle.Service.Controllers
                 }
                 userInfo.HeaderImgUrl = ImageUtil.GetImgUrlWithTag(userInfo.HeaderImgUrl);
                 userEntity = userBiz.Add(userInfo);
+
+                commonBiz.WriteRequestLog(userEntity.ID, EnumModel.LogType.Login_Register, JsonConvert.SerializeObject(request),"注册成功");
+
             }
             catch (Exception ex)
             {

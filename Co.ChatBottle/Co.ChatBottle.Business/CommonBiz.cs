@@ -114,6 +114,11 @@ namespace Co.ChatBottle.Business
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="logContent"></param>
+        /// <param name="level">日志等级   1：错误  2：警告  3：正常</param>
         public void WriteLog(string logContent, byte level = 1)
         {
             try
@@ -130,6 +135,39 @@ namespace Co.ChatBottle.Business
             {
                 //log error
             }
+        }
+
+        /// <summary>
+        /// 写入系统请求日志（用户操作记录）
+        /// </summary>
+        /// <param name="logContent"></param>
+        /// <param name="level">日志等级   1：错误  2：警告  3：正常</param>
+        public void WriteRequestLog(long userid, Enum logType, string bussiesValue = "", string remark = "")
+        {
+            Task.Run(() =>
+            {
+                try
+                {
+                    var requestLog = new SYS_RequestLog
+                    {
+                        ID = Guid.NewGuid().ToString(),
+                        UserID = userid,
+                        LogType = logType.ToString(),
+                        LogTypeName = EnumModel.GetEnumDesc(logType),
+                        BussiessValue = bussiesValue,
+                        CreatedUserID = userid,
+                        UpdateUserID = userid,
+                        CreatedTime = DateTime.Now,
+                        UpdateTime = DateTime.Now,
+                        Remark = remark
+                    };
+                    commonDal.Add(requestLog);
+                }
+                catch (Exception ex)
+                {
+                    //log error
+                }
+            });
         }
     }
 }
