@@ -11,7 +11,7 @@ namespace Co.ChatBottle.WebUI.Controllers
         public ActionResult Index(int sourceFlag = -1)
         {
             ViewBag.sourceFlag = sourceFlag;
-            return View();
+            return View(); 
         }
 
         public ActionResult MyBottle()
