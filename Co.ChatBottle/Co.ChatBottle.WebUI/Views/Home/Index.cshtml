@@ -173,7 +173,7 @@
 
 <div class="mainDiv">
     <div class="head">
-        <span>流浪瓶 V1.0</span>
+        <span id="msgtext" style="float:left;"></span>
         <img class="icon" style="float:right" id="profileInfo" src="~/Content/img/icon_profiles.png" />
         <img class="icon" style="float:right" id="setting" src="~/Content/img/icon_setting.png" />
     </div>
@@ -203,11 +203,16 @@
         init();
     });
 
-    var loadPage = function (pageName, param) {
-        currentPage = pageName;
-        var pagePath = pageName;
+    var loadPage = function (pageNameT, param) {
+        currentPage = pageNameT;
+        var pagePath = pageNameT;
         if (param != undefined && param != "") {
             pagePath += param;
+        }
+        if (pageNameT != pageName.BottleDetail) {
+            //var age = parseInt((new Date() - new Date(userinfo.Birthday)) / (1000 * 60 * 60 * 24 * 365));
+            //msg = userinfo.UserName + "-" + (userinfo.Gender == 1 ? "男" : "女") + "-" + age + "岁";
+            $("#msgtext")[0].textContent = "欢迎来到流浪瓶";
         }
         $("#rootdiv").load(pagePath);
     }
@@ -304,16 +309,7 @@
             var backsenderid = callMsgjson.SenderID;
             var backmsg = callMsgjson.ClientMsg;
             var chatType = callMsgjson.ChatType;
-
-            //var msgArr = backmsg.split(encypt);
-            //if (msgArr.length > 2) {
-            //    backbottleid = msgArr[0];
-            //    backsenderid = msgArr[1];
-            //    backmsg = msgArr[2];
-            //    var chatType = 0; //0:文字，1：图片
-            //    if (msgArr.length > 3) {
-            //        chatType = msgArr[3];
-            //    }
+            
                 //相同瓶子
                 if (backbottleid == currentbottleid) {
                     //var html = "";
@@ -336,13 +332,7 @@
                         } else {
                             html += '<li class="textLeft chatrecordstyle "><img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg"/><span class="spantext ' + maleclass + '">' + backmsg + '</span></li>';
                         }
-
-                        //var maleclass = friendinfo.Gender == 1 ? "male" : "female";
-                        //if (chatType == 1) {
-                        //    html += '<div class = "chatrecordstyle leftstyle ' + maleclass + '" style="background-color: rgba(0,0,0,0.0);" > <img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg"/> <img src="' + backmsg +'" style="height:100px;width:130px;padding-left:5px;"/></div>';
-                        //} else {
-                        //    html += '<div class = "chatrecordstyle leftstyle ' + maleclass + '"> <img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg"/> <span style="height:35px;padding-left:5px;">' + backmsg + '</span></div>';
-                        //}
+                        
                     } else {
                         //自己发的消息
                         if (chatType == 1) {
@@ -350,20 +340,8 @@
                         } else {
                             html += '<li class="textRight chatrecordstyle "><span class="spantext" style="background-color: lightgreen;" >' + backmsg + '</span><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></li>';
                         }
-
-                        //if (chatType == 1) {
-                        //    //图片
-                        //    html += '<div class = "chatrecordstyle rightstyle " style="background-color: rgba(0,0,0,0.0);" ><img src="' + backmsg +'" style="height:100px;width:130px;padding-right:5px;"/><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
-                        //} else {
-                        //    html += '<div class = "chatrecordstyle rightstyle "><span style="height:35px;padding-right:5px;">' + backmsg + '</span><img src="' + userinfo.HeaderImgUrl + '" class = "iconimg"/></div>';
-                        //}
+                        
                     }
-                    //if (chatType == 1) {
-                    //    html += '<div class="bottlelineimg" ></div>';
-                    //} else {
-                    //    html += '<div class="bottlelinetext" ></div>';
-                    //}
-                    //html += "<br />";
                     html += "</ul>";
                     $("#detail_bottle").append(html);
                     $("#detail_bottle")[0].scrollTop = $("#detail_bottle")[0].scrollHeight;
@@ -444,7 +422,6 @@
         if (!checkUserValid()) {
             window.location.href = "/welcome/index";
         }
-
         getLocation();
         connectWebsocket();
         if (@ViewBag.sourceFlag!= -1) {

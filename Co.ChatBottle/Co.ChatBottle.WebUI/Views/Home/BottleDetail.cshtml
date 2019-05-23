@@ -99,6 +99,11 @@
                     }
                 });
 
+                //显示对方名字性别年龄等
+                var age = parseInt((new Date() - new Date(friendinfo.Birthday)) / (1000 * 60 * 60 * 24 * 365));
+                var topleftmsg = friendinfo.UserName + "-" + (friendinfo.Gender == 1 ? "男" : "女") + "-" + age + "岁";
+                $("#msgtext")[0].textContent = topleftmsg;
+
                 var html = "<ul>";
                 $.each(chatRecord, function (index, item) {
                     if (item.SenderID != userid) {

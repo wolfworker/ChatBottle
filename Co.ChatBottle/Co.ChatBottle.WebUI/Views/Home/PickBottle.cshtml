@@ -3,15 +3,15 @@
 }
 
 @*没捡到瓶子*@
-<div id="pick_noBottle" class="fulldiv" style="display:none;"><img src="~/Content/img/emptybottle.jpg" class="fulldiv" id="throwBottle"/></div>
+<div id="pick_noBottle" class="fulldiv" style="display:none;"><img src="~/Content/img/emptybottle.jpg" class="fulldiv" id="emptyBottle"/></div>
 @*捡到一个瓶子*@
 <div id="pick_bottle" class="fulldiv" style="display:none"><img src="~/Content/img/findbottle.jpg" class="fulldiv" id="openBottle" data-bottleid=""/></div>
 @*捡瓶子时的动画*@
 <div id="pickbottlegif" class="fulldiv" style="display:none"><img src="~/Content/img/pickbottle.gif" class="fulldiv" /></div>
 
 <script type="text/javascript">
-    $("#throwBottle").click(function () {
-        loadPage(pageName.ThrowBottle);
+    $("#emptyBottle").click(function () {
+        $("#pick_noBottle").hide();
     });
 
     $("#openBottle").click(function () {
