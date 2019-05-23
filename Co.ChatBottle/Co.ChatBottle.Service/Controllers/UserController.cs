@@ -43,12 +43,12 @@ namespace Co.ChatBottle.Service.Controllers
                 if (exsitUser.FirstOrDefault().PassChar == request.PassChar
                     && !string.IsNullOrEmpty(exsitUser.FirstOrDefault().PassChar))
                 {
-                   commonBiz.WriteRequestLog(exsitUser.FirstOrDefault().ID, EnumModel.LogType.Login_Request, JsonConvert.SerializeObject(request),"登陆成功");
+                   commonBiz.WriteRequestLog(exsitUser.FirstOrDefault().ID, (int)EnumModel.LogType.Welcome_Login, JsonConvert.SerializeObject(request),"登陆成功");
 
                     //登陆成功
                     return EntityToJson(exsitUser);
                 }
-                commonBiz.WriteRequestLog(exsitUser.FirstOrDefault().ID, EnumModel.LogType.Login_Request, JsonConvert.SerializeObject(request),"昵称已经存在，登录或注册失败");
+                commonBiz.WriteRequestLog(exsitUser.FirstOrDefault().ID, (int)EnumModel.LogType.Welcome_Login, JsonConvert.SerializeObject(request),"昵称已经存在，登录或注册失败");
 
                 return ErrorToJson("这个昵称已经有人用了，换一个吧！");
             }
@@ -71,7 +71,7 @@ namespace Co.ChatBottle.Service.Controllers
                 userInfo.HeaderImgUrl = ImageUtil.GetImgUrlWithTag(userInfo.HeaderImgUrl);
                 userEntity = userBiz.Add(userInfo);
 
-                commonBiz.WriteRequestLog(userEntity.ID, EnumModel.LogType.Login_Register, JsonConvert.SerializeObject(request),"注册成功");
+                commonBiz.WriteRequestLog(userEntity.ID, (int)EnumModel.LogType.Welcome_Register, JsonConvert.SerializeObject(request),"注册成功");
 
             }
             catch (Exception ex)
@@ -99,6 +99,8 @@ namespace Co.ChatBottle.Service.Controllers
             var exsitUser = userBiz.QueryCustom<ACT_User>(sql);
             if (exsitUser != null && exsitUser.Any())
             {
+                commonBiz.WriteRequestLog(request.ID, (int)EnumModel.LogType.Profile_Update, JsonConvert.SerializeObject(request), $"昵称:{userName} 已被使用");
+
                 return ErrorToJson("这个昵称已经有人用了，换一个吧！");
             }
 
@@ -147,45 +149,20 @@ namespace Co.ChatBottle.Service.Controllers
             userEntity.HeaderImgUrl = ImageUtil.GetImgUrlWithTag(userEntity.HeaderImgUrl);
             if (userBiz.Update(userEntity))
             {
+                commonBiz.WriteRequestLog(request.ID, (int)EnumModel.LogType.Profile_Update, JsonConvert.SerializeObject(request), "更新信息成功");
+
                 response.ErrorCode = 0;
                 response.Result = userEntity;
                 return ResponseToJson(response);
             }
             else
             {
+                commonBiz.WriteRequestLog(request.ID, (int)EnumModel.LogType.Profile_Update, JsonConvert.SerializeObject(request), "更新信息失败");
+
                 return ErrorToJson("更新失败");
             }
             
         }
-
-        ////将图片按百分比压缩，flag取值1到100，越小压缩比越大
-        //public void CompressSave(Image iSource, string outPath, int flag)
-        //{
-        //    ImageFormat tFormat = iSource.RawFormat;
-        //    EncoderParameters ep = new EncoderParameters();
-        //    long[] qy = new long[1];
-        //    qy[0] = flag;
-        //    EncoderParameter eParam = new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, qy);
-        //    ep.Param[0] = eParam;
-        //    ImageCodecInfo[] arrayICI = ImageCodecInfo.GetImageDecoders();
-        //    ImageCodecInfo jpegICIinfo = null;
-        //    for (int x = 0; x < arrayICI.Length; x++)
-        //    {
-        //        if (arrayICI[x].FormatDescription.Equals("JPEG"))
-        //        {
-        //            jpegICIinfo = arrayICI[x];
-        //            break;
-        //        }
-        //    }
-        //    if (jpegICIinfo != null)
-        //    {
-        //        iSource.Save(outPath, jpegICIinfo, ep);
-        //    }
-        //    else
-        //    {
-        //        iSource.Save(outPath, tFormat);
-        //    }
-        //}
 
         [HttpGet]
         public HttpResponseMessage QueryAll()

@@ -142,7 +142,7 @@ namespace Co.ChatBottle.Business
         /// </summary>
         /// <param name="logContent"></param>
         /// <param name="level">日志等级   1：错误  2：警告  3：正常</param>
-        public void WriteRequestLog(long userid, Enum logType, string bussiesValue = "", string remark = "")
+        public void WriteRequestLog(long userid, int logType, string bussiesValue = "", string remark = "")
         {
             Task.Run(() =>
             {
@@ -153,7 +153,7 @@ namespace Co.ChatBottle.Business
                         ID = Guid.NewGuid().ToString(),
                         UserID = userid,
                         LogType = logType.ToString(),
-                        LogTypeName = EnumModel.GetEnumDesc(logType),
+                        LogTypeName = EnumModel.GetEnumDesc((EnumModel.LogType)logType),
                         BussiessValue = bussiesValue,
                         CreatedUserID = userid,
                         UpdateUserID = userid,

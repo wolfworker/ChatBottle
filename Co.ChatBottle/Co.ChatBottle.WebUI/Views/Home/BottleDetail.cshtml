@@ -75,7 +75,7 @@
     $.ajax({
         url: serviceurl + "/api/ChatRecord/QueryChatByBottleId",
         type: "get",
-        data: { bottleid: @ViewBag.bottleId },
+        data: { bottleid: @ViewBag.bottleId, userid: userid },
         success: function (result) {
             if (result.ErrorCode == 0 && result.Result != undefined && result.Result.length > 0) {
                 var chatRecord = result.Result;

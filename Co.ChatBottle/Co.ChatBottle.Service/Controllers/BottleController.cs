@@ -39,25 +39,24 @@ namespace Co.ChatBottle.Service.Controllers
 
             var bottleEntity = bottleBiz.Add(bottleInfo);
 
-            //插入第一条聊天记录
-            var chatInfo = new ACT_ChatRecord
-            {
-                ID = Guid.NewGuid().ToString(),
-                BottleID = bottleEntity.ID,
-                ChatText = request.BottleDesc,
-                SenderID = request.ThrowUserID,
-                Remark = "扔瓶子时同步聊天记录",
-                CreatedTime = DateTime.Now,
-                UpdateTime = DateTime.Now,
-                CreatedUserID = request.ThrowUserID,
-                UpdateUserID = request.ThrowUserID,
-            };
-
-            new ChatRecordBiz().Add(chatInfo);
-
-            //异步记录瓶子位置
+            //异步记录瓶子聊天记录和位置
             Task.Run(() =>
             {
+                //插入第一条聊天记录
+                var chatInfo = new ACT_ChatRecord
+                {
+                    ID = Guid.NewGuid().ToString(),
+                    BottleID = bottleEntity.ID,
+                    ChatText = request.BottleDesc,
+                    SenderID = request.ThrowUserID,
+                    Remark = "扔瓶子时同步聊天记录",
+                    CreatedTime = DateTime.Now,
+                    UpdateTime = DateTime.Now,
+                    CreatedUserID = request.ThrowUserID,
+                    UpdateUserID = request.ThrowUserID,
+                };
+                new ChatRecordBiz().Add(chatInfo);
+
                 var positionInfo = new ACT_User_Position
                 {
                     UserID = request.ThrowUserID,
@@ -73,14 +72,16 @@ namespace Co.ChatBottle.Service.Controllers
                     StreetNumber = request.StreetNumber,
                     AddressDetail = request.AddressDetail,
                 };
-
                 new PositionBiz().Add(positionInfo);
             });
 
             if (bottleEntity == null)
             {
+                commonBiz.WriteRequestLog(request.ThrowUserID, (int)EnumModel.LogType.Bottle_Throw, "", "扔瓶子失败");
                 return ErrorToJson("瓶子没扔出去，重新试下吧！");
             }
+
+            commonBiz.WriteRequestLog(request.ThrowUserID, (int)EnumModel.LogType.Bottle_Throw, bottleEntity.ID.ToString());
             return EntityToJson(bottleEntity);
         }
         
@@ -162,7 +163,6 @@ namespace Co.ChatBottle.Service.Controllers
             return EntityToJson(result);
         }
 
-
         /// <summary>
         /// 捡瓶子
         /// </summary>
@@ -185,9 +185,12 @@ namespace Co.ChatBottle.Service.Controllers
                     var updateSql = $@"  UPDATE ACT_ChatRecord SET receiverid = {userId},UpdateTime = getdate() WHERE bottleid = {bottleInfo.ID} ;";
                     bottleBiz.ExcuteSql(updateSql);
 
+                    commonBiz.WriteRequestLog(userId, (int)EnumModel.LogType.Bottle_Pick, bottleInfo.ID.ToString(), "捞到一个瓶子");
                     return EntityToJson(bottleInfo);
                 }
             }
+
+            commonBiz.WriteRequestLog(userId, (int)EnumModel.LogType.Bottle_Pick, "","没捞到瓶子");
             return ErrorToJson("瓶子太重，捞不上来啦，重新试试吧！");
         }
 

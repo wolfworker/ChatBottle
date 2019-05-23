@@ -46,6 +46,12 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.7\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
     </Reference>
@@ -141,6 +147,7 @@
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\WelcomeController.cs" />
     <Compile Include="Global.asax.cs">
@@ -223,6 +230,14 @@
     <Content Include="Views\Home\ProfileInfoView.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Co.ChatBottle.Business\Co.ChatBottle.Business.csproj">
+      <Project>{126dc10f-a70b-49a5-85ce-9ba9bab04a5e}</Project>
+      <Name>Co.ChatBottle.Business</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Co.ChatBottle.Model\Co.ChatBottle.Model.csproj">
+      <Project>{c39ff08b-f058-443b-b48c-2cdc758d2dac}</Project>
+      <Name>Co.ChatBottle.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Co.ChatBottle.Utility\Co.ChatBottle.Utility.csproj">
       <Project>{08e687b0-6a28-48af-bbd7-f8c7cc884f4d}</Project>
       <Name>Co.ChatBottle.Utility</Name>

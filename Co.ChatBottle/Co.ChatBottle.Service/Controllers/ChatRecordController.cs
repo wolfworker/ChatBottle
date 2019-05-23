@@ -81,7 +81,7 @@ namespace Co.ChatBottle.Service.Controllers
         /// <param name="bottleid"></param>
         /// <returns></returns>
         [HttpGet]
-        public HttpResponseMessage QueryChatByBottleId(long bottleid)
+        public HttpResponseMessage QueryChatByBottleId(long bottleid, long userid = 0)
         {
             var sql = $"SELECT * FROM ACT_ChatRecord WHERE BottleID = {bottleid} ORDER BY CreatedTime ";
             var result = chatRecordBiz.QueryCustom<ACT_ChatRecord>(sql);

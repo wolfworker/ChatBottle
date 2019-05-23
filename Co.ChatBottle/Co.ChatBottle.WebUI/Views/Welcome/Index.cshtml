@@ -99,8 +99,10 @@
                     if (data != undefined && data.ID > 0) {
                         localStorage.setItem("userid", data.ID);
                         localStorage.setItem("expiredTime", new Date());
+                        window.location.href = "/home/index?sourceFlag=4&userid=" + data.ID;
+                    } else {
+                        showDialog("此用户无效");
                     }
-                    window.location.href = "/home/index?sourceFlag=4";
                 } else {
                     showDialog(result.ErrorMsg);
                 }

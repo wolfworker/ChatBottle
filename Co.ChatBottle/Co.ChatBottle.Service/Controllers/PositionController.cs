@@ -31,7 +31,7 @@ namespace Co.ChatBottle.Service.Controllers
                 UserID = request.UserID,
                 Longitude = request.Longitude,
                 Latitude = request.Latitude,
-                
+                BottleID = request.BottleID,
                 CreatedUserID = request.UserID,
                 UpdateUserID = request.UserID,
                 Province = request.Province,

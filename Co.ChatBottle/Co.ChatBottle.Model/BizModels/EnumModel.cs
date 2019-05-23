@@ -25,19 +25,25 @@ namespace Co.ChatBottle.Model
         public enum LogType
         {
             #region 系统设置模块 10..
+            [Description("打开主页面")]
+            Sys_OpenIndex = 1001,
+
             [Description("打开设置页面")]
-            Sys_OpenSetting = 1001,
+            Sys_OpenSetting = 1002,
 
             [Description("退出账号")]
-            Sys_Quit = 1002,
+            Sys_Quit = 1003,
             #endregion
 
-            #region 注册登录相关 11..
+            #region 欢迎页面相关 11..
+            [Description("打开欢迎页")]
+            Welcome_OpenPage = 1101,
+
             [Description("请求登录")]
-            Login_Request = 1101,
+            Welcome_Login = 1102,
 
             [Description("请求注册")]
-            Login_Register = 1102,
+            Welcome_Register = 1103,
 
             #endregion
 
@@ -46,16 +52,19 @@ namespace Co.ChatBottle.Model
             Bottle_My = 1201,
 
             [Description("打开扔瓶子页面")]
-            Bottle_ThrowPage = 1202,
+            Bottle_OpenThrowPage = 1202,
 
-            [Description("点击捞瓶子")]
-            Bottle_PickUp = 1203,
+            [Description("打开捞瓶子页面")]
+            Bottle_OpenPickPage = 1203,
 
-            [Description("扔出瓶子")]
+            [Description("操作扔瓶子")]
             Bottle_Throw = 1204,
 
+            [Description("操作捞瓶子")]
+            Bottle_Pick = 1205,
+
             [Description("打开瓶子")]
-            Bottle_Open = 1206,
+            Bottle_OpenDetail = 1206,
             #endregion
 
             #region 个人信息模块 13..

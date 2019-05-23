@@ -54,8 +54,8 @@
     <script>
         //全局变量
         //var serviceurl = "http://www.buyshoes.club:9001/";
-        var serviceurl = "http://localhost:9001/";
-        //var serviceurl = "http://10.1.8.4:9014/";
+        //var serviceurl = "http://localhost:9001/";
+        var serviceurl = "http://10.1.8.4:9014/";
         var userid = 0;//定义全局用户id
         var userinfo = null;//用户信息
         var friendinfo = null;//对方的信息
@@ -119,6 +119,9 @@
                         //重新设置有效期
                         localStorage.setItem("userid", userid);
                         localStorage.setItem("expiredTime", nowTime);
+
+                        //更新session
+                        $.post("/Home/SetUserSession", { userid: userid });
                     }
                 }, error: function (result) {
 
