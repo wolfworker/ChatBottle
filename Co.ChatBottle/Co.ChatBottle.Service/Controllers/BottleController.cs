@@ -172,8 +172,19 @@ namespace Co.ChatBottle.Service.Controllers
         // GET: api/UserApi/5
         public HttpResponseMessage PickBottles(long userId)
         {
-            var sql = $"SELECT TOP 1 * FROM ACT_Bottle WHERE ThrowUserID != {userId} AND ReceiveUserID = 0 ORDER BY UpdateTime DESC ";
+            //先捞异性的瓶子
+            var sql = $@"SELECT TOP 1 bottle.* FROM ACT_Bottle bottle INNER JOIN dbo.ACT_User throwusers ON throwusers.ID = bottle.ThrowUserID
+                                LEFT JOIN dbo.ACT_User receiveusers ON receiveusers.ID = {userId} WHERE throwusers.Gender != receiveusers.Gender
+                                AND bottle.ReceiveUserID = 0 AND bottle.ThrowUserID != {userId} ORDER BY bottle.UpdateTime DESC; ";
             var result = bottleBiz.QueryCustom<ACT_Bottle>(sql);
+
+            //异性瓶子没有，再捞全部瓶子
+            if (result == null || !result.Any())
+            {
+                sql = $"SELECT TOP 1 * FROM ACT_Bottle WHERE ThrowUserID != {userId} AND  ReceiveUserID = 0 ORDER BY UpdateTime DESC ";
+                result = bottleBiz.QueryCustom<ACT_Bottle>(sql);
+            }
+               
             if (result != null && result.Any())
             {
                 var bottleInfo = result.FirstOrDefault();

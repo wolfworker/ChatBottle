@@ -110,9 +110,9 @@
                         //对方
                         var maleclass = friendinfo.Gender == 1 ? "male" : "female";
                         if (item.ChatType == 1) {
-                            html += '<li class="textLeft chatrecordstyle "><img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg"/><img src="' + item.ChatText + '" class="imgcontent"/></li>';
+                            html += '<li class="textLeft chatrecordstyle "><img src="' + friendinfo.HeaderImgUrl + '" data-userid="' + item.SenderID +'" class = "iconimg"/><img src="' + item.ChatText + '" class="imgcontent"/></li>';
                         } else {
-                            html += '<li class="textLeft chatrecordstyle "><img src="' + friendinfo.HeaderImgUrl + '" class = "iconimg"/><span class="spantext ' + maleclass+'">' + item.ChatText + '</span></li>';
+                            html += '<li class="textLeft chatrecordstyle "><img src="' + friendinfo.HeaderImgUrl + '" data-userid="' + item.SenderID +'" class = "iconimg"/><span class="spantext ' + maleclass+'">' + item.ChatText + '</span></li>';
                         }
 
                     }
