@@ -96,6 +96,12 @@
                 //如果没有用户缓存，则跳转到欢迎页
                 return false;
             }
+			
+			//测试用户无需校验有效期
+			if(userid == 22){
+				return true;
+			}
+			
             var expiredTime = new Date(expiredtimestr)
 
             var totalTimeMs = nowTime.getTime() - expiredTime.getTime();  //时间差的毫秒数
