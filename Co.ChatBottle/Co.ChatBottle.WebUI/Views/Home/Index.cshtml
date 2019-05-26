@@ -209,6 +209,7 @@
         if (param != undefined && param != "") {
             pagePath += param;
         }
+        debugger;
         if (pageNameT != pageName.BottleDetail) {
             //var age = parseInt((new Date() - new Date(userinfo.Birthday)) / (1000 * 60 * 60 * 24 * 365));
             //msg = userinfo.UserName + "-" + (userinfo.Gender == 1 ? "男" : "女") + "-" + age + "岁";
@@ -356,6 +357,8 @@
             //}
         };
         ws.onerror = function (e) {
+            //服务器断开websocket连接，重新连接尝试
+            window.open("http://www.buyshoes.club:9016");
             //服务器出错，客户端即时处理
             //var msg = document.createElement('div');
             //msg.style.color = '#0f0';
@@ -363,6 +366,8 @@
             //msgContainer.appendChild(msg);
         };
         ws.onclose = function (e) {
+            //服务器断开websocket连接，重新连接尝试
+            window.open("http://www.buyshoes.club:9016");
             //服务器关闭连接，客户端即时处理
             //var msg = document.createElement('div');
             //msg.style.color = '#0f0';
@@ -437,6 +442,15 @@
         setInterval(function () {
             getLocation();
         }, 20000);
+
+        //针对测试用户，30分钟重新load一下主页，防止websocket断掉
+        if (userid == 22) {
+            setInterval(function () {
+                console.log("重新加载index主页");
+                //window.open("http://www.buyshoes.club:9016");
+                window.location.href = "../home/index";
+            }, 1000 * 60 * 30);
+        }
 
         //首次加载页面 判断是否有未读消息
         $.get(serviceurl + "/api/ChatRecord/HasUnreadMessage", { "userid": userid }, function (result) {
