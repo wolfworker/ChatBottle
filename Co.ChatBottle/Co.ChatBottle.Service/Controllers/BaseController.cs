@@ -100,7 +100,7 @@ namespace Co.ChatBottle.Service.Controllers
             }
             if (Request != null && Request.Headers != null)
             {
-                request.Host = Request.Headers.Host;
+                request.Referrer = Request.Headers.Referrer.ToString();
                 request.UserAgent = Request.Headers.UserAgent.ToString();
             }
         }

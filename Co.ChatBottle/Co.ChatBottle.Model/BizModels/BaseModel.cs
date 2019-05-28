@@ -33,7 +33,7 @@ namespace Co.ChatBottle.Model
     /// </summary>
     public class BaseRequest
     {
-        public string Host { get; set; }
+        public string Referrer { get; set; }
 
         public string UserAgent { get; set; }
     }

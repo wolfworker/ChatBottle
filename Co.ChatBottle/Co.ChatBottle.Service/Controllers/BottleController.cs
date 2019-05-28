@@ -27,7 +27,7 @@ namespace Co.ChatBottle.Service.Controllers
                 return ErrorToJson("瓶子内容为空，请重试！");
             }
 
-            ConvertBaseRequest(request);
+            //ConvertBaseRequest(request);
 
             var bottleInfo = new ACT_Bottle
             {

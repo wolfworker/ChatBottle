@@ -16,6 +16,7 @@ namespace Co.ChatBottle.Model
         public long BottleID { get; set; }
         public string Longitude { get; set; }
         public string Latitude { get; set; }
+        public string IP { get; set; }
 
         public string Province { get; set; }
         public string City { get; set; }

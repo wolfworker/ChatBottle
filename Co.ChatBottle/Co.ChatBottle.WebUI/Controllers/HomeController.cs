@@ -29,7 +29,7 @@ namespace Co.ChatBottle.WebUI.Controllers
 
         public ActionResult PickBottle()
         {
-            ServiceBiz.WriteRequestLog(UserInfo.ID, (int)EnumModel.LogType.Bottle_OpenPickPage);
+            //ServiceBiz.WriteRequestLog(UserInfo.ID, (int)EnumModel.LogType.Bottle_OpenPickPage);
             return View();
         }
 

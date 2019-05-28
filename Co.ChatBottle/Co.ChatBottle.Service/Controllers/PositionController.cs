@@ -25,12 +25,13 @@ namespace Co.ChatBottle.Service.Controllers
                 return null;
             }
 
-            ConvertBaseRequest(request);
+            //ConvertBaseRequest(request);
             var positionInfo = new ACT_User_Position
             {
                 UserID = request.UserID,
                 Longitude = request.Longitude,
                 Latitude = request.Latitude,
+                IP = request.IP,
                 BottleID = request.BottleID,
                 CreatedUserID = request.UserID,
                 UpdateUserID = request.UserID,

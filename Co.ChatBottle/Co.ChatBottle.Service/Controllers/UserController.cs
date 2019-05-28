@@ -30,7 +30,7 @@ namespace Co.ChatBottle.Service.Controllers
             {
                 return ErrorToJson("昵称需要填的哦，小可爱");
             }
-            ConvertBaseRequest(request);
+            //ConvertBaseRequest(request);
 
             var userName = request.UserName.Trim();
 
@@ -86,7 +86,7 @@ namespace Co.ChatBottle.Service.Controllers
         {
             var response = new BaseResponse<ACT_User>();
 
-            ConvertBaseRequest(request);
+            //ConvertBaseRequest(request);
 
             if (request == null)
             {

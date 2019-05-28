@@ -81,7 +81,7 @@
                     $.each(bottleData, function (i, item) {
                         var areaName = (item.City == undefined ? "" : item.City) + (item.District == undefined ? "" : item.District)
                         if (areaName != undefined && areaName != "") {
-                            areaName = "(" + areaName.replace(/市/g, "").replace(/区/g, "").replace(/县/g, "") + ")";
+                            areaName = "(" + areaName.replace(/省/g, "").replace(/市/g, "").replace(/区/g, "").replace(/县/g, "") + ")";
                         }
                         var genderUrl = item.BottleGender == 1 ? "/Content/img/male.png" : "/Content/img/female.png";
                         html += '<div ' + (item.ReadStatus == 1 ? "" : "class = 'mybottlediv'")+'>';

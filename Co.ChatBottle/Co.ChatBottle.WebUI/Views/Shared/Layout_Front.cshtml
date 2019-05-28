@@ -14,6 +14,7 @@
     <script src="~/Content/component/datepicker/bootstrap-datetimepicker.min.js"></script>
     <script src="~/Content/component/datepicker/bootstrap-datetimepicker.zh-CN.js"></script>
     <script src="http://api.map.baidu.com/api?v=2.0&ak=7aQjxiU2MrATqBNEdW9SDeG9"></script>
+    <script type="text/javascript" src="http://pv.sohu.com/cityjson?ie=utf-8"></script>
     <script src="~/Content/js/common.js"></script>
 
 </head>
@@ -53,9 +54,9 @@
     @*服务地址*@
     <script>
         //全局变量
-        var serviceurl = "http://www.buyshoes.club:9001/";
+        //var serviceurl = "http://www.buyshoes.club:9001/";
         //var serviceurl = "http://localhost:9001/";
-        //var serviceurl = "http://10.1.8.4:9014/";
+        var serviceurl = "http://10.1.8.4:9014/";
         var userid = 0;//定义全局用户id
         var userinfo = null;//用户信息
         var friendinfo = null;//对方的信息
@@ -72,8 +73,8 @@
         var streetNumber = "";
         var addressdetail = "";
         var encypt = '@AppConst.EncryptStr';
-        var websocketaddress = "ws://www.buyshoes.club:9018";//websocket地址
-        //var websocketaddress = "ws://127.0.0.1:9018";//websocket地址
+        //var websocketaddress = "ws://www.buyshoes.club:9018";//websocket地址
+        var websocketaddress = "ws://127.0.0.1:9018";//websocket地址
 
         var pageName = {
             ProfileInfo: "/Home/ProfileInfo",
